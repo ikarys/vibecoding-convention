@@ -40,7 +40,30 @@ lists each one with its sources and the requirement that answers it.
 - **Measure the product, not the process.** The convention does not say how to
   work. It says what the result must show.
 
-## 3. Levels
+## 3. Parity with human-led projects
+
+A fair objection: the convention asks of AI-assisted projects more than anyone
+asks of human-written ones. The answer has two parts.
+
+Most requirements are not new. CI, coverage, lint, secrets scanning,
+dependency checks, `SECURITY.md`, architecture documents and decision records,
+human review before merge, a release approved by a named person: a careful
+human-led project of the same size is already expected to have them, and many
+do not. Those requirements apply to any project, and a human-led project can
+adopt this convention at any level unchanged.
+
+Five requirements exist only because AI is involved: the disclosure (D1), the
+declaration (D2), the commit attribution (D3), the provenance statement (D7)
+and the blind test (A3, because AI-written documentation describes intent more
+often than behaviour). They are the price of entering with a trust deficit,
+and they are cheap: four of the five are text.
+
+The parity test is a rule for this convention's own evolution: a requirement
+that a careful human-led project of the same size would not be expected to
+meet is not added, unless it is one of the AI-specific five. Each requirement
+below that fails the test is a bug in the convention. Open an issue.
+
+## 4. Levels
 
 | Level | Name | Means |
 |---|---|---|
@@ -60,7 +83,7 @@ Suggested fit:
 - Level 3: anything that handles other people's data, money or safety, and any
   project that wants its trustworthiness to be checked rather than believed.
 
-## 4. Requirements
+## 5. Requirements
 
 Each requirement has an identifier, a statement, the evidence expected, and how
 it is checked. "Checked" says what an auditor, human or agent, does to verify
@@ -80,7 +103,7 @@ keys for the degree of AI involvement (`version`, `level`, `processes`,
 `components`), so that the same information is written once and existing
 badges keep working, plus a `convention` block for this convention's fields.
 A project that already has an `AI-DECLARATION.md` may point to it instead of
-repeating those keys. Section 5 gives the format. The file states, at least:
+repeating those keys. Section 6 gives the format. The file states, at least:
 - the AI involvement level per process (design, implementation, testing,
   documentation, review, deployment), in AI-DECLARATION terms;
 - the convention level claimed;
@@ -231,11 +254,13 @@ a reason.
 **T6. Dependency hygiene and provenance.** Lockfiles are committed.
 Dependencies are checked for known vulnerabilities and for licence
 compatibility in CI or before every release. Every new dependency is checked
-by a human before merge: it exists on the registry under exactly that name, it
-is established (age, maintainers, download trend) or the reason for taking a
-young one is stated, and it is the package the code needs. The check is
-recorded in the commit or pull request. This is the answer to hallucinated
-package names and to the packages attackers register under them.
+against the registry before merge, by a tool, an agent or a human: it exists
+under exactly that name, it is established (age, maintainers, download trend)
+or the reason for taking a young one is stated, and it is the package the code
+needs. The check is recorded in the commit or pull request. Who or what runs
+the check does not matter; that it runs against the registry, and not against
+the model's memory, does. This is the answer to hallucinated package names and
+to the packages attackers register under them.
 - Evidence: the lockfile, the CI step or release checklist and the tool used,
   the recorded checks.
 - Checked: the auditor runs the tools, lists dependencies added since the last
@@ -253,14 +278,16 @@ configuration.
   listed as accepted.
 
 **T8. Maintainability signals.** The project declares a tool and thresholds for
-at least code duplication and function complexity (cyclomatic or cognitive),
-runs it in CI or at each release, and records the numbers in `audit/status.json`
-so that the trend is visible from one check to the next. Thresholds are the
-project's own; the convention asks that they are declared, measured and not
-exceeded. This is the answer to the growth of duplication and churn in
-AI-written code, including its everyday forms: the same logic regenerated in
-three places, a style rule repeated on every element instead of a class, a
-helper rewritten because the model did not find the existing one.
+at least: code duplication, function complexity (cyclomatic or cognitive),
+function length, and file length. It runs the tool in CI or at each release
+and records the numbers in `audit/status.json` so that the trend is visible
+from one check to the next. Thresholds are the project's own; the convention
+asks that they are declared, measured and not exceeded. This is the answer to
+the growth of duplication and churn in AI-written code, including its everyday
+forms: the same logic regenerated in three places, a style rule repeated on
+every element instead of a class, a helper rewritten because the model did not
+find the existing one, and the single file that grows with every prompt until
+it holds the whole program.
 - Evidence: the tool output, the numbers in `audit/status.json`.
 - Checked: the auditor runs the tool and compares with the thresholds and with
   the previous check.
@@ -268,15 +295,22 @@ helper rewritten because the model did not find the existing one.
 ### Level 3: Audited
 
 **A1. Architecture review.** A versioned report assesses whether the software
-is built to be used, not only to demonstrate: module boundaries, error
-handling, configuration, persistence and migrations, observability, failure
-modes, test strategy, and agreement with the architecture documents of A6. The
-verdict is one of `prototype`, `usable with listed gaps`, `production-grade`.
-The review is renewed at each minor release or major structural change, as the
-declaration states.
+is built to be used, not only to demonstrate. It covers module boundaries,
+error handling, configuration, persistence and migrations, observability,
+failure modes, test strategy, and agreement with the architecture documents of
+A6. It judges the design against the usual principles, named so that two
+reviews are comparable: one responsibility per module and type; dependencies
+pointing inward (domain logic without IO, persistence apart from transport,
+authorization as a policy rather than scattered checks); no god object or god
+file; no layer, trait or abstraction with a single use that exists for a
+future that has not come; names that say what things do. Simplicity wins over
+speculative structure: a review flags the missing boundary and the useless one
+alike. The verdict is one of `prototype`, `usable with listed gaps`,
+`production-grade`. The review is renewed at each minor release or major
+structural change, as the declaration states.
 - Evidence: `audit/<date>-architecture.md` with findings and decisions.
 - Checked: the report exists for the current minor version; every finding has
-  a decision (section 6).
+  a decision (section 7).
 
 **A2. Security audit.** The repository has a `SECURITY.md` with a disclosure
 contact, a threat model and the response time of D9. Every security claim made
@@ -299,7 +333,7 @@ friction report. The tester's blindness is enforced by the environment it runs
 in, not by an instruction. The tester installs the software the way the
 documentation says, so an installation that does not work, or a dependency
 that does not exist, is found here as well. The report follows the format in
-section 7.
+section 8.
 - Evidence: `audit/<date>-blind-<campaign>.md` with the brief, the friction
   log, the verdict and the decisions.
 - Checked: a campaign exists for the current minor version if the declaration
@@ -315,7 +349,7 @@ are appended.
   commits and dates in the index match the report headers and the status file.
 
 **A5. Release rule.** No release is published with an open finding of
-severity `BLOCKER` or `DOC-WRONG` (section 6) in any audit report of the
+severity `BLOCKER` or `DOC-WRONG` (section 7) in any audit report of the
 current minor version. Each release names, in its notes or tag message, the
 human maintainer who approved it; that person is listed in `VIBECODING.md`.
 - Evidence: the audit index at the release commit, the release notes.
@@ -360,7 +394,7 @@ been a vector.
   unreviewed third-party items, secrets, and agents running without a stated
   permission model.
 
-## 5. Declaration file
+## 6. Declaration file
 
 `VIBECODING.md` is the single place where the project states what it claims.
 Its front matter reuses the AI-DECLARATION.md keys, then adds a `convention`
@@ -395,7 +429,7 @@ convention:
   security_response: "72h"
   licence: MIT
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
-  maintainability: { tool: rust-code-analysis, duplication_max: 5, complexity_max: 15 }
+  maintainability: { tool: rust-code-analysis, duplication_max: 5, complexity_max: 15, function_max: 60, file_max: 600 }
   mutation: { tool: cargo-mutants, threshold: 70 }
   audit_dir: audit
   audit_cadence: minor
@@ -425,7 +459,7 @@ The README disclosure (D1) is the dynamic badge of D5:
     "commit": "03c8df2",
     "report": "audit/2026-11-08-convention.md",
     "open_findings": { "BLOCKER": 0, "DOC-WRONG": 0, "PAINFUL": 1, "MINOR": 4 },
-    "metrics": { "coverage": 86.2, "duplication": 2.1, "complexity_max": 12, "mutation": 74 },
+    "metrics": { "coverage": 86.2, "duplication": 2.1, "complexity_max": 12, "function_max": 48, "file_max": 512, "mutation": 74 },
     "checked_by": "Claude Code:claude-opus-5-5",
     "read_by": "ikarys"
   }
@@ -435,7 +469,7 @@ The README disclosure (D1) is the dynamic badge of D5:
 Colour: `blue` for `pass`, `yellow` for `pass with findings`, `red` for
 `fail`, `lightgrey` for `stale`.
 
-## 6. Findings and decisions
+## 7. Findings and decisions
 
 Audit reports use four severities:
 
@@ -460,7 +494,7 @@ Findings are not deleted or downgraded after the fact. A finding that turns out
 to be wrong gets the decision `won't fix` with the reason "not reproduced" or
 "tester error".
 
-## 7. Report format
+## 8. Report format
 
 Every report in `audit/` starts with a header and ends with the decisions
 table.
@@ -486,7 +520,7 @@ software for this task;
 
 Report skeletons are in `templates/`.
 
-## 8. Tooling
+## 9. Tooling
 
 The convention can be satisfied by hand. The tooling in this repository
 exists so that the same checks are run the same way on every project.
@@ -516,7 +550,7 @@ Planned set, for Claude Code and for Fennec:
 | `arch-reviewer` | agent | Writes the architecture review with the three-way verdict and checks the A6 documents against the code. |
 | `security-auditor` | agent | Traces claims to tests, runs the data exposure check and the scans, reads the tooling configuration (A8), writes the security report. |
 
-## 9. Related work
+## 10. Related work
 
 The convention reuses what exists and adds the part that did not.
 
@@ -538,7 +572,7 @@ The convention reuses what exists and adds the part that did not.
   source projects regulate incoming AI contributions. D8 asks a vibecoded
   project to have such a policy and to respect those of others.
 
-## 10. Non-goals
+## 11. Non-goals
 
 - The convention does not say whether a project should use AI, nor whether
   vibecoding is faster or cheaper. It says whether the result is sound.
@@ -554,7 +588,7 @@ The convention reuses what exists and adds the part that did not.
   requirement makes no sense for a project, the declaration says so and why,
   and the auditor reports the exception rather than the requirement.
 
-## 11. Glossary
+## 12. Glossary
 
 - **AI-written**: produced by an AI assistant and accepted by a human, with or
   without edits.
@@ -570,7 +604,7 @@ The convention reuses what exists and adds the part that did not.
 - **Check**: the run of the convention auditor that produces
   `audit/status.json`.
 
-## 12. Open questions
+## 13. Open questions
 
 These are being decided for version 0.1. Opinions welcome.
 

@@ -18,9 +18,9 @@ large-sample studies, and the text says which is which.
 |---|---|---|---|---|
 | 1 | AI code ships vulnerabilities, and real apps leak data | A2 security audit, T6 dependency checks | Security only at level 3; nothing on data exposure by default | **NEW T7** secrets and static analysis at level 2; A2 adds an authorization check on every data path |
 | 2 | Nobody understands the code; comprehension debt | A1 architecture review | Nothing proves a human understands the system | **NEW A6** human-written architecture overview and decision records, checked against the code |
-| 3 | Duplication, churn and technical debt grow | A1 | No measurement | **NEW T8** maintainability signals (duplication, complexity) with declared tool and thresholds |
+| 3 | Duplication, churn and technical debt grow; god files | A1 | No measurement | **NEW T8** maintainability signals (duplication, complexity, function and file length) with declared tool and thresholds; A1 names the design principles it judges against |
 | 4 | AI tests assert nothing; agents weaken tests to pass CI | T3 sampled review | Judgement only; no objective measure; no rule on test removal | T3 strengthened; **NEW A7** mutation score recommended at level 3; **NEW D6** test changes are explained |
-| 5 | Hallucinated packages, slopsquatting, supply chain | T6 | New dependencies not covered | T6 extended: lockfile, every new dependency reviewed by a human against a checklist |
+| 5 | Hallucinated packages, slopsquatting, supply chain | T6 | New dependencies not covered | T6 extended: lockfile, every new dependency checked against the registry before merge, by tool, agent or human |
 | 6 | Copyright, licence and provenance are unknowable | D3 trailers | No provenance statement; `Co-Authored-By` legally wrong | D3 switches to `Assisted-by` / `Generated-by`; **NEW D7** provenance and licence statement |
 | 7 | AI slop floods maintainers; drive-by PRs | none | Convention only covers the project's own code | **NEW D8** contribution policy: incoming AI contributions disclosed with evidence; generator is never sole reviewer |
 | 8 | Nobody is accountable | D2 maintainers, D4 human review, "Humans decide" | Release not signed by a named human | A5 adds "released by" a named human |
@@ -167,7 +167,8 @@ you are about to add.
 
 **Proposed.**
 - **T6 extended. Dependency provenance.** Lockfiles are committed. Every new
-  dependency is checked by a human before merge against a short list: it
+  dependency is checked against the registry before merge, by a tool, an agent
+  or a human: it
   exists on the registry under exactly that name, it is established (age,
   maintainers, download trend) or the reason to take a young one is stated,
   and it is the package the code actually needs. The check is recorded in the

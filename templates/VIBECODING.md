@@ -24,7 +24,7 @@ convention:
   licence: <SPDX identifier>
   # level 2 and above
   coverage: { threshold: <N>, kind: <line | branch>, tool: <tool> }
-  maintainability: { tool: <tool>, duplication_max: <percent>, complexity_max: <N> }
+  maintainability: { tool: <tool>, duplication_max: <percent>, complexity_max: <N>, function_max: <lines>, file_max: <lines> }
   # level 3
   mutation: { tool: <tool>, threshold: <N> }   # recommended, remove if not measured
   audit_dir: audit
