@@ -2,3 +2,4 @@
 .agents/
 *.swp
 .DS_Store
+vibecheck/target/

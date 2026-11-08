@@ -21,7 +21,7 @@ large-sample studies, and the text says which is which.
 | 3 | Duplication, churn and technical debt grow; god files | A1 | No measurement | **NEW T8** maintainability signals (duplication, complexity, function and file length) with declared tool and thresholds; A1 names the design principles it judges against |
 | 4 | AI tests assert nothing; agents weaken tests to pass CI | T3 sampled review | Judgement only; no objective measure; no rule on test removal | T3 strengthened; **NEW A7** mutation score recommended at level 3; **NEW D6** test changes are explained |
 | 5 | Hallucinated packages, slopsquatting, supply chain | T6 | New dependencies not covered | T6 extended: lockfile, every new dependency checked against the registry before merge, by tool, agent or human |
-| 6 | Copyright, licence and provenance are unknowable | D3 trailers | No provenance statement; `Co-Authored-By` legally wrong | D3 switches to `Assisted-by` / `Generated-by`; **NEW D7** provenance and licence statement |
+| 6 | Copyright, licence and provenance are unknowable | D3 trailers | No provenance statement | D3 accepts any declared trailer and notes the `Assisted-by` practice; **NEW D7** provenance and licence statement |
 | 7 | AI slop floods maintainers; drive-by PRs | none | Convention only covers the project's own code | **NEW D8** contribution policy: incoming AI contributions disclosed with evidence; generator is never sole reviewer |
 | 8 | Nobody is accountable | D2 maintainers, D4 human review, "Humans decide" | Release not signed by a named human | A5 adds "released by" a named human |
 | 9 | Projects are abandoned fast; badges go stale | D5 dated check (proposed) | No project status | **NEW D9** project status and maintenance statement |
@@ -199,12 +199,12 @@ believes about the copyright status of its AI-written parts or what it did to
 avoid reproducing licence-incompatible code.
 
 **Proposed.**
-- **D3 changed.** `Assisted-by: <Tool>:<model> [tools]` on commits with
-  AI-written content, the kernel's format; `Generated-by:` when the change is
-  substantially generated without human edits. `Co-Authored-By` naming a
-  model is honest disclosure and counts, but is flagged with the fix (a tool
-  setting). A human signs `Signed-off-by` where a DCO applies; the model never
-  does.
+- **D3 changed.** A machine-readable trailer naming tool and model on every
+  commit with AI-written content; the project declares which trailer it uses
+  (`Assisted-by`, `Generated-by`, `Co-Authored-By`, or another). The convention
+  records that large projects converged on `Assisted-by` and why, without
+  making it a rule. A human signs `Signed-off-by` where a DCO applies; the
+  model never does.
 - **NEW D7. Provenance and licence statement.** Level 1. `VIBECODING.md`
   states: the project licence; that AI-written parts may not be protected by
   copyright and the maintainers accept this; that no verbatim reproduction of

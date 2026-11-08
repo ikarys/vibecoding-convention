@@ -44,24 +44,25 @@ repeating those keys. The Declaration file section gives the format. The file st
   thresholds in CI configuration).
 
 **D3. Commit attribution.** Every commit that contains AI-written content
-carries an `Assisted-by:` trailer naming the tool and model, in the format the
-Linux kernel adopted: `Assisted-by: <Tool>:<model> [tool2] [tool3]`, for
-example `Assisted-by: Claude Code:claude-opus-5-5`. A commit whose change is
-substantially generated without human edits uses `Generated-by:` with the same
-value. A `Co-Authored-By:` trailer naming a model, which several tools add by
-default, is honest disclosure and counts as attribution; it is nonetheless
-flagged as a warning, because it presents the model as an author in the legal
-sense, which it is not, and because the projects that have settled the question
-(the Linux kernel, Fedora, LLVM, OpenInfra, OpenTelemetry) use `Assisted-by:`.
-The fix is a one-line tool setting. Where the project uses `Signed-off-by:`, a
-human signs; the model never does, since that trailer certifies origin. A
-commit without a trailer is understood as human-written.
+carries a git trailer that names the tool and the model, so that attribution
+can be read by a machine from the history alone. The convention does not pick
+the trailer. The project declares the ones it uses in `VIBECODING.md`
+(`convention.attribution_trailers`); when it declares none, the common ones are
+accepted: `Assisted-by:` and `Generated-by:` (Linux kernel, Fedora, LLVM,
+OpenInfra, OpenTelemetry, Apache), `Co-Authored-By:` (the default of several
+coding tools), `AI-Tool:`. For the record, `Assisted-by: <Tool>:<model>` is the
+form the large projects converged on, and `Co-Authored-By:` has been criticised
+for presenting a model as a legal author; that is information for the project,
+not a rule of this convention. One rule only, because it is about honesty and
+not form: a trailer that certifies origin or legal responsibility
+(`Signed-off-by:` under a Developer Certificate of Origin) names a human, never
+a model. A commit without any attribution trailer is understood as
+human-written.
 - Evidence: the git history from the adoption commit named in `VIBECODING.md`.
 - Checked: sample commits since adoption. Substantial commits without a
   trailer are a finding if the declaration says the project is mostly
   AI-written. The share of attributed commits is reported, not judged against
-  a threshold. `Co-Authored-By:` naming a model is a warning with the fix;
-  `Signed-off-by:` naming a model is a failure.
+  a threshold. A `Signed-off-by:` naming a model is a failure.
 
 **D4. Human review before merge.** No AI-written change reaches the default
 branch without a human having read it and approved it. For a team this is a
@@ -130,18 +131,19 @@ honest, and it is the information a user needs.
 - Checked: present and consistent between the two files; an `archived`
   project is not required to keep its check fresh (D5).
 
-**D10. Agent instructions carry the convention.** Where the project has an
-agent instruction file (`AGENTS.md`, `CLAUDE.md`, `.cursorrules` or an
-equivalent), that file names the convention level and links to
+**D10. Agent instructions carry the convention.** Where the project has agent
+instruction files, under whatever name its tools use (`AGENTS.md`, `CLAUDE.md`,
+`.cursorrules`, `GEMINI.md` and the like, or the paths the project declares in
+`convention.agent_instruction_files`), each such file names the convention level and links to
 `VIBECODING.md`; gives the build, test, lint and scan commands an agent must
 pass before calling a change done; states the edit-time rules (the D3 trailer,
 a reason for every test change under D6, the registry check of T6 for new
 dependencies, no secrets); and lists what the agent does not do without a
 human (merge, release, change the CI, delete data). This is the only place
 where the convention acts while the code is being written rather than at
-audit time. Keep the file short enough to be read whole by the model; no size
-is mandated, and no structure is: tools differ. A project with no such file is
-not required to add one.
+audit time. Keep the file short enough to be read whole by the model; no size,
+no structure and no file name is mandated: tools differ, and the convention has
+no opinion on them. A project with no such file is not required to add one.
 - Evidence: the file.
 - Checked: where present, the file contains the four points and no secret.
 

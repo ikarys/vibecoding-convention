@@ -42,13 +42,13 @@ requirements:
   - id: D3
     level: 1
     title: Commit attribution
-    statement: Every commit with AI-written content carries "Assisted-by: <Tool>:<model>" or "Generated-by:"; a Co-Authored-By naming a model counts as disclosure but is flagged; Signed-off-by never names a model.
+    statement: Every commit with AI-written content carries a machine-readable trailer naming the tool and model; the project declares which trailers it uses (defaults Assisted-by, Generated-by, Co-Authored-By, AI-Tool); a trailer that certifies origin (Signed-off-by) never names a model.
     evidence: [git history since convention.adopted_at]
     check: mechanical
     mechanical:
-      - a Co-Authored-By trailer whose value matches a declared tool or a known model vendor address is a warning (counts as attribution; fix is the tool's attribution setting)
+      - attribution trailers are convention.attribution_trailers, default [Assisted-by, Generated-by, Co-Authored-By, AI-Tool]
       - a Signed-off-by trailer naming a declared tool or model is a failure
-      - report the share of commits since adoption with any AI attribution trailer (informative, no threshold)
+      - report the share of commits since adoption with an attribution trailer (informative, no threshold)
 
   - id: D4
     level: 1
@@ -115,11 +115,12 @@ requirements:
   - id: D10
     level: 1
     title: Agent instructions carry the convention
-    statement: Where an agent instruction file exists, it names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the edit-time rules and lists what the agent never does without a human.
-    evidence: [AGENTS.md, CLAUDE.md, .cursorrules, equivalents]
+    statement: Where the project has agent instruction files (any name its tools use, or the paths it declares), each names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the edit-time rules and lists what the agent never does without a human.
+    evidence: [AGENTS.md, CLAUDE.md, .cursorrules, GEMINI.md, convention.agent_instruction_files]
     check: mechanical
     mechanical:
-      - for each present instruction file, it links VIBECODING.md, mentions Assisted-by, and contains the test command declared in convention.commands.test
+      - instruction files are the known names plus convention.agent_instruction_files
+      - for each present file, it links VIBECODING.md, names at least one declared attribution trailer, and contains the test command declared in convention.commands.test
       - it contains no secret (same scanner as T7)
 
   - id: T1

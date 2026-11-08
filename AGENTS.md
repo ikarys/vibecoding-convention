@@ -1,0 +1,27 @@
+# Agent instructions
+
+This repository holds the Vibecoding Convention text, its machine-readable
+list, templates, and the `vibecheck` validator (Rust, in `vibecheck/`).
+
+## Vibecoding Convention (level 1)
+
+This project follows its own convention at level 1; see `VIBECODING.md`.
+
+Before calling a change done, these must pass:
+- `cargo test --manifest-path vibecheck/Cargo.toml`
+- `cargo clippy --manifest-path vibecheck/Cargo.toml --all-targets -- -D warnings`
+- `cargo fmt --manifest-path vibecheck/Cargo.toml --check`
+- `vibecheck .` (build it with `cargo build --manifest-path vibecheck/Cargo.toml`)
+
+Rules while editing:
+- Every commit with AI-written content ends with `Assisted-by: <Tool>:<model>`,
+  the trailer this project declares.
+- Deleting, skipping or weakening a test requires the reason in the commit message.
+- A new dependency is checked against crates.io (exists under that exact name,
+  established, the one the code needs) and the check is noted in the commit.
+- No secret in any file, prompt or config.
+- `CONVENTION.md`, `docs/requirements.md` and `convention.yaml` must say the
+  same thing; a change to one is a change to all three.
+- Everything in this repository is in English.
+
+Never without a human: merge, release, change the CI, delete data.

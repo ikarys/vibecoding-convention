@@ -17,7 +17,9 @@ convention:
   adopted_at: <commit hash>
   status: <active | maintenance | archived>
   tools:
-    - "<Tool>:<model>"            # same values as the Assisted-by trailers
+    - "<Tool>:<model>"            # same values as in the attribution trailers
+  attribution_trailers: [Assisted-by]   # the trailers this project uses; default accepts Assisted-by, Generated-by, Co-Authored-By, AI-Tool
+  agent_instruction_files: [AGENTS.md]  # optional; the known names are always looked at
   maintainers: [<handle>]
   review: "<reviewed pull requests | single maintainer reads every diff; enforced by <tool or workflow>>"
   security_response: "<72h | none>"

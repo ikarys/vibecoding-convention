@@ -15,8 +15,11 @@ convention:
   status: active
   tools:
     - "Claude Code:claude-fable-5-1"
-    - "Claude Code:claude-opus-5-5"
-    - "Fennec:qwen3.8-27b"
+  attribution_trailers: [Assisted-by, Generated-by]
+  commands:
+    test: "cargo test --manifest-path vibecheck/Cargo.toml"
+    lint: "cargo clippy --manifest-path vibecheck/Cargo.toml --all-targets -- -D warnings"
+    format: "cargo fmt --manifest-path vibecheck/Cargo.toml --check"
   maintainers: [ikarys]
   review: "single maintainer reads every diff before it reaches main"
   security_response: "none"
@@ -26,15 +29,18 @@ convention:
 # Vibecoding declaration
 
 This repository follows its own [Vibecoding Convention](CONVENTION.md) version
-0.1 at level 1. It holds text, templates and agent definitions, with no code to
-test yet; the level will be revised when executable tooling is added.
+0.1 at level 1. It holds text, templates and the `vibecheck` validator. Level 2
+will be claimed once the validator has CI, coverage and the other level 2
+evidence.
 
 ## AI assistance
 
 The convention text, the criticism survey and the templates are drafted by AI
 assistants in conversation with the maintainer, who frames, argues, edits and
-decides. Agent and skill definitions are drafted by a local model through
-Fennec and reviewed in Claude Code. Most of the text is AI-written.
+decides. Code and agent definitions are drafted by a local model (qwen3.8-27b)
+called from Claude Code, then reviewed and corrected there; commits are
+attributed to the tool that committed them. Most of the text and code is
+AI-written.
 
 ## Review
 

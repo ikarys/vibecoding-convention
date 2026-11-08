@@ -8,8 +8,8 @@ Before calling a change done, these must pass:
 - `<secrets scan command>`
 
 Rules while editing:
-- Every commit with AI-written content ends with `Assisted-by: <Tool>:<model>`.
-  Never `Co-Authored-By` for a model.
+- Every commit with AI-written content ends with the attribution trailer this
+  project uses, naming the tool and model, for example `Assisted-by: <Tool>:<model>`.
 - Deleting, skipping or weakening a test requires the reason in the commit message.
 - A new dependency is checked against the registry (exists under that exact name,
   established, the one the code needs) and the check is noted in the commit.

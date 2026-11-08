@@ -20,6 +20,7 @@ Tools read the same list from [convention.yaml](convention.yaml).
 - **Humans decide.** AI proposes; a named human validates, decides and is accountable. Nothing has to be written by a human; everything has to be validated by one.
 - **Nothing silent.** AI-written changes are attributed where they land.
 - **Measure the product, not the process.** The convention says what the result must show, not how to work.
+- **Outcomes, not forms.** The convention says what must be visible, never which file name, trailer wording or tool to use. Where tools need a form, the project declares the one it uses; the defaults are the common ones.
 
 ## Parity with human-led projects
 
@@ -51,14 +52,14 @@ Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 |---|---|---|---|---|
 | D1 | 1 | README discloses AI assistance and links to `VIBECODING.md` | README | M |
 | D2 | 1 | `VIBECODING.md` declares AI involvement (AI-DECLARATION.md keys), convention level, tools and models, maintainers, review policy, status, provenance, adoption commit, thresholds | the file | M |
-| D3 | 1 | AI-written commits carry `Assisted-by: <Tool>:<model>` (or `Generated-by:`); `Co-Authored-By` naming a model counts as disclosure but is flagged; `Signed-off-by` by a model never | git history | M |
+| D3 | 1 | AI-written commits carry a machine-readable trailer naming the tool and model (`Assisted-by:`, `Generated-by:`, `Co-Authored-By:` or another the project declares); a model never signs a certificate of origin | git history | M |
 | D4 | 1 | No AI-written change reaches the default branch without a human review step; the generator is never the only reviewer | policy, PR history, review gates | M+J |
 | D5 | 1 | `audit/status.json` holds the date, commit and verdict of the last check, feeds the README badge, and marks itself stale after the declared interval or a release | status file, badge | M |
 | D6 | 1 | A change that deletes, skips or weakens a test states why, and a human approves | git history | M+J |
 | D7 | 1 | Declaration states licence, copyright stance on AI-written parts, no known licence-incompatible reproduction, safeguards used | the declaration | M |
 | D8 | 1 | `CONTRIBUTING.md` states the policy for incoming AI contributions and requires disclosure and verification evidence in PRs; outgoing contributions disclose | the file, PR template | M |
 | D9 | 1 | Declaration states project status (active, maintenance, archived) and security response time, matching `SECURITY.md` | the files | M |
-| D10 | 1 | Where an agent instruction file exists, it names the level, the commands to pass, the edit-time rules and what the agent never does alone | the file | M |
+| D10 | 1 | Where the project has agent instruction files (whatever their name), they name the level, the commands to pass, the edit-time rules and what the agent never does alone | the files | M |
 | T1 | 2 | Tests run in CI on every change from a clean checkout; default branch green | CI config, last run | M |
 | T2 | 2 | Coverage measured by a declared tool is at or above the declared threshold (80 % recommended) | coverage report | M |
 | T3 | 2 | Tests assert behaviour; no unexplained skips; every behaviour change lands with its test | test suite, history | J |
@@ -106,7 +107,8 @@ Disclosure formats ([AI-DECLARATION.md](https://github.com/DimwitLabs/AI-DECLARA
 whose keys D2 reuses, and several badge schemes) are self-declared and say so;
 the convention adds the evidence behind the declaration. The `Assisted-by:` and
 `Generated-by:` trailers come from the Linux kernel, Fedora, LLVM, OpenInfra,
-OpenTelemetry and the Apache Software Foundation; D3 adopts them unchanged. The
+OpenTelemetry and the Apache Software Foundation; D3 accepts them, and any
+other trailer a project declares, without taking a side. The
 [Vibe Coding Repository Standard](https://github.com/cz1993/vibe-coding-repository-standard)
 organises an AI-built repository's governance files; it does not cover
 disclosure, attribution, coverage, blind tests or versioned audits. Studies of

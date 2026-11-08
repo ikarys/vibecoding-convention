@@ -13,7 +13,8 @@ Assisted-by: Claude Code:claude-opus-5-5
 ```
 
 Use `Generated-by:` instead when the change is substantially generated without
-human edits. Do not add `Co-Authored-By:` for a model.
+human edits. This project uses these two trailers; the convention itself
+accepts any declared trailer.
 
 In the pull request, say what you did to check the change: what you read, what
 you ran. A pull request whose description was generated and not read is closed
