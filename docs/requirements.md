@@ -113,10 +113,11 @@ scanning, a human check of long generated blocks).
 
 **D8. Contribution policy.** `CONTRIBUTING.md` states the project's policy for
 incoming AI-assisted contributions: accepted with disclosure, accepted with
-conditions, or refused. Where accepted, it requires the D3 trailer and, in the
-pull request, what the contributor ran to verify the change. Contributions the
-project makes to other projects follow the target project's AI policy and
-disclose AI assistance by default.
+conditions, or refused. Where accepted, it asks contributors for C1 to C3 of
+Part B: disclosure with the project's trailer, a statement that the diff was
+read, tests and documentation with the change, and what was run. The pull
+request template carries them as checkboxes. Contributions the project makes
+to other projects follow Part B.
 - Evidence: `CONTRIBUTING.md` and the pull request template.
 - Checked: both exist and say this; the auditor samples merged pull requests
   from outside contributors for the trailer and a human approval.
@@ -361,6 +362,57 @@ been a vector.
 - Checked: the security auditor reads these files and lists unpinned or
   unreviewed third-party items, secrets, and agents running without a stated
   permission model.
+
+## Part B: contributing to other projects
+
+Part A applies to a repository and its maintainers. Part B applies to anyone,
+person or agent, who sends a pull request, an issue or a vulnerability report
+to a project they do not maintain. It needs no declaration and has no level:
+the evidence is the contribution itself, and the receiving maintainer checks
+it. A project under Part A asks for C1 to C3 in its pull request template
+(D8); a project that has never heard of the convention can still read them.
+
+**C1. Disclosure.** The pull request or report says that AI assisted in
+writing it, with the tool and model, in its text and, for commits, as the
+trailer the target project expects; when the project expresses no preference,
+the D3 defaults apply. A contribution with AI-written content and no
+disclosure is dishonest, whatever its quality.
+- Evidence: the description and the commit trailers.
+
+**C2. Read and understood.** The contributor has read every line of the diff
+and can explain each change when asked. The description says so in one line.
+How the description was written does not matter; that it is true does.
+- Evidence: the statement, and the answers given in review. A reviewer may
+  ask about any line; an answer that does not match the diff shows the
+  statement was false, and the project may close the contribution.
+
+**C3. Complete.** A change of behaviour comes with the tests that cover it and
+with the documentation it affects, in the same pull request. The description
+says what was run (tests, lint, the software itself) and shows the result.
+For a bug report: the contributor reproduced the bug and gives the exact steps,
+the versions and the output. For a vulnerability report: a working
+reproduction, and no claim the contributor has not seen happen; a report that
+describes a vulnerability a model imagined is the single most damaging form of
+slop, and it is what closed curl's bug bounty.
+- Evidence: the diff, the description, the report.
+
+**C4. Scope and policy.** The contributor has read the target project's
+contribution guide and its AI policy and follows them; a project that refuses
+AI-assisted contributions receives none. One change per pull request. No
+unsolicited generated changes sent across many repositories (typo sweeps,
+"modernisation", dependency bumps the project did not ask for).
+- Evidence: the description names the guide; the contributor's recent
+  activity shows no mass sending.
+
+**C5. Follow-up.** The contributor answers review themselves, within the time
+the project expects, and does not hand the thread to a model that has not seen
+the review. An AI-assisted contribution whose author does not answer may be
+closed without discussion; the convention says this is legitimate, so that
+maintainers who do it are not accused of hostility to AI.
+- Evidence: the review thread.
+
+The skill `vibecoding-contribute` runs C1 to C4 as a pre-flight before a
+contribution is sent.
 
 ## Declaration file
 

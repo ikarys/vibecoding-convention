@@ -57,7 +57,7 @@ Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 | D5 | 1 | `audit/status.json` holds the date, commit and verdict of the last check, feeds the README badge, and marks itself stale after the declared interval or a release | status file, badge | M |
 | D6 | 1 | A change that deletes, skips or weakens a test states why, and a human approves | git history | M+J |
 | D7 | 1 | Declaration states licence, copyright stance on AI-written parts, no known licence-incompatible reproduction, safeguards used | the declaration | M |
-| D8 | 1 | `CONTRIBUTING.md` states the policy for incoming AI contributions and requires disclosure and verification evidence in PRs; outgoing contributions disclose | the file, PR template | M |
+| D8 | 1 | `CONTRIBUTING.md` states the policy for incoming AI contributions and asks for C1 to C3 in pull requests; outgoing contributions follow Part B | the file, PR template | M |
 | D9 | 1 | Declaration states project status (active, maintenance, archived) and security response time, matching `SECURITY.md` | the files | M |
 | D10 | 1 | Where the project has agent instruction files (whatever their name), they name the level, the commands to pass, the edit-time rules and what the agent never does alone | the files | M |
 | T1 | 2 | Tests run in CI on every change from a clean checkout; default branch green | CI config, last run | M |
@@ -77,6 +77,28 @@ Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 | A6 | 3 | Architecture overview and decision records exist, each validated by a named human with a date, revalidated on structural change, and match the code | the documents | M+J |
 | A7 | 3 | Mutation score measured on core modules and at or above the declared threshold (recommended) | tool output | M |
 | A8 | 3 | Everything that executes with repository access (agent configs, skills, hooks, CI actions, scripts) is versioned, reviewed, pinned, secret-free, with a stated permission model | the files | M+J |
+
+## Part B: contributing to other projects
+
+Most of the harm attributed to vibecoding is done not by projects but by
+individual contributions: a generated pull request sent unread, a bug report
+or a vulnerability report that nobody reproduced. Part A applies to a
+repository; Part B applies to a person or an agent sending one contribution
+to a project they do not maintain, whatever that project's own stance. The
+evidence is in the contribution itself, and the receiving maintainer is the
+one who checks it. A project at any level of Part A makes C1 to C3 the
+checkboxes of its pull request template (D8).
+
+| ID | Requirement | Evidence |
+|---|---|---|
+| C1 | The pull request or report discloses AI assistance, with tool and model, in its text and as the trailer the target project expects (the D3 defaults otherwise) | description, trailers |
+| C2 | The contributor has read every line of the diff and can explain each change when asked | a statement in the description, answers in review |
+| C3 | The contribution is complete: a behaviour change comes with its tests and with the documentation it affects; the description says what was run and shows the result; a bug report was reproduced, with exact steps, versions and output; a vulnerability report has a working reproduction and no speculative claim | the diff, the description |
+| C4 | The target project's contribution guide and AI policy are read and respected; a project that refuses AI-assisted contributions receives none; one change per pull request; no unsolicited generated changes sent across many repositories | the description, the contributor's history |
+| C5 | The contributor answers review themselves, within the time the project expects; an AI-assisted contribution whose author does not answer may be closed without discussion | the review thread |
+
+Parity: a human contributor is already expected to do all of this. C1 is the
+only AI-specific line.
 
 ## Findings and decisions
 
@@ -98,7 +120,8 @@ same checks the same way everywhere:
   `vibecoding-architecture`, `vibecoding-security`) do the **J** checks and
   write the reports. They read `vibecheck`'s output rather than redoing it.
 - Skills (`vibecoding-init`, `vibecoding-release`) bootstrap a project and
-  prepare a release.
+  prepare a release; `vibecoding-contribute` checks a contribution against
+  Part B before it is sent.
 - A ten-line block in the agent instruction file (D10) is all that sits in a
   model's context during ordinary work.
 

@@ -2,14 +2,15 @@
 
 <One or two sentences.>
 
-## AI assistance
+## Vibecoding Convention, Part B
 
-- [ ] No AI-written content in this change
-- [ ] AI-written content, commits carry `Assisted-by: <Tool>:<model>`
+- [ ] C1. AI assistance disclosed: <none | tool and model>, and the commits carry the project's trailer
+- [ ] C2. I read every line of this diff and can explain each change
+- [ ] C3. Tests and documentation updated for what changed, and here is what I ran:
 
-## What I ran
-
-<The commands you ran and their result: tests, lint, scan. "I read the diff" is a valid line for a docs change.>
+```
+<commands and their result>
+```
 
 ## Test changes
 

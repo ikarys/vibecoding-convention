@@ -22,7 +22,7 @@ large-sample studies, and the text says which is which.
 | 4 | AI tests assert nothing; agents weaken tests to pass CI | T3 sampled review | Judgement only; no objective measure; no rule on test removal | T3 strengthened; **NEW A7** mutation score recommended at level 3; **NEW D6** test changes are explained |
 | 5 | Hallucinated packages, slopsquatting, supply chain | T6 | New dependencies not covered | T6 extended: lockfile, every new dependency checked against the registry before merge, by tool, agent or human |
 | 6 | Copyright, licence and provenance are unknowable | D3 trailers | No provenance statement | D3 accepts any declared trailer and notes the `Assisted-by` practice; **NEW D7** provenance and licence statement |
-| 7 | AI slop floods maintainers; drive-by PRs | none | Convention only covers the project's own code | **NEW D8** contribution policy: incoming AI contributions disclosed with evidence; generator is never sole reviewer |
+| 7 | AI slop floods maintainers; drive-by PRs and imagined bug reports | none | Convention only covers the project's own code; nothing addresses the individual who sends one contribution | **NEW D8** contribution policy on the receiving side; **NEW Part B (C1 to C5)** on the sending side: disclosure, diff read, tests and docs with the change, reproduction for reports, target policy respected, follow-up |
 | 8 | Nobody is accountable | D2 maintainers, D4 human review, "Humans decide" | Release not signed by a named human | A5 adds "released by" a named human |
 | 9 | Projects are abandoned fast; badges go stale | D5 dated check (proposed) | No project status | **NEW D9** project status and maintenance statement |
 | 10 | Agent tooling is itself an attack surface | none | Agent config, skills and plugins not treated as code | **NEW A8** agent configuration is code: reviewed, versioned, pinned, no secrets |
@@ -235,13 +235,18 @@ maintainer pay for its tooling.
 **Proposed.**
 - **NEW D8. Contribution policy.** Level 1. `CONTRIBUTING.md` states the
   project's policy for incoming AI-assisted contributions (accepted with
-  disclosure, accepted with conditions, or refused), requires the
-  `Assisted-by` trailer and, in the pull request, what was run to verify the
-  change. The agent or tool that produced a change is never its only
-  reviewer; a human approves. Outgoing contributions to other projects follow
-  the target project's AI policy and disclose by default. Checked: the file
-  and the pull request template exist; the auditor samples merged pull
-  requests for a human approval.
+  disclosure, accepted with conditions, or refused) and asks for C1 to C3 in
+  pull requests. The agent or tool that produced a change is never its only
+  reviewer; a human approves. Checked: the file and the pull request template
+  exist; the auditor samples merged pull requests for a human approval.
+- **NEW Part B, C1 to C5.** The convention as first drafted spoke only to
+  projects. The slop problem is made by individuals sending one contribution
+  each to projects they do not maintain, and the worst of it, the imagined
+  vulnerability report, has no repository at all. Part B gives those five
+  rules a name and an identifier that a maintainer can point to: disclosure,
+  the diff was read, tests and documentation come with the change and reports
+  come with a reproduction, the target's policy is respected, the author
+  answers review. It costs nothing to a project and needs no declaration.
 
 ## 8. Accountability
 

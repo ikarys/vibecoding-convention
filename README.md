@@ -23,7 +23,10 @@ with their sources: see [docs/criticisms.md](docs/criticisms.md).
 | 3 | **Audited** | versioned audit reports in the repository: architecture review, security audit, blind usability test when applicable, architecture documents validated by a named human, each finding with a decision. |
 
 A project picks a level and proves it. Nobody is asked to reach level 3 for a
-weekend script. The one-page text is [CONVENTION.md](CONVENTION.md); the
+weekend script. A second part, five rules named C1 to C5, applies to anyone
+sending a pull request or a bug report to a project they do not maintain:
+disclose, read your diff, bring tests and docs, reproduce what you report,
+respect the target's policy, answer review. The one-page text is [CONVENTION.md](CONVENTION.md); the
 detail of each requirement is in [docs/requirements.md](docs/requirements.md).
 
 ## What it reuses
@@ -54,7 +57,7 @@ AI coding tools:
   `audit/status.json`.
 - `convention.yaml` — the requirements as data, for tools.
 - `skills/` — procedures loaded into the main assistant: bootstrap a project,
-  prepare a release.
+  prepare a release, check a contribution before sending it.
 - `agents/claude-code/` — Claude Code subagents `vibecoding-audit`,
   `vibecoding-blind-test`, `vibecoding-architecture`, `vibecoding-security`.
 - `agents/fennec/` — the same four agents for [Fennec](https://github.com/ikarys/fennec).

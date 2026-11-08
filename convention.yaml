@@ -95,7 +95,7 @@ requirements:
   - id: D8
     level: 1
     title: Contribution policy
-    statement: CONTRIBUTING.md states the policy for incoming AI-assisted contributions and requires disclosure and verification evidence in pull requests; outgoing contributions disclose.
+    statement: CONTRIBUTING.md states the policy for incoming AI-assisted contributions and asks for C1 to C3 of Part B in pull requests; outgoing contributions follow Part B.
     evidence: [CONTRIBUTING.md, pull request template]
     check: mechanical
     mechanical:
@@ -294,6 +294,30 @@ requirements:
       - CI actions and pre-commit hooks are pinned to a version or commit
       - no secret in instruction files, skills, hooks, workflows (same scanner as T7)
       - convention.agent_permissions is set
+
+# Part B: one contribution to a project the contributor does not maintain.
+# No level; checked by the receiving maintainer from the contribution itself.
+contributions:
+  - id: C1
+    title: Disclosure
+    statement: The pull request or report discloses AI assistance, with tool and model, in its text and as the trailer the target project expects (D3 defaults otherwise).
+    evidence: [description, commit trailers]
+  - id: C2
+    title: Read and understood
+    statement: The contributor has read every line of the diff and can explain each change when asked; the description says so.
+    evidence: [description statement, review answers]
+  - id: C3
+    title: Complete
+    statement: A behaviour change comes with its tests and with the documentation it affects; the description says what was run and shows the result; a bug report was reproduced with exact steps, versions and output; a vulnerability report has a working reproduction and no speculative claim.
+    evidence: [diff, description, report]
+  - id: C4
+    title: Scope and policy
+    statement: The target project's contribution guide and AI policy are read and respected; a project refusing AI-assisted contributions receives none; one change per pull request; no unsolicited generated changes across many repositories.
+    evidence: [description, contributor activity]
+  - id: C5
+    title: Follow-up
+    statement: The contributor answers review themselves within the time the project expects; an unanswered AI-assisted contribution may be closed without discussion.
+    evidence: [review thread]
 
 # Commands a project declares in VIBECODING.md under convention.commands so that
 # tools can run them without guessing. All optional; a missing command makes the
