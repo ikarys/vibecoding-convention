@@ -5,7 +5,10 @@ gives, for each requirement, the full statement, the evidence expected and how
 it is checked. Identifiers are stable: a requirement is never renumbered.
 [convention.yaml](../convention.yaml) carries the same list for tools.
 
-## Requirements
+## Part A: a project
+
+Part A applies to a repository and its maintainers: three levels, the
+requirements below. Identifiers are stable.
 
 Each requirement has an identifier, a statement, the evidence expected, and how
 it is checked. "Checked" says what an auditor, human or agent, does to verify

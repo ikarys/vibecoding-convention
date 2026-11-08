@@ -31,7 +31,13 @@ are the price of a trust deficit, and four of them are text. The parity test
 governs the convention's evolution: a requirement that a human-led project
 would not be expected to meet is not added unless it is one of those five.
 
-## Levels
+## Part A: a project
+
+Part A applies to a repository and the people who maintain it. It has three
+levels and twenty-six requirements. Part B, below, applies to anyone sending
+one contribution to a project they do not maintain.
+
+### Levels
 
 | Level | Name | Means |
 |---|---|---|
@@ -43,7 +49,7 @@ Each level includes the ones below. Suggested fit: level 1 for scripts and
 prototypes, level 2 for anything others depend on, level 3 for anything that
 handles other people's data, money or safety.
 
-## Requirements
+### Requirements
 
 Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 (a reviewer, human or agent, decides), **M+J** both.
