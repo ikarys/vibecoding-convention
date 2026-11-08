@@ -142,9 +142,16 @@ instruction files, under whatever name its tools use (`AGENTS.md`, `CLAUDE.md`,
 `VIBECODING.md`; gives the build, test, lint and scan commands an agent must
 pass before calling a change done; states the edit-time rules (the D3 trailer,
 a reason for every test change under D6, the registry check of T6 for new
-dependencies and the registry's current version under T9, no secrets); and
-lists what the agent does not do without a human (merge, release, change the
-CI, delete data). This is the only place
+dependencies and the registry's current version under T9, no secrets, and
+signal over noise: a comment states a reason, a constraint or a trap, never
+what the line does; a docstring says what the caller must know, not the
+signature again; the public API is documented; no TODO, placeholder,
+commented-out or dead code in a delivered change; documentation proportionate
+to the project, a README that says what it is, how to install it, how to use
+it and where to go next, and nothing generated to fill space); and lists what
+the agent does not do without a human (merge, release, change the CI, delete
+data). The noise rules are here because the instruction file is the only
+place where noise is prevented rather than reviewed away. This is the only place
 where the convention acts while the code is being written rather than at
 audit time. Keep the file short enough to be read whole by the model; no size,
 no structure and no file name is mandated: tools differ, and the convention has
@@ -227,15 +234,20 @@ configuration.
 
 **T8. Maintainability signals.** The project declares a tool and thresholds for
 at least: code duplication, function complexity (cyclomatic or cognitive),
-function length, and file length. It runs the tool in CI or at each release
-and records the numbers in `audit/status.json` so that the trend is visible
-from one check to the next. Thresholds are the project's own; the convention
+function length, file length, and leftover markers (`TODO`, `FIXME`, `XXX`,
+placeholder text, commented-out code blocks) in delivered code. Where the
+ecosystem has a lint for public API documentation (`missing_docs`,
+pydocstyle, eslint-plugin-jsdoc and the like), it runs in CI. The project
+runs the tools in CI or at each release and records the numbers in
+`audit/status.json` so that the trend is visible from one check to the next. Thresholds are the project's own; the convention
 asks that they are declared, measured and not exceeded. This is the answer to
 the growth of duplication and churn in AI-written code, including its everyday
 forms: the same logic regenerated in three places, a style rule repeated on
 every element instead of a class, a helper rewritten because the model did not
-find the existing one, and the single file that grows with every prompt until
-it holds the whole program.
+find the existing one, the single file that grows with every prompt until it
+holds the whole program, and the `TODO: implement` a model leaves behind. A
+comment density is deliberately not measured: it is a bad metric in both
+directions; the signal-over-noise judgement belongs to A1.
 - Evidence: the tool output, the numbers in `audit/status.json`.
 - Checked: the auditor runs the tool and compares with the thresholds and with
   the previous check.
@@ -275,9 +287,14 @@ reviews are comparable: one responsibility per module and type; dependencies
 pointing inward (domain logic without IO, persistence apart from transport,
 authorization as a policy rather than scattered checks); no god object or god
 file; no layer, trait or abstraction with a single use that exists for a
-future that has not come; names that say what things do. Simplicity wins over
-speculative structure: a review flags the missing boundary and the useless one
-alike. The verdict is one of `prototype`, `usable with listed gaps`,
+future that has not come; names that say what things do; and signal over
+noise: comments that state a reason rather than paraphrase the line,
+docstrings that tell the caller something the signature does not, no dead or
+commented-out code, no defensive handling of errors that cannot happen. A
+comment that paraphrases, a docstring that restates the signature, dead code
+or needless defensiveness are `MINOR` findings; a comment that contradicts the
+code is `DOC-WRONG`. Simplicity wins over speculative structure: a review
+flags the missing boundary and the useless one alike. The verdict is one of `prototype`, `usable with listed gaps`,
 `production-grade`. The review is renewed at each minor release or major
 structural change, as the declaration states.
 - Evidence: `audit/<date>-architecture.md` with findings and decisions.
@@ -302,7 +319,10 @@ meant to be used by people other than its authors (libraries, command-line
 tools, APIs, applications), an AI tester with no access to the source code uses
 it from the documentation alone to build or do something real, and writes a
 friction report. The tester's blindness is enforced by the environment it runs
-in, not by an instruction. The tester installs the software the way the
+in, not by an instruction. The tester also judges the documentation itself:
+pages that drown the needed information in generated prose, a README that
+lists every feature instead of saying how to start, are `PAINFUL` findings;
+the right amount of documentation is the amount the task needed. The tester installs the software the way the
 documentation says, so an installation that does not work, or a dependency
 that does not exist, is found here as well. The report follows the format in
 the Report format section.

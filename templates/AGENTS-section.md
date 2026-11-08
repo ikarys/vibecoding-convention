@@ -16,5 +16,11 @@ Rules while editing:
   version, not the one you remember; the check is noted in the commit. Existing
   dependencies are not held back without a reason written in `VIBECODING.md`.
 - No secret in any file, prompt or config.
+- Signal over noise. A comment states a reason, a constraint or a trap, never
+  what the line does. A docstring tells the caller what the signature does
+  not. The public API is documented. No TODO, placeholder, commented-out or
+  dead code in a delivered change. Documentation proportionate to the
+  project: a README says what it is, how to install, how to use, where to go
+  next; nothing written to fill space.
 
 Never without a human: merge, release, change the CI, delete data.

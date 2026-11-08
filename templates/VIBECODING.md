@@ -26,7 +26,7 @@ convention:
   licence: <SPDX identifier>
   # level 2 and above
   coverage: { threshold: <N>, kind: <line | branch>, tool: <tool> }
-  maintainability: { tool: <tool>, duplication_max: <percent>, complexity_max: <N>, function_max: <lines>, file_max: <lines> }
+  maintainability: { tool: <tool>, duplication_max: <percent>, complexity_max: <N>, function_max: <lines>, file_max: <lines>, markers_max: 0 }
   freshness: { max_outdated: <N>, max_lag_months: <N> }   # T9; update bot config or commands.outdated must exist
   # level 3
   mutation: { tool: <tool>, threshold: <N> }   # recommended, remove if not measured
@@ -46,6 +46,7 @@ convention:
     secrets: "<command>"
     maintainability: "<command>"
     outdated: "<command>"           # cargo outdated, npm outdated, pip list --outdated ...
+    doc_lint: "<command>"           # public API documentation lint, if the ecosystem has one
     mutation: "<command>"
 ---
 

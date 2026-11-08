@@ -17,7 +17,7 @@ convention:
     - "Claude Code:claude-fable-5-1"
   attribution_trailers: [Assisted-by, Generated-by]
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
-  maintainability: { tool: none, duplication_max: 5, complexity_max: 15, function_max: 80, file_max: 400 }
+  maintainability: { tool: none, duplication_max: 5, complexity_max: 15, function_max: 80, file_max: 400, markers_max: 0 }
   freshness: { max_outdated: 3, max_lag_months: 6 }
   commands:
     test: "cargo test --manifest-path vibecheck/Cargo.toml"

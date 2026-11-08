@@ -115,7 +115,7 @@ requirements:
   - id: D10
     level: 1
     title: Agent instructions carry the convention
-    statement: Where the project has agent instruction files (any name its tools use, or the paths it declares), each names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the edit-time rules and lists what the agent never does without a human.
+    statement: Where the project has agent instruction files (any name its tools use, or the paths it declares), each names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the edit-time rules (attribution, test changes, dependencies, secrets, signal over noise in code and docs) and lists what the agent never does without a human.
     evidence: [AGENTS.md, CLAUDE.md, .cursorrules, GEMINI.md, convention.agent_instruction_files]
     check: mechanical
     mechanical:
@@ -193,13 +193,14 @@ requirements:
   - id: T8
     level: 2
     title: Maintainability signals
-    statement: Duplication, complexity, function length and file length are measured with a declared tool and thresholds, in CI or at release, and recorded in the status file.
+    statement: Duplication, complexity, function length, file length and leftover markers (TODO, placeholders, commented-out code) are measured with a declared tool and thresholds, in CI or at release, and recorded in the status file; public API documentation is linted where the ecosystem has a lint.
     evidence: [tool output, audit/status.json]
     check: mechanical
     mechanical:
-      - convention.maintainability has tool, duplication_max, complexity_max, function_max, file_max
+      - convention.maintainability has tool, duplication_max, complexity_max, function_max, file_max, markers_max (default 0)
       - with --run, run convention.commands.maintainability and compare
-      - built-in fallback without a tool: file length and function length by language heuristics
+      - built-in fallback without a tool: file length, function length and leftover markers by language heuristics
+      - CI mentions convention.commands.doc_lint when declared
 
   - id: T9
     level: 2
@@ -332,4 +333,5 @@ commands:
   secrets: secrets scanner over the tree
   maintainability: duplication, complexity, sizes
   outdated: list dependencies with a newer version available
+  doc_lint: public API documentation lint (missing_docs, pydocstyle, eslint-plugin-jsdoc ...)
   mutation: mutation testing

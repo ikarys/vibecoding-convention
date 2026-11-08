@@ -31,6 +31,7 @@ large-sample studies, and the text says which is which.
 | 13 | Over-confidence; perceived versus measured productivity | principle "Evidence over claims" | Not a property of the artifact | Non-goal: the convention measures the product, not the process |
 | 14 | Deskilling of developers | none | Out of scope for an artifact standard | Partly answered by A6; say so in non-goals |
 | 15 | Frozen in time: models pick the library versions and APIs they memorised; projects start behind and stay behind | T6 (known vulnerabilities only) | No requirement on currency or on keeping up | **NEW T9** dependency freshness: current version at addition, update mechanism, measured lag, exceptions with a reason, no abandoned dependency |
+| 16 | Noise: comments that paraphrase the code, docstrings that restate the signature, leftover TODOs and dead code, READMEs that list everything and explain nothing | none | Nothing on signal over noise | D10 edit-time rule; T8 counts leftover markers and lints API docs; A1 judges noise, a contradicting comment is DOC-WRONG; A3 judges documentation proportion |
 
 ## 1. Security: AI code ships vulnerabilities, and real apps leak data
 
@@ -368,6 +369,37 @@ kept current, nor that a dependency held back be justified.
   without such a reason. "Always the latest" is not the rule, since blind
   updates break things too; "no unjustified lag" is. Parity: a human-led
   project is already expected to keep its dependencies current.
+
+## 16. Noise: comments, docstrings and READMEs that say nothing
+
+**The criticism.** Generated code comes wrapped in comments that paraphrase
+the line below them, docstrings that repeat the signature, section banners,
+`TODO: implement` left behind, code kept "for reference" in comments, and
+defensive handling of errors that cannot happen. Generated documentation
+comes as READMEs that list every feature and never say how to start. Both
+cost the reviewer attention, which is the scarce resource of the whole
+convention, and a paraphrasing comment lies as soon as the code changes.
+This is a practitioner observation, repeated in every review of generated
+code; we know of no study that measures it and do not pretend otherwise.
+
+**What the convention answers.** Nothing before this version.
+
+**Gap.** "Comments only when useful" cannot be measured; comment density is a
+bad metric in both directions. So the rule goes where it acts and where it is
+judged, not into a number.
+
+**Proposed.**
+- **D10** carries the edit-time rule, the only place where noise is prevented
+  rather than reviewed away: why not what, docstrings for the caller, public
+  API documented, no leftovers, documentation proportionate to the project.
+- **T8** measures the measurable part: leftover markers (`TODO`, placeholders,
+  commented-out code) against a declared maximum, default zero in delivered
+  code; public API documentation linted where the ecosystem has a lint.
+- **A1** judges the rest: paraphrasing comments, restated signatures, dead
+  code and needless defensiveness are `MINOR`; a comment that contradicts the
+  code is `DOC-WRONG`.
+- **A3**: the blind tester judges the documentation's proportion; pages that
+  drown the needed information are `PAINFUL`.
 
 ## Changes to the level structure
 
