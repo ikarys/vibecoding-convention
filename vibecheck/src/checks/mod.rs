@@ -38,6 +38,20 @@ pub struct Context {
     pub metrics: RefCell<BTreeMap<String, Value>>,
 }
 
+#[cfg(test)]
+impl Context {
+    pub fn for_test(root: &std::path::Path, decl: Option<Declaration>) -> Self {
+        Context {
+            root: root.to_path_buf(),
+            decl,
+            decl_error: None,
+            git: Git::new(root.to_path_buf()),
+            level: 1,
+            metrics: Default::default(),
+        }
+    }
+}
+
 pub trait Check {
     fn id(&self) -> &'static str;
     fn level(&self) -> u8;

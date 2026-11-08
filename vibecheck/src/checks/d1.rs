@@ -45,19 +45,10 @@ impl Check for D1 {
 mod tests {
     use super::*;
     use crate::checks::Context;
-    use crate::git::Git;
     use std::fs;
-    use std::path::PathBuf;
 
     fn ctx(root: &std::path::Path) -> Context {
-        Context {
-            root: root.to_path_buf(),
-            decl: None,
-            decl_error: None,
-            git: Git::new(PathBuf::from(root)),
-            level: 1,
-            metrics: Default::default(),
-        }
+        Context::for_test(root, None)
     }
 
     #[test]

@@ -83,8 +83,6 @@ mod tests {
     use super::*;
     use crate::checks::Context;
     use crate::declaration::Declaration;
-    use crate::git::Git;
-    use std::path::PathBuf;
 
     #[test]
     fn fails_on_bad_status() {
@@ -92,14 +90,7 @@ mod tests {
         let mut decl = Declaration::default();
         decl.convention.status = "weird".into();
         decl.convention.security_response = "none".into();
-        let ctx = Context {
-            root: dir.path().to_path_buf(),
-            decl: Some(decl),
-            decl_error: None,
-            git: Git::new(PathBuf::from(dir.path())),
-            level: 1,
-            metrics: Default::default(),
-        };
+        let ctx = Context::for_test(dir.path(), Some(decl));
         let findings = D9.run(&ctx);
         assert!(findings
             .iter()
@@ -112,14 +103,7 @@ mod tests {
         let mut decl = Declaration::default();
         decl.convention.status = "active".into();
         decl.convention.security_response = "none".into();
-        let ctx = Context {
-            root: dir.path().to_path_buf(),
-            decl: Some(decl),
-            decl_error: None,
-            git: Git::new(PathBuf::from(dir.path())),
-            level: 1,
-            metrics: Default::default(),
-        };
+        let ctx = Context::for_test(dir.path(), Some(decl));
         let findings = D9.run(&ctx);
         assert!(findings.is_empty());
     }

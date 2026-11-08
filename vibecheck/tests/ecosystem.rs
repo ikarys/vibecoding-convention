@@ -22,7 +22,7 @@ fn detect_recognizes_multiple_manifests() {
 }
 
 #[test]
-fn lockfiles_and_default_test_commands_are_known() {
+fn lockfiles_are_known() {
     assert!(lockfiles(Ecosystem::Rust).contains(&"Cargo.lock"));
     assert!(lockfiles(Ecosystem::Node).contains(&"package-lock.json"));
     assert!(lockfiles(Ecosystem::Python).contains(&"requirements.txt"));
@@ -31,7 +31,10 @@ fn lockfiles_and_default_test_commands_are_known() {
     assert!(lockfiles(Ecosystem::Dotnet).contains(&"packages.lock.json"));
     assert!(lockfiles(Ecosystem::Ruby).contains(&"Gemfile.lock"));
     assert!(lockfiles(Ecosystem::Php).contains(&"composer.lock"));
+}
 
+#[test]
+fn default_test_commands_are_known() {
     assert_eq!(default_test_command(Ecosystem::Rust), Some("cargo test"));
     assert_eq!(default_test_command(Ecosystem::Node), Some("npm test"));
     assert_eq!(default_test_command(Ecosystem::Python), Some("pytest"));

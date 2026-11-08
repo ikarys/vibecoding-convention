@@ -13,11 +13,11 @@ jobs:
     name: Secrets scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
       - name: gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -30,13 +30,14 @@ jobs:
       run:
         working-directory: vibecheck
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable branch, 2026-11-08
         with:
+          toolchain: stable
           components: clippy, rustfmt, llvm-tools-preview
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           workspaces: vibecheck
       - name: Format
@@ -49,7 +50,10 @@ jobs:
         run: cargo test --manifest-path vibecheck/Cargo.toml
         working-directory: .
       - name: Install coverage and audit tools
-        run: cargo install cargo-llvm-cov cargo-audit --locked
+        run: |
+          cargo install cargo-llvm-cov --version 0.9.1 --locked
+          cargo install cargo-audit --version 0.22.2 --locked
+          cargo install cargo-outdated --version 0.19.0 --locked
       - name: Coverage (threshold 80 %)
         run: |
           set -o pipefail
@@ -61,6 +65,14 @@ jobs:
           set -o pipefail
           mkdir -p audit/evidence
           cargo audit --file vibecheck/Cargo.lock --json | tee audit/evidence/audit.json
+        working-directory: .
+      - name: Outdated dependencies
+        run: |
+          set -o pipefail
+          cargo outdated --manifest-path vibecheck/Cargo.toml --root-deps-only --format json | tee audit/evidence/outdated.json
+        working-directory: .
+      - name: Duplication (threshold 5 %)
+        run: npx --yes jscpd@5.4.3 vibecheck/src vibecheck/tests --format rust --threshold 5 --reporters json --output audit/evidence
         working-directory: .
       - name: Self-check against the convention
         run: cargo run --manifest-path vibecheck/Cargo.toml -- . --write-status --strict

@@ -61,21 +61,12 @@ impl Check for D8 {
 mod tests {
     use super::*;
     use crate::checks::Context;
-    use crate::git::Git;
     use std::fs;
-    use std::path::PathBuf;
 
     #[test]
     fn fails_without_contributing() {
         let dir = tempfile::tempdir().unwrap();
-        let ctx = Context {
-            root: dir.path().to_path_buf(),
-            decl: None,
-            decl_error: None,
-            git: Git::new(PathBuf::from(dir.path())),
-            level: 1,
-            metrics: Default::default(),
-        };
+        let ctx = Context::for_test(dir.path(), None);
         let findings = D8.run(&ctx);
         assert!(findings
             .iter()
@@ -88,14 +79,7 @@ mod tests {
         fs::write(dir.path().join("CONTRIBUTING.md"), "Assisted-by").unwrap();
         fs::create_dir_all(dir.path().join(".github")).unwrap();
         fs::write(dir.path().join(".github/PULL_REQUEST_TEMPLATE.md"), "x").unwrap();
-        let ctx = Context {
-            root: dir.path().to_path_buf(),
-            decl: None,
-            decl_error: None,
-            git: Git::new(PathBuf::from(dir.path())),
-            level: 1,
-            metrics: Default::default(),
-        };
+        let ctx = Context::for_test(dir.path(), None);
         let findings = D8.run(&ctx);
         assert!(findings.is_empty());
     }

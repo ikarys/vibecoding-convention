@@ -15,11 +15,12 @@ convention:
   status: active
   tools:
     - "Claude Code:claude-fable-5-1"
+    - "Claude Code:claude-opus-5-5"
   attribution_trailers: [Assisted-by, Generated-by]
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
-  maintainability: { tool: none, duplication_max: 5, complexity_max: 15, function_max: 80, file_max: 400, markers_max: 0 }
+  maintainability: { tool: "jscpd (duplication), clippy cognitive_complexity (complexity)", duplication_max: 5, complexity_max: 15, function_max: 80, file_max: 400, markers_max: 0 }
   freshness: { max_outdated: 3, max_lag_months: 6 }
-  evidence: { coverage: audit/evidence/coverage.txt, audit: audit/evidence/audit.json }
+  evidence: { coverage: audit/evidence/coverage.txt, audit: audit/evidence/audit.json, outdated: audit/evidence/outdated.json, maintainability: audit/evidence/jscpd-report.json }
   commands:
     test: "cargo test --manifest-path vibecheck/Cargo.toml"
     lint: "cargo clippy --manifest-path vibecheck/Cargo.toml --all-targets -- -D warnings"
@@ -79,6 +80,7 @@ response commitment.
 
 ## Exceptions
 
-- T8: duplication and complexity are not measured yet; no tool is chosen for
-  Rust. File and function length are measured by `vibecheck` itself. The
-  thresholds above for duplication and complexity are targets, not evidence.
+- T8: complexity is enforced, not recorded: clippy's `cognitive_complexity`
+  lint at the declared threshold fails the lint step, so no number lands in
+  the evidence file. File and function length are measured by `vibecheck`
+  itself.

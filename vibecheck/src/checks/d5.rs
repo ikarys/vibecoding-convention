@@ -171,20 +171,12 @@ mod tests {
     use super::*;
     use crate::checks::Context;
     use crate::declaration::Declaration;
-    use crate::git::Git;
     use std::path::PathBuf;
 
     #[test]
     fn fails_without_status() {
         let dir = tempfile::tempdir().unwrap();
-        let ctx = Context {
-            root: dir.path().to_path_buf(),
-            decl: Some(Declaration::default()),
-            decl_error: None,
-            git: Git::new(PathBuf::from(dir.path())),
-            level: 1,
-            metrics: Default::default(),
-        };
+        let ctx = Context::for_test(dir.path(), Some(Declaration::default()));
         let findings = D5.run(&ctx);
         assert!(findings
             .iter()

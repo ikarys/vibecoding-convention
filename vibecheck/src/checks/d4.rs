@@ -41,19 +41,10 @@ mod tests {
     use super::*;
     use crate::checks::Context;
     use crate::declaration::Declaration;
-    use crate::git::Git;
-    use std::path::PathBuf;
 
     #[test]
     fn fails_on_empty_review() {
-        let ctx = Context {
-            root: PathBuf::from("."),
-            decl: Some(Declaration::default()),
-            decl_error: None,
-            git: Git::new(PathBuf::from(".")),
-            level: 1,
-            metrics: Default::default(),
-        };
+        let ctx = Context::for_test(std::path::Path::new("."), Some(Declaration::default()));
         let findings = D4.run(&ctx);
         assert!(findings
             .iter()
