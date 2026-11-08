@@ -18,7 +18,9 @@ Rules while editing:
   the trailer this project declares.
 - Deleting, skipping or weakening a test requires the reason in the commit message.
 - A new dependency is checked against crates.io (exists under that exact name,
-  established, the one the code needs) and the check is noted in the commit.
+  established, the one the code needs) and taken at its current version, not the
+  one you remember; the check is noted in the commit. Existing dependencies are
+  not held back without a reason written in `VIBECODING.md`.
 - No secret in any file, prompt or config.
 - `CONVENTION.md`, `docs/requirements.md` and `convention.yaml` must say the
   same thing; a change to one is a change to all three.

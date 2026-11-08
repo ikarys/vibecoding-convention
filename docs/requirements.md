@@ -138,8 +138,9 @@ instruction files, under whatever name its tools use (`AGENTS.md`, `CLAUDE.md`,
 `VIBECODING.md`; gives the build, test, lint and scan commands an agent must
 pass before calling a change done; states the edit-time rules (the D3 trailer,
 a reason for every test change under D6, the registry check of T6 for new
-dependencies, no secrets); and lists what the agent does not do without a
-human (merge, release, change the CI, delete data). This is the only place
+dependencies and the registry's current version under T9, no secrets); and
+lists what the agent does not do without a human (merge, release, change the
+CI, delete data). This is the only place
 where the convention acts while the code is being written rather than at
 audit time. Keep the file short enough to be read whole by the model; no size,
 no structure and no file name is mandated: tools differ, and the convention has
@@ -234,6 +235,30 @@ it holds the whole program.
 - Evidence: the tool output, the numbers in `audit/status.json`.
 - Checked: the auditor runs the tool and compares with the thresholds and with
   the previous check.
+
+**T9. Dependency freshness.** A model proposes the library versions and APIs
+it memorised, not today's, so an AI-written project is behind from its first
+day and falls further behind at every regeneration. The rule is not "always
+the latest" but "no unjustified lag". Three moments:
+- At addition: the version taken is the registry's current one, read from the
+  registry and not from memory (this completes the T6 check).
+- Over time: an update mechanism exists, either a bot (Dependabot, Renovate or
+  an equivalent) or a declared cadence with a declared command (`cargo
+  outdated`, `npm outdated`, `pip list --outdated`, and the like), and the
+  check measures the lag: the number of dependencies with a newer major or
+  minor version available, and the age of the oldest lag. The project declares
+  its limits (`convention.freshness`: `max_outdated`, `max_lag_months`).
+- Exceptions: a dependency held back for incompatibility or stability is
+  listed in `VIBECODING.md` with the reason. That is the human
+  counter-indication; it is the only thing that justifies a lag.
+No dependency flagged as unmaintained or abandoned by the ecosystem's advisory
+database stays without such an exception.
+- Evidence: the update configuration or the declared command, the outdated
+  report, the exceptions, `metrics.outdated` in `audit/status.json`.
+- Checked: the update mechanism exists; with the declared command, the auditor
+  counts the outdated dependencies and the oldest lag and compares them to the
+  limits, minus the declared exceptions; the advisory tool of T6 reports no
+  unmaintained dependency without an exception.
 
 ### Level 3: Audited
 

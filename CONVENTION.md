@@ -36,7 +36,7 @@ would not be expected to meet is not added unless it is one of those five.
 | Level | Name | Means |
 |---|---|---|
 | 1 | Declared | Says it is AI-assisted, with which tools and models, who decides, how it handles contributions, its provenance stance, and when it was last checked. All text. |
-| 2 | Tested | Tests that assert behaviour, declared and met coverage, green CI, lint, secrets scanning, static analysis, dependency hygiene, measured duplication and size. |
+| 2 | Tested | Tests that assert behaviour, declared and met coverage, green CI, lint, secrets scanning, static analysis, dependency hygiene and freshness, measured duplication and size. |
 | 3 | Audited | Versioned audit reports: architecture, security, blind usability test, validated architecture documents, each finding with a decision. |
 
 Each level includes the ones below. Suggested fit: level 1 for scripts and
@@ -68,6 +68,7 @@ Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 | T6 | 2 | Lockfile committed; vulnerability and licence checks run; every new dependency is checked against the registry before merge and the check is recorded | lockfile, CI, history | M |
 | T7 | 2 | Secrets scanner in pre-commit and in CI; static analyser in CI; findings fixed or accepted with a reason | hook config, CI | M |
 | T8 | 2 | Duplication, complexity, function length and file length measured with declared tool and thresholds; numbers recorded in the status file | tool output | M |
+| T9 | 2 | Dependencies are current: new ones taken at the registry's current version, an update mechanism in place, lag measured against declared limits, no abandoned dependency; exceptions declared with a reason | update config, outdated report, declaration | M |
 | A1 | 3 | Architecture review against named design principles with verdict `prototype`, `usable with listed gaps` or `production-grade`; renewed at each minor or structural change | `audit/*-architecture.md` | J |
 | A2 | 3 | `SECURITY.md` with contact, threat model, response time; every security claim traced to a passing test; every user-data path has an authorization test; re-verified at each release | `audit/*-security.md` | M+J |
 | A3 | 3 | Blind usability test: an AI with no access to the source installs and uses the software from the docs alone; blindness enforced by the environment | `audit/*-blind-*.md` | J |

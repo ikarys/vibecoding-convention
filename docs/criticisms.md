@@ -30,6 +30,7 @@ large-sample studies, and the text says which is which.
 | 12 | Hidden AI use | D1, D2, D3, D5 | none | keep |
 | 13 | Over-confidence; perceived versus measured productivity | principle "Evidence over claims" | Not a property of the artifact | Non-goal: the convention measures the product, not the process |
 | 14 | Deskilling of developers | none | Out of scope for an artifact standard | Partly answered by A6; say so in non-goals |
+| 15 | Frozen in time: models pick the library versions and APIs they memorised; projects start behind and stay behind | T6 (known vulnerabilities only) | No requirement on currency or on keeping up | **NEW T9** dependency freshness: current version at addition, update mechanism, measured lag, exceptions with a reason, no abandoned dependency |
 
 ## 1. Security: AI code ships vulnerabilities, and real apps leak data
 
@@ -338,9 +339,34 @@ experts cannot self-detect decline.
 write and defend the architecture overview. Beyond that, out of scope for an
 artifact standard. Say so in non-goals.
 
+## 15. Frozen in time: the model's library versions, not today's
+
+**The criticism.** A model has a training cutoff. Asked for a dependency it
+names the version and the API it memorised, which may be a year or more old,
+deprecated, or abandoned. Regenerating code later repeats the choice. The
+project is behind from its first day, and the gap grows with every prompt.
+This happened while writing this convention's own tooling: the model chose
+`serde_yaml` 0.9, unmaintained since 2024, and only the dependency audit
+caught it.
+
+**What the convention answers.** T6 checks for known vulnerabilities and
+licences, not for currency.
+
+**Gap.** Nothing asks that versions be current when added, nor that they be
+kept current, nor that a dependency held back be justified.
+
+**Proposed.**
+- **NEW T9. Dependency freshness.** Level 2. The version taken at addition is
+  the registry's current one; an update mechanism exists (bot, or declared
+  cadence and command); the lag is measured and compared to declared limits;
+  dependencies held back are listed with a reason; no abandoned dependency
+  without such a reason. "Always the latest" is not the rule, since blind
+  updates break things too; "no unjustified lag" is. Parity: a human-led
+  project is already expected to keep its dependencies current.
+
 ## Changes to the level structure
 
-If the proposals above are accepted, level 2 grows by T7 and T8 and the
+If the proposals above are accepted, level 2 grows by T7, T8, T9 and the
 extended T6; level 1 grows by D6, D7, D8 and D9 (all text, no tooling); level 3
 grows by A6, A7 and A8. Level 1 stays achievable in an afternoon. Level 2
 adds three CI steps. Level 3 adds one human-written document and one optional

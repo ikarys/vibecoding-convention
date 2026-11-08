@@ -12,7 +12,9 @@ Rules while editing:
   project uses, naming the tool and model, for example `Assisted-by: <Tool>:<model>`.
 - Deleting, skipping or weakening a test requires the reason in the commit message.
 - A new dependency is checked against the registry (exists under that exact name,
-  established, the one the code needs) and the check is noted in the commit.
+  established, the one the code needs) and taken at the registry's current
+  version, not the one you remember; the check is noted in the commit. Existing
+  dependencies are not held back without a reason written in `VIBECODING.md`.
 - No secret in any file, prompt or config.
 
 Never without a human: merge, release, change the CI, delete data.

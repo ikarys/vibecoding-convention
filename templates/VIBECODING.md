@@ -27,6 +27,7 @@ convention:
   # level 2 and above
   coverage: { threshold: <N>, kind: <line | branch>, tool: <tool> }
   maintainability: { tool: <tool>, duplication_max: <percent>, complexity_max: <N>, function_max: <lines>, file_max: <lines> }
+  freshness: { max_outdated: <N>, max_lag_months: <N> }   # T9; update bot config or commands.outdated must exist
   # level 3
   mutation: { tool: <tool>, threshold: <N> }   # recommended, remove if not measured
   audit_dir: audit
@@ -44,6 +45,7 @@ convention:
     static_analysis: "<command>"
     secrets: "<command>"
     maintainability: "<command>"
+    outdated: "<command>"           # cargo outdated, npm outdated, pip list --outdated ...
     mutation: "<command>"
 ---
 
@@ -78,3 +80,7 @@ long generated blocks | none>.
 ## Exceptions
 
 <Requirements that do not apply to this project, with the reason, one line each. Delete this section if none.>
+
+## Dependencies held back
+
+<Dependency, version held, reason (incompatibility, stability), date. Delete this section if none.>

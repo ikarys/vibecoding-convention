@@ -201,6 +201,18 @@ requirements:
       - with --run, run convention.commands.maintainability and compare
       - built-in fallback without a tool: file length and function length by language heuristics
 
+  - id: T9
+    level: 2
+    title: Dependency freshness
+    statement: New dependencies are taken at the registry's current version; an update mechanism (bot or declared cadence and command) exists; the lag is measured against declared limits (max_outdated, max_lag_months) minus declared exceptions; no unmaintained dependency without an exception.
+    evidence: [dependabot.yml or renovate.json or convention.commands.outdated, outdated report, VIBECODING.md exceptions, audit/status.json metrics.outdated]
+    check: mechanical
+    mechanical:
+      - .github/dependabot.yml, renovate.json (or .renovaterc*) exists, or convention.commands.outdated is declared; neither is a failure
+      - convention.freshness has max_outdated and max_lag_months
+      - with --run, run convention.commands.outdated, count outdated dependencies not listed in exceptions, compare to max_outdated; record metrics.outdated
+      - unmaintained advisories from the T6 audit tool without a declared exception are failures
+
   - id: A1
     level: 3
     title: Architecture review
@@ -295,4 +307,5 @@ commands:
   static_analysis: static analyser
   secrets: secrets scanner over the tree
   maintainability: duplication, complexity, sizes
+  outdated: list dependencies with a newer version available
   mutation: mutation testing
