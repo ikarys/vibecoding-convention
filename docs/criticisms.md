@@ -16,7 +16,7 @@ large-sample studies, and the text says which is which.
 
 | # | Criticism | Convention today | Gap | Proposed |
 |---|---|---|---|---|
-| 1 | AI code ships vulnerabilities, and real apps leak data | A2 security audit, T6 dependency checks | Security only at level 3; nothing on data exposure by default | **NEW T7** secrets and static analysis at level 2; A2 adds an authorization check on every data path |
+| 1 | AI code ships vulnerabilities, and real apps leak data | A2 security audit, T6 dependency checks | Security only at level 3; nothing on data exposure by default; no list of what to look for | **NEW T7** secrets and static analysis at level 2 with rules covering the named classes; A2 adds an authorization check on every data path and a threat model that names the known vulnerability classes with their coverage; D10 rule: every input is hostile |
 | 2 | Nobody understands the code; comprehension debt | A1 architecture review | Nothing proves a human understands the system | **NEW A6** human-written architecture overview and decision records, checked against the code |
 | 3 | Duplication, churn and technical debt grow; god files | A1 | No measurement | **NEW T8** maintainability signals (duplication, complexity, function and file length) with declared tool and thresholds; A1 names the design principles it judges against |
 | 4 | AI tests assert nothing; agents weaken tests to pass CI | T3 sampled review | Judgement only; no objective measure; no rule on test removal | T3 strengthened; **NEW A7** mutation score recommended at level 3; **NEW D6** test changes are explained |

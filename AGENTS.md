@@ -22,6 +22,10 @@ Rules while editing:
   one you remember; the check is noted in the commit. Existing dependencies are
   not held back without a reason written in `VIBECODING.md`.
 - No secret in any file, prompt or config.
+- Every input is hostile: arguments, files, environment, network, model output.
+  Follow the project's security checklist in `SECURITY.md`; a change that touches
+  parsing, SQL or command building, authentication, crypto, credentials or file
+  import names the vulnerability class it guards against and its test.
 - Signal over noise. A comment states a reason, a constraint or a trap, never
   what the line does. A docstring tells the caller what the signature does
   not. The public API is documented. No TODO, placeholder, commented-out or

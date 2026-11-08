@@ -182,7 +182,7 @@ requirements:
   - id: T7
     level: 2
     title: Secrets and static analysis
-    statement: A secrets scanner runs as a pre-commit hook and in CI; a static analyser runs in CI; findings are fixed or accepted with a reason.
+    statement: A secrets scanner runs as a pre-commit hook and in CI; a static analyser runs in CI with rules covering the vulnerability classes the project names; findings are fixed or accepted with a reason.
     evidence: [pre-commit configuration, CI configuration]
     check: mechanical
     mechanical:
@@ -227,11 +227,12 @@ requirements:
   - id: A2
     level: 3
     title: Security audit
-    statement: SECURITY.md has contact, threat model and response time; every security claim is traced to a passing test; every user-data path has an authorization test; re-verified at each release.
+    statement: SECURITY.md has contact, response time and a threat model naming the known vulnerability classes relevant to the software, each with the tool rule or test covering it; every security claim is traced to a passing test; every user-data path has an authorization test; re-verified at each release.
     evidence: [SECURITY.md, "audit/<date>-security.md"]
     check: both
     mechanical:
       - SECURITY.md exists with a contact
+      - SECURITY.md has a threat model section with a table of vulnerability classes and their coverage (heading contains "threat model" or "classes")
       - a report of kind security exists for the current minor version with every finding decided
 
   - id: A3

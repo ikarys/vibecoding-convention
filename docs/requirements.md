@@ -142,7 +142,8 @@ instruction files, under whatever name its tools use (`AGENTS.md`, `CLAUDE.md`,
 `VIBECODING.md`; gives the build, test, lint and scan commands an agent must
 pass before calling a change done; states the edit-time rules (the D3 trailer,
 a reason for every test change under D6, the registry check of T6 for new
-dependencies and the registry's current version under T9, no secrets, and
+dependencies and the registry's current version under T9, no secrets, every
+input treated as hostile and the project's security checklist followed, and
 signal over noise: a comment states a reason, a constraint or a trap, never
 what the line does; a docstring says what the caller must know, not the
 signature again; the public API is documented; no TODO, placeholder,
@@ -224,8 +225,14 @@ to the packages attackers register under them.
 **T7. Secrets and static analysis.** A secrets scanner runs as a pre-commit
 hook, so that a secret never enters the history, and again in CI, so that the
 hook cannot be bypassed silently. A static analyser for the language runs in
-CI. Findings are fixed, or listed as accepted with a reason in the tool's
-configuration.
+CI, with a rule set that covers the known vulnerability classes the project
+names in its threat model (A2) or, below level 3, the classes relevant to its
+kind of software: injection, path traversal, unsafe deserialization, broken
+authorization, secrets in code, for most software; the OWASP Top 10 for web
+software; the CWE Top 25 as the general list. Findings are fixed, or listed as
+accepted with a reason in the tool's configuration. The convention does not
+promise the absence of vulnerabilities, which nobody can prove; it asks that
+the known classes be looked for by a tool, every time.
 - Evidence: the pre-commit configuration (for example `.pre-commit-config.yaml`
   with gitleaks or an equivalent), the CI steps, the last run.
 - Checked: both steps exist; the auditor runs the secrets scanner over the
@@ -302,16 +309,20 @@ structural change, as the declaration states.
   a decision (Findings and decisions).
 
 **A2. Security audit.** The repository has a `SECURITY.md` with a disclosure
-contact, a threat model and the response time of D9. Every security claim made
-in `SECURITY.md` or in the documentation points to a test that asserts it. The
-audit includes a data exposure check: every data store, table, bucket and
+contact, the response time of D9, and a threat model that names the known
+vulnerability classes relevant to this kind of software (from the OWASP Top
+10, the CWE Top 25, or the ecosystem's own list) and, for each, the tool rule
+or the test that covers it; a class with no coverage is a finding. Every
+security claim made in `SECURITY.md` or in the documentation points to a test
+that asserts it. The audit includes a data exposure check: every data store, table, bucket and
 endpoint that holds user data has an authorization rule, and a test that an
 unauthorized caller is refused. Because security degrades as code is
 iterated, the claims are re-verified at each release. The result is a
 versioned report.
 - Evidence: `SECURITY.md`, `audit/<date>-security.md`.
-- Checked: each claim has a test that exists, asserts the claim and passes;
-  every user-data path has an authorization test; the scans of T6 and T7 ran;
+- Checked: the threat model names its classes and each has a tool rule or a
+  test; each claim has a test that exists, asserts the claim and passes; every
+  user-data path has an authorization test; the scans of T6 and T7 ran;
   findings have decisions.
 
 **A3. Blind usability test.** When the software has user documentation and is

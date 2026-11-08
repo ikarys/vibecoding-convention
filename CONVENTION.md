@@ -65,18 +65,18 @@ Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 | D7 | 1 | Declaration states licence, copyright stance on AI-written parts, no known licence-incompatible reproduction, safeguards used | the declaration | M |
 | D8 | 1 | `CONTRIBUTING.md` states the policy for incoming AI contributions and asks for C1 to C3 in pull requests; outgoing contributions follow Part B | the file, PR template | M |
 | D9 | 1 | Declaration states project status (active, maintenance, archived) and security response time, matching `SECURITY.md` | the files | M |
-| D10 | 1 | Where the project has agent instruction files (whatever their name), they name the level, the commands to pass, the edit-time rules (attribution, test changes, dependencies, secrets, signal over noise in code and docs) and what the agent never does alone | the files | M |
+| D10 | 1 | Where the project has agent instruction files (whatever their name), they name the level, the commands to pass, the edit-time rules (attribution, test changes, dependencies, secrets, every input hostile and the project's security checklist, signal over noise in code and docs) and what the agent never does alone | the files | M |
 | T1 | 2 | Tests run in CI on every change from a clean checkout; default branch green | CI config, last run | M |
 | T2 | 2 | Coverage measured by a declared tool is at or above the declared threshold (80 % recommended) | coverage report | M |
 | T3 | 2 | Tests assert behaviour; no unexplained skips; every behaviour change lands with its test | test suite, history | J |
 | T4 | 2 | User-facing software has end-to-end tests of its main journeys | e2e suite | J |
 | T5 | 2 | Lint and format run in CI and fail on warnings, exceptions listed with a reason | CI config | M |
 | T6 | 2 | Lockfile committed; vulnerability and licence checks run; every new dependency is checked against the registry before merge and the check is recorded | lockfile, CI, history | M |
-| T7 | 2 | Secrets scanner in pre-commit and in CI; static analyser in CI; findings fixed or accepted with a reason | hook config, CI | M |
+| T7 | 2 | Secrets scanner in pre-commit and in CI; static analyser in CI whose rules cover the vulnerability classes the project names; findings fixed or accepted with a reason | hook config, CI | M |
 | T8 | 2 | Duplication, complexity, function length, file length, and leftover markers (TODO, placeholders, commented-out code) measured with declared tool and thresholds; public API documentation linted; numbers recorded in the status file | tool output | M |
 | T9 | 2 | Dependencies are current: new ones taken at the registry's current version, an update mechanism in place, lag measured against declared limits, no abandoned dependency; exceptions declared with a reason | update config, outdated report, declaration | M |
 | A1 | 3 | Architecture review against named design principles, including signal over noise (comments that say why, no paraphrase, no dead code), with verdict `prototype`, `usable with listed gaps` or `production-grade`; renewed at each minor or structural change | `audit/*-architecture.md` | J |
-| A2 | 3 | `SECURITY.md` with contact, threat model, response time; every security claim traced to a passing test; every user-data path has an authorization test; re-verified at each release | `audit/*-security.md` | M+J |
+| A2 | 3 | `SECURITY.md` with contact, response time and a threat model that names the known vulnerability classes relevant to this kind of software, each with the tool or test covering it; every security claim traced to a passing test; every user-data path has an authorization test; re-verified at each release | `audit/*-security.md` | M+J |
 | A3 | 3 | Blind usability test: an AI with no access to the source installs and uses the software from the docs alone; blindness enforced by the environment | `audit/*-blind-*.md` | J |
 | A4 | 3 | `audit/README.md` indexes every report with date, commit, kind, tool, reader, verdict; reports never rewritten, decisions appended | the index | M |
 | A5 | 3 | No release with an open `BLOCKER` or `DOC-WRONG`; each release names the human who approved it | index at tag, release notes | M |
