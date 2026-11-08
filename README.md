@@ -55,9 +55,9 @@ AI coding tools:
 - `convention.yaml` — the requirements as data, for tools.
 - `skills/` — procedures loaded into the main assistant: bootstrap a project,
   prepare a release.
-- `agents/claude-code/` — Claude Code subagents: convention auditor, blind
-  tester, architecture reviewer, security auditor.
-- `agents/fennec/` — the same agents for [Fennec](https://github.com/ikarys/fennec).
+- `agents/claude-code/` — Claude Code subagents `vibecoding-audit`,
+  `vibecoding-blind-test`, `vibecoding-architecture`, `vibecoding-security`.
+- `agents/fennec/` — the same four agents for [Fennec](https://github.com/ikarys/fennec).
 - `templates/` — `VIBECODING.md`, `audit/README.md`, `audit/status.json`,
   report skeletons.
 

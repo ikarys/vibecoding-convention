@@ -94,9 +94,9 @@ same checks the same way everywhere:
 
 - `vibecheck`, a command-line validator with no AI in it, runs every **M**
   check locally, in pre-commit and in CI, and writes `audit/status.json`.
-- Agents (`convention-auditor`, `blind-tester`, `arch-reviewer`,
-  `security-auditor`) do the **J** checks and write the reports. They read
-  `vibecheck`'s output rather than redoing it.
+- Agents (`vibecoding-audit`, `vibecoding-blind-test`,
+  `vibecoding-architecture`, `vibecoding-security`) do the **J** checks and
+  write the reports. They read `vibecheck`'s output rather than redoing it.
 - Skills (`vibecoding-init`, `vibecoding-release`) bootstrap a project and
   prepare a release.
 - A ten-line block in the agent instruction file (D10) is all that sits in a
