@@ -201,8 +201,9 @@ avoid reproducing licence-incompatible code.
 **Proposed.**
 - **D3 changed.** `Assisted-by: <Tool>:<model> [tools]` on commits with
   AI-written content, the kernel's format; `Generated-by:` when the change is
-  substantially generated without human edits. Never `Co-Authored-By` for a
-  model. A human signs `Signed-off-by` where a DCO applies; the model never
+  substantially generated without human edits. `Co-Authored-By` naming a
+  model is honest disclosure and counts, but is flagged with the fix (a tool
+  setting). A human signs `Signed-off-by` where a DCO applies; the model never
   does.
 - **NEW D7. Provenance and licence statement.** Level 1. `VIBECODING.md`
   states: the project licence; that AI-written parts may not be protected by

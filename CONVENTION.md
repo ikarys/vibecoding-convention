@@ -51,7 +51,7 @@ Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 |---|---|---|---|---|
 | D1 | 1 | README discloses AI assistance and links to `VIBECODING.md` | README | M |
 | D2 | 1 | `VIBECODING.md` declares AI involvement (AI-DECLARATION.md keys), convention level, tools and models, maintainers, review policy, status, provenance, adoption commit, thresholds | the file | M |
-| D3 | 1 | AI-written commits carry `Assisted-by: <Tool>:<model>` (or `Generated-by:`); never `Co-Authored-By` or `Signed-off-by` for a model | git history | M |
+| D3 | 1 | AI-written commits carry `Assisted-by: <Tool>:<model>` (or `Generated-by:`); `Co-Authored-By` naming a model counts as disclosure but is flagged; `Signed-off-by` by a model never | git history | M |
 | D4 | 1 | No AI-written change reaches the default branch without a human review step; the generator is never the only reviewer | policy, PR history, review gates | M+J |
 | D5 | 1 | `audit/status.json` holds the date, commit and verdict of the last check, feeds the README badge, and marks itself stale after the declared interval or a release | status file, badge | M |
 | D6 | 1 | A change that deletes, skips or weakens a test states why, and a human approves | git history | M+J |

@@ -42,13 +42,13 @@ requirements:
   - id: D3
     level: 1
     title: Commit attribution
-    statement: Every commit with AI-written content carries "Assisted-by: <Tool>:<model>" or "Generated-by:"; never Co-Authored-By or Signed-off-by naming a model.
+    statement: Every commit with AI-written content carries "Assisted-by: <Tool>:<model>" or "Generated-by:"; a Co-Authored-By naming a model counts as disclosure but is flagged; Signed-off-by never names a model.
     evidence: [git history since convention.adopted_at]
     check: mechanical
     mechanical:
-      - no commit since adoption has a Co-Authored-By trailer whose value matches a declared tool or a known model vendor address
-      - no Signed-off-by trailer names a declared tool or model
-      - report the share of commits since adoption with an Assisted-by or Generated-by trailer (informative, no threshold)
+      - a Co-Authored-By trailer whose value matches a declared tool or a known model vendor address is a warning (counts as attribution; fix is the tool's attribution setting)
+      - a Signed-off-by trailer naming a declared tool or model is a failure
+      - report the share of commits since adoption with any AI attribution trailer (informative, no threshold)
 
   - id: D4
     level: 1

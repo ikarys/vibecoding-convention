@@ -48,16 +48,20 @@ carries an `Assisted-by:` trailer naming the tool and model, in the format the
 Linux kernel adopted: `Assisted-by: <Tool>:<model> [tool2] [tool3]`, for
 example `Assisted-by: Claude Code:claude-opus-5-5`. A commit whose change is
 substantially generated without human edits uses `Generated-by:` with the same
-value. `Co-Authored-By:` is not used for a model: a model is not an author in
-the legal sense and cannot sign a Certificate of Origin. Where the project uses
-`Signed-off-by:`, a human signs; the model never does. A commit without a
-trailer is understood as human-written.
+value. A `Co-Authored-By:` trailer naming a model, which several tools add by
+default, is honest disclosure and counts as attribution; it is nonetheless
+flagged as a warning, because it presents the model as an author in the legal
+sense, which it is not, and because the projects that have settled the question
+(the Linux kernel, Fedora, LLVM, OpenInfra, OpenTelemetry) use `Assisted-by:`.
+The fix is a one-line tool setting. Where the project uses `Signed-off-by:`, a
+human signs; the model never does, since that trailer certifies origin. A
+commit without a trailer is understood as human-written.
 - Evidence: the git history from the adoption commit named in `VIBECODING.md`.
 - Checked: sample commits since adoption. Substantial commits without a
   trailer are a finding if the declaration says the project is mostly
   AI-written. The share of attributed commits is reported, not judged against
-  a threshold. Any `Co-Authored-By:` naming a model, or `Signed-off-by:`
-  naming a model, is a finding.
+  a threshold. `Co-Authored-By:` naming a model is a warning with the fix;
+  `Signed-off-by:` naming a model is a failure.
 
 **D4. Human review before merge.** No AI-written change reaches the default
 branch without a human having read it and approved it. For a team this is a
