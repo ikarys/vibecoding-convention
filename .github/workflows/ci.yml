@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: Secrets scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  vibecheck:
+    name: Build, lint, test, coverage, self-check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vibecheck
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt, llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: vibecheck
+      - name: Format
+        run: cargo fmt --manifest-path vibecheck/Cargo.toml --check
+        working-directory: .
+      - name: Lint
+        run: cargo clippy --manifest-path vibecheck/Cargo.toml --all-targets -- -D warnings
+        working-directory: .
+      - name: Test
+        run: cargo test --manifest-path vibecheck/Cargo.toml
+        working-directory: .
+      - name: Install coverage and audit tools
+        run: cargo install cargo-llvm-cov cargo-audit --locked
+      - name: Coverage (threshold 80 %)
+        run: cargo llvm-cov --manifest-path vibecheck/Cargo.toml --summary-only --fail-under-lines 80
+        working-directory: .
+      - name: Dependency audit
+        run: cargo audit --file vibecheck/Cargo.lock
+        working-directory: .
+      - name: Self-check against the convention
+        run: cargo run --manifest-path vibecheck/Cargo.toml -- . --strict
+        working-directory: .

@@ -183,6 +183,8 @@ mod tests {
             decl_error: None,
             git: Git::new(PathBuf::from(dir.path())),
             level: 1,
+            run: false,
+            metrics: Default::default(),
         };
         let findings = D5.run(&ctx);
         assert!(findings

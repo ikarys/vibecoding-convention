@@ -71,7 +71,7 @@ impl Git {
         self.output(&[
             "for-each-ref",
             "--sort=-creatordate",
-            "--format=%(refname:short)%x00%(creatordate:iso-strict)",
+            "--format=%(refname:short)%00%(creatordate:iso-strict)",
             "refs/tags",
         ])
         .and_then(|out| {
@@ -89,7 +89,7 @@ impl Git {
     }
 
     pub fn show_diff(&self, hash: &str) -> String {
-        self.output(&["show", "--diff", "--format=", hash])
+        self.output(&["show", "--patch", "--format=", hash])
             .map(|out| String::from_utf8_lossy(&out.stdout).into_owned())
             .unwrap_or_default()
     }

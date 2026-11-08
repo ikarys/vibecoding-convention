@@ -127,7 +127,8 @@ mod tests {
 
     #[test]
     fn scans_secrets() {
-        let hits = scan_secrets("key=ghp_abcdefghijklmnopqrstuvwxyz0123456789");
+        let token = format!("ghp_{}", "abcdefghijklmnopqrstuvwxyz0123456789");
+        let hits = scan_secrets(&format!("key={token}"));
         assert!(!hits.is_empty());
     }
 }

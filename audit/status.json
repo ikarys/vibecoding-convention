@@ -1,14 +1,17 @@
 {
   "color": "blue",
   "label": "vibecoding",
-  "message": "level 1 · checked 2026-11-08 · a34c273",
+  "message": "level 2 · checked 2026-11-08 · db762f1",
   "schemaVersion": 1,
   "vibecoding": {
     "checked_by": "vibecheck 0.1.0",
-    "commit": "a34c273",
+    "commit": "db762f1",
     "date": "2026-11-08",
-    "level": 1,
-    "metrics": {},
+    "level": 2,
+    "metrics": {
+      "file_max": 357,
+      "function_max": 44
+    },
     "open_findings": {
       "BLOCKER": 0,
       "DOC-WRONG": 0,

@@ -1,76 +1,60 @@
 use std::path::PathBuf;
-use std::process::ExitCode;
+use std::process;
 
-use clap::{Parser, ValueEnum};
+use clap::Parser;
 
-#[derive(Debug, Clone, Copy, ValueEnum)]
+#[derive(clap::ValueEnum, Clone, Copy, PartialEq, Eq)]
 enum Format {
     Text,
     Json,
 }
 
-#[derive(Debug, Parser)]
-#[command(
-    name = "vibecheck",
-    about = "Validate a project against the Vibecoding Convention"
-)]
+#[derive(Parser)]
 struct Args {
-    /// Repository root.
     #[arg(default_value = ".")]
     path: PathBuf,
-
-    /// Override the declared level.
     #[arg(long)]
     level: Option<u8>,
-
-    /// Output format.
     #[arg(long, value_enum, default_value_t = Format::Text)]
     format: Format,
-
-    /// Write audit/status.json after the run.
     #[arg(long)]
     write_status: bool,
-
-    /// Treat warnings as failures for the exit code.
     #[arg(long)]
     strict: bool,
+    #[arg(long)]
+    run: bool,
 }
 
-fn main() -> ExitCode {
+fn main() -> process::ExitCode {
     let args = Args::parse();
+    let opts = vibecheck::Options {
+        level_override: args.level,
+        run: args.run,
+    };
 
-    if !args.path.is_dir() {
-        eprintln!(
-            "vibecheck: path is not a directory: {}",
-            args.path.display()
-        );
-        return ExitCode::from(2);
-    }
-
-    match vibecheck::run(&args.path, args.level) {
+    match vibecheck::run(&args.path, opts) {
         Ok(report) => {
+            match args.format {
+                Format::Text => println!("{}", report.to_text()),
+                Format::Json => println!("{}", report.to_json()),
+            }
+
             if args.write_status {
                 if let Err(err) = vibecheck::status::write_status(&args.path, &report) {
-                    eprintln!("vibecheck: cannot write status: {err}");
-                    return ExitCode::from(2);
+                    eprintln!("failed to write status: {err}");
+                    return process::ExitCode::FAILURE;
                 }
             }
 
-            let output = match args.format {
-                Format::Text => report.to_text(),
-                Format::Json => report.to_json(),
-            };
-            println!("{output}");
-
             if report.has_fail() || (args.strict && report.has_warn()) {
-                ExitCode::from(1)
+                process::ExitCode::FAILURE
             } else {
-                ExitCode::SUCCESS
+                process::ExitCode::SUCCESS
             }
         }
         Err(err) => {
             eprintln!("vibecheck: {err}");
-            ExitCode::from(2)
+            process::ExitCode::FAILURE
         }
     }
 }

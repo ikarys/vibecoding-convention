@@ -8,8 +8,21 @@ pub mod d6;
 pub mod d7;
 pub mod d8;
 pub mod d9;
+pub mod support;
+pub mod t1;
+pub mod t2;
+pub mod t3;
+pub mod t4;
+pub mod t5;
+pub mod t6;
+pub mod t7;
+pub mod t8;
 
+use std::cell::RefCell;
+use std::collections::BTreeMap;
 use std::path::PathBuf;
+
+use serde_json::Value;
 
 use crate::declaration::Declaration;
 use crate::finding::Finding;
@@ -21,6 +34,8 @@ pub struct Context {
     pub decl_error: Option<String>,
     pub git: Git,
     pub level: u8,
+    pub run: bool,
+    pub metrics: RefCell<BTreeMap<String, Value>>,
 }
 
 pub trait Check {
@@ -41,6 +56,14 @@ pub fn all() -> Vec<Box<dyn Check>> {
         Box::new(d8::D8),
         Box::new(d9::D9),
         Box::new(d10::D10),
+        Box::new(t1::T1),
+        Box::new(t2::T2),
+        Box::new(t3::T3),
+        Box::new(t4::T4),
+        Box::new(t5::T5),
+        Box::new(t6::T6),
+        Box::new(t7::T7),
+        Box::new(t8::T8),
     ]
 }
 
@@ -57,9 +80,10 @@ mod tests {
     use super::*;
 
     #[test]
-    fn all_contains_level_one_checks() {
+    fn all_contains_level_one_and_level_two_checks() {
         let checks = all();
-        assert_eq!(checks.len(), 10);
-        assert!(checks.iter().all(|check| check.level() == 1));
+        assert_eq!(checks.len(), 18);
+        assert_eq!(checks.iter().filter(|check| check.level() == 1).count(), 10);
+        assert_eq!(checks.iter().filter(|check| check.level() == 2).count(), 8);
     }
 }

@@ -232,7 +232,7 @@ pub fn read_declaration(root: &Path) -> (Option<Declaration>, Option<String>) {
         Err(err) => return (None, Some(format!("VIBECODING.md front matter: {err}"))),
     };
 
-    let mut declaration: Declaration = match serde_yaml::from_str(&yaml) {
+    let mut declaration: Declaration = match serde_yaml_ng::from_str(&yaml) {
         Ok(value) => value,
         Err(err) => return (None, Some(format!("VIBECODING.md YAML: {err}"))),
     };
@@ -246,7 +246,7 @@ pub fn missing_required_keys(text: &str) -> Vec<String> {
         Ok(value) => value,
         Err(_) => return Vec::new(),
     };
-    let value: serde_yaml::Value = match serde_yaml::from_str(&yaml) {
+    let value: serde_yaml_ng::Value = match serde_yaml_ng::from_str(&yaml) {
         Ok(value) => value,
         Err(_) => return Vec::new(),
     };

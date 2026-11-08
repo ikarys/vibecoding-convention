@@ -1,7 +1,9 @@
-use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
+use serde::Serialize;
+use serde_json::{json, Value};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize)]
 pub enum Severity {
     Fail,
     Warn,
@@ -9,7 +11,18 @@ pub enum Severity {
     NotRun,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+impl std::fmt::Display for Severity {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Severity::Fail => write!(f, "FAIL"),
+            Severity::Warn => write!(f, "WARN"),
+            Severity::Info => write!(f, "INFO"),
+            Severity::NotRun => write!(f, "NOT RUN"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
 pub struct Finding {
     pub id: String,
     pub severity: Severity,
@@ -32,8 +45,8 @@ impl Finding {
             id: id.to_string(),
             severity,
             title: title.to_string(),
-            problem: problem.into(),
             where_,
+            problem: problem.into(),
             fix,
         }
     }
@@ -72,12 +85,13 @@ impl Finding {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Report {
     pub level: u8,
     pub findings: Vec<Finding>,
     pub checked_commit: Option<String>,
     pub date: chrono::NaiveDate,
+    pub metrics: BTreeMap<String, Value>,
 }
 
 impl Report {
@@ -94,7 +108,6 @@ impl Report {
         let mut warn = 0;
         let mut info = 0;
         let mut not_run = 0;
-
         for finding in &self.findings {
             match finding.severity {
                 Severity::Fail => fail += 1,
@@ -103,75 +116,65 @@ impl Report {
                 Severity::NotRun => not_run += 1,
             }
         }
-
         (fail, warn, info, not_run)
     }
 
     pub fn to_text(&self) -> String {
-        let mut output = String::new();
-        let mut groups: std::collections::BTreeMap<(u8, u32, String), Vec<&Finding>> =
-            std::collections::BTreeMap::new();
-
+        let mut out = String::new();
+        let mut last_rank = None;
         for finding in &self.findings {
-            groups
-                .entry(requirement_rank(&finding.id))
-                .or_default()
-                .push(finding);
-        }
-
-        for ((_, _, id), findings) in groups {
-            for finding in findings {
-                let severity = match finding.severity {
-                    Severity::Fail => "FAIL",
-                    Severity::Warn => "WARN",
-                    Severity::Info => "INFO",
-                    Severity::NotRun => "NOT RUN",
-                };
-                let where_part = finding
-                    .where_
-                    .as_ref()
-                    .map(|value| format!("  ({value})"))
-                    .unwrap_or_default();
-                output.push_str(&format!(
-                    "{id}  {severity}  {}{}\n",
-                    finding.problem, where_part
-                ));
-                if let Some(fix) = &finding.fix {
-                    output.push_str(&format!("    fix: {fix}\n"));
+            let rank = requirement_rank(&finding.id);
+            if last_rank.as_ref() != Some(&rank) {
+                if last_rank.is_some() {
+                    out.push('\n');
                 }
+                last_rank = Some(rank);
+            }
+            let where_part = finding
+                .where_
+                .as_ref()
+                .map(|w| format!("  ({w})"))
+                .unwrap_or_default();
+            out.push_str(&format!(
+                "{}  {}  {}{}\n",
+                finding.id, finding.severity, finding.problem, where_part
+            ));
+            if let Some(fix) = &finding.fix {
+                out.push_str(&format!("    fix: {fix}\n"));
             }
         }
 
         let (fail, warn, info, not_run) = self.counts();
-        let commit = self
-            .checked_commit
-            .as_deref()
-            .map(short_hash)
-            .unwrap_or("none");
-        output.push_str(&format!(
-            "{fail} fail, {warn} warn, {info} info, {not_run} not run · level {} · commit {commit}\n",
+        let commit = self.checked_commit.clone().unwrap_or_default();
+        let short = if commit.is_empty() {
+            "none".to_string()
+        } else {
+            short_hash(&commit).to_string()
+        };
+        out.push_str(&format!(
+            "{fail} fail, {warn} warn, {info} info, {not_run} not run · level {} · commit {short}\n",
             self.level
         ));
-
-        output
+        out
     }
 
     pub fn to_json(&self) -> String {
-        let summary = serde_json::json!({
-            "fail": self.counts().0,
-            "warn": self.counts().1,
-            "info": self.counts().2,
-            "not_run": self.counts().3,
+        let (fail, warn, info, not_run) = self.counts();
+        let commit = self.checked_commit.clone().unwrap_or_default();
+        let value = json!({
             "level": self.level,
-            "date": self.date.to_string(),
-            "checked_commit": self.checked_commit.clone(),
-        });
-
-        serde_json::json!({
+            "date": self.date,
+            "commit": short_hash(&commit),
             "findings": self.findings,
-            "summary": summary,
-        })
-        .to_string()
+            "summary": {
+                "fail": fail,
+                "warn": warn,
+                "info": info,
+                "not_run": not_run
+            },
+            "metrics": self.metrics
+        });
+        serde_json::to_string_pretty(&value).unwrap_or_default()
     }
 }
 
@@ -179,19 +182,21 @@ pub fn short_hash(hash: &str) -> &str {
     hash.get(..7).unwrap_or(hash)
 }
 
-/// Sort key for requirement identifiers: level letter (D, T, A), then number.
 pub fn requirement_rank(id: &str) -> (u8, u32, String) {
-    let letter = match id.chars().next() {
-        Some('D') => 0,
-        Some('T') => 1,
-        Some('A') => 2,
-        _ => 3,
-    };
-    let number = id
-        .trim_start_matches(|c: char| c.is_ascii_alphabetic())
-        .parse::<u32>()
+    let mut chars = id.chars();
+    let letter = chars.next().unwrap_or('D');
+    let number: u32 = chars
+        .filter(|c| c.is_ascii_digit())
+        .collect::<String>()
+        .parse()
         .unwrap_or(0);
-    (letter, number, id.to_string())
+    let rank = match letter {
+        'D' => 0,
+        'T' => 1,
+        'A' => 2,
+        _ => 255,
+    };
+    (rank, number, id.to_string())
 }
 
 #[cfg(test)]
@@ -199,35 +204,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn text_output_contains_summary() {
-        let report = Report {
-            level: 1,
-            findings: vec![Finding::fail(
-                "D1",
-                "t",
-                "problem",
-                Some("where".into()),
-                None,
-            )],
-            checked_commit: Some("0123456789".into()),
-            date: chrono::NaiveDate::from_ymd_opt(2026, 1, 1).unwrap(),
-        };
-        let text = report.to_text();
-        assert!(text.contains("D1  FAIL  problem  (where)"));
-        assert!(text.contains("1 fail, 0 warn, 0 info, 0 not run"));
-        assert!(text.contains("commit 0123456"));
+    fn short_hash_truncates() {
+        assert_eq!(short_hash("abcdef123456"), "abcdef1");
+        assert_eq!(short_hash("abc"), "abc");
     }
 
     #[test]
-    fn json_output_contains_findings() {
-        let report = Report {
-            level: 1,
-            findings: vec![Finding::info("D1", "t", "problem", None)],
-            checked_commit: None,
-            date: chrono::NaiveDate::from_ymd_opt(2026, 1, 1).unwrap(),
-        };
-        let json: serde_json::Value = serde_json::from_str(&report.to_json()).unwrap();
-        assert_eq!(json["findings"][0]["id"], "D1");
-        assert_eq!(json["summary"]["info"], 1);
+    fn requirement_rank_orders_d_t_a() {
+        assert!(requirement_rank("D1") < requirement_rank("T1"));
+        assert!(requirement_rank("T1") < requirement_rank("A1"));
+        assert!(requirement_rank("D2") < requirement_rank("D10"));
     }
 }

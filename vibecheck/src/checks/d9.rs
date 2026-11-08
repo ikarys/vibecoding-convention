@@ -98,6 +98,8 @@ mod tests {
             decl_error: None,
             git: Git::new(PathBuf::from(dir.path())),
             level: 1,
+            run: false,
+            metrics: Default::default(),
         };
         let findings = D9.run(&ctx);
         assert!(findings
@@ -117,6 +119,8 @@ mod tests {
             decl_error: None,
             git: Git::new(PathBuf::from(dir.path())),
             level: 1,
+            run: false,
+            metrics: Default::default(),
         };
         let findings = D9.run(&ctx);
         assert!(findings.is_empty());

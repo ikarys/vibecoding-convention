@@ -10,16 +10,22 @@ processes:
   deployment: none
 convention:
   version: "0.1"
-  level: 1
+  level: 2
   adopted_at: 03c8df2
   status: active
   tools:
     - "Claude Code:claude-fable-5-1"
   attribution_trailers: [Assisted-by, Generated-by]
+  coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
+  maintainability: { tool: none, duplication_max: 5, complexity_max: 15, function_max: 80, file_max: 400 }
   commands:
     test: "cargo test --manifest-path vibecheck/Cargo.toml"
     lint: "cargo clippy --manifest-path vibecheck/Cargo.toml --all-targets -- -D warnings"
     format: "cargo fmt --manifest-path vibecheck/Cargo.toml --check"
+    coverage: "cargo llvm-cov --manifest-path vibecheck/Cargo.toml --summary-only"
+    audit: "cargo audit --file vibecheck/Cargo.lock"
+    static_analysis: "cargo clippy --manifest-path vibecheck/Cargo.toml --all-targets -- -D warnings"
+    secrets: "gitleaks detect --no-banner"
   maintainers: [ikarys]
   review: "single maintainer reads every diff before it reaches main"
   security_response: "none"
@@ -29,9 +35,9 @@ convention:
 # Vibecoding declaration
 
 This repository follows its own [Vibecoding Convention](CONVENTION.md) version
-0.1 at level 1. It holds text, templates and the `vibecheck` validator. Level 2
-will be claimed once the validator has CI, coverage and the other level 2
-evidence.
+0.1 at level 2. It holds text, templates and the `vibecheck` validator, which
+has tests, CI, coverage, lint, secrets scanning and dependency checks. Level 3
+will be claimed once the audit reports exist.
 
 ## AI assistance
 
@@ -60,3 +66,9 @@ every change.
 
 Active. This repository holds no running software; there is no security
 response commitment.
+
+## Exceptions
+
+- T8: duplication and complexity are not measured yet; no tool is chosen for
+  Rust. File and function length are measured by `vibecheck` itself. The
+  thresholds above for duplication and complexity are targets, not evidence.

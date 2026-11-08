@@ -1,5 +1,7 @@
 # Vibecoding Convention
 
+[![Vibecoding Convention](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ikarys/vibecoding-convention/main/audit/status.json)](VIBECODING.md)
+
 A checkable standard for software written with AI assistance.
 
 AI-assisted code is not a problem. Unframed, unreviewed, unaudited code is,

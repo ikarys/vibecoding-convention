@@ -140,6 +140,8 @@ mod tests {
             decl_error: Some("bad".into()),
             git: Git::new(PathBuf::from(dir.path())),
             level: 1,
+            run: false,
+            metrics: Default::default(),
         };
         let findings = D2.run(&ctx);
         assert!(findings
