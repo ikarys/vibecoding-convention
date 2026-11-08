@@ -11,17 +11,6 @@ pub fn run_default(dir: &Path) -> vibecheck::Report {
     vibecheck::run(dir, Options::default()).unwrap()
 }
 
-pub fn run_with(dir: &Path, run: bool) -> vibecheck::Report {
-    vibecheck::run(
-        dir,
-        Options {
-            level_override: None,
-            run,
-        },
-    )
-    .unwrap()
-}
-
 pub fn has_finding<'a>(
     findings: impl IntoIterator<Item = &'a Finding>,
     id: &str,
@@ -114,6 +103,7 @@ convention:
     coverage: {coverage}
     audit: {audit}
     maintainability: {maintainability}
+  evidence: {{ coverage: audit/evidence/coverage.txt, audit: audit/evidence/audit.json }}
 ---
 # Body
 "#

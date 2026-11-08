@@ -87,6 +87,18 @@ impl Check for D2 {
                     Some("Add convention.maintainability".into()),
                 ));
             }
+            let evidence = decl.convention.evidence.as_ref();
+            if evidence.is_none_or(|e| e.coverage.is_none() || e.audit.is_none()) {
+                findings.push(Finding::fail(
+                    "D2",
+                    "Declaration",
+                    "level 2 requires convention.evidence.coverage and convention.evidence.audit",
+                    Some("VIBECODING.md".into()),
+                    Some(
+                        "declare evidence.coverage and evidence.audit (files written by CI)".into(),
+                    ),
+                ));
+            }
         }
 
         if decl.convention.adopted_at.is_empty() || !ctx.git.is_repo() {
@@ -149,7 +161,6 @@ mod tests {
             decl_error: Some("bad".into()),
             git: Git::new(PathBuf::from(dir.path())),
             level: 1,
-            run: false,
             metrics: Default::default(),
         };
         let findings = D2.run(&ctx);

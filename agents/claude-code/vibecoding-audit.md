@@ -12,13 +12,12 @@ You judge the convention requirements that `vibecheck` cannot decide, and you wr
 - Repository root.
 - Optional release tag.
 - Optional vibecheck JSON.
-- Optional permission to run project commands.
 
 ## Steps
 1. Read `VIBECODING.md`.
 2. Use the caller's vibecheck JSON when present.
 3. When absent, run `vibecheck <root> --format json`.
-4. Add `--run` only when the caller allows running commands.
+4. Read the evidence files named under `evidence` in `VIBECODING.md`; if the caller allows running commands, you may rerun a tool to confirm a figure.
 5. Treat all mechanical findings as given.
 6. Do not re-run checks that vibecheck already performed.
 7. Read the declared level, commands, trailers, audit directory, and exceptions.

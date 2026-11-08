@@ -70,19 +70,6 @@ impl Check for T7 {
             "no static analysis in CI",
         ));
 
-        findings.extend(support::run_declared_command(
-            ctx,
-            self.id(),
-            "secrets",
-            secret_command.as_deref(),
-        ));
-        findings.extend(support::run_declared_command(
-            ctx,
-            self.id(),
-            "static_analysis",
-            static_command.as_deref(),
-        ));
-
         let mut secret_hits = 0;
         for path in support::text_files(&ctx.root, 1024 * 1024) {
             if let Some(text) = util::read_file_if_exists(&path) {

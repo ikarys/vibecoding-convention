@@ -9,73 +9,6 @@ use vibecheck::finding::{Finding, Severity};
 use vibecheck::Options;
 
 #[test]
-fn t2_run_reports_good_coverage_metric() {
-    let dir = tempfile::tempdir().unwrap();
-    common::finalize_level2_fixture(dir.path());
-    minimal_level2(
-        dir.path(),
-        r#""echo TOTAL lines 91.5%""#,
-        80,
-        "true",
-        "null",
-        "null",
-    );
-    let report = run_with(dir.path(), true);
-    assert!(has_finding(
-        report.findings.iter(),
-        "T2",
-        Severity::Info,
-        "coverage 91.5"
-    ));
-    assert!(report
-        .metrics
-        .get("coverage")
-        .is_some_and(|v| v.as_f64() == Some(91.5)));
-}
-
-#[test]
-fn t2_run_fails_below_threshold() {
-    let dir = tempfile::tempdir().unwrap();
-    common::finalize_level2_fixture(dir.path());
-    minimal_level2(
-        dir.path(),
-        r#""echo TOTAL lines 42%""#,
-        80,
-        "true",
-        "null",
-        "null",
-    );
-    let report = run_with(dir.path(), true);
-    assert!(has_finding(
-        report.findings.iter(),
-        "T2",
-        Severity::Fail,
-        "below threshold"
-    ));
-}
-
-#[test]
-fn t2_run_warns_when_percentage_unreadable() {
-    let dir = tempfile::tempdir().unwrap();
-    common::finalize_level2_fixture(dir.path());
-    minimal_level2(
-        dir.path(),
-        r#""echo nothing here""#,
-        80,
-        "true",
-        "null",
-        "null",
-    );
-    let report = run_with(dir.path(), true);
-    assert!(has_finding(
-        report.findings.iter(),
-        "T2",
-        Severity::Warn,
-        "percentage"
-    ));
-}
-
-#[test]
 fn t2_fails_when_threshold_is_zero() {
     let dir = tempfile::tempdir().unwrap();
     common::finalize_level2_fixture(dir.path());
@@ -217,7 +150,7 @@ fn t1_has_no_failures_when_true_command_is_in_ci() {
         "name: ci\non: push\njobs:\n  test:\n    steps:\n      - run: true\n",
     )
     .unwrap();
-    let report = run_with(dir.path(), true);
+    let report = run_default(dir.path());
     assert!(!report
         .findings
         .iter()

@@ -45,6 +45,7 @@ pub fn write_status(root: &Path, report: &Report) -> anyhow::Result<()> {
             "report": preserved_report,
             "open_findings": { "BLOCKER": 0, "DOC-WRONG": 0, "PAINFUL": 0, "MINOR": 0 },
             "metrics": metrics,
+            "evidence": report.evidence,
             "checked_by": format!("vibecheck {}", env!("CARGO_PKG_VERSION")),
             "read_by": preserved_read_by
         }
@@ -93,6 +94,7 @@ mod tests {
             checked_commit: Some("abcdef1234567890".to_string()),
             date: chrono::Utc::now().naive_local().date(),
             metrics,
+            evidence: BTreeMap::new(),
         }
     }
 

@@ -35,7 +35,6 @@ pub struct Context {
     pub decl_error: Option<String>,
     pub git: Git,
     pub level: u8,
-    pub run: bool,
     pub metrics: RefCell<BTreeMap<String, Value>>,
 }
 

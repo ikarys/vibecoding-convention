@@ -2,7 +2,7 @@ pub mod checks;
 pub mod ci;
 pub mod declaration;
 pub mod ecosystem;
-pub mod exec;
+pub mod evidence;
 pub mod finding;
 pub mod git;
 pub mod status;
@@ -12,10 +12,10 @@ use std::path::Path;
 
 pub use finding::Report;
 
+/// Settings that change what is checked, not how: vibecheck runs no project code.
 #[derive(Default, Clone, Copy)]
 pub struct Options {
     pub level_override: Option<u8>,
-    pub run: bool,
 }
 
 pub fn run(root: &Path, opts: Options) -> anyhow::Result<Report> {
@@ -34,7 +34,6 @@ pub fn run(root: &Path, opts: Options) -> anyhow::Result<Report> {
         decl_error,
         git,
         level,
-        run: opts.run,
         metrics,
     };
 
@@ -47,12 +46,18 @@ pub fn run(root: &Path, opts: Options) -> anyhow::Result<Report> {
     });
     let date = chrono::Utc::now().naive_local().date();
     let metrics = ctx.metrics.into_inner();
+    let evidence = ctx
+        .decl
+        .as_ref()
+        .map(declaration::declared_evidence)
+        .unwrap_or_default();
     Ok(Report {
         level,
         findings,
         checked_commit,
         date,
         metrics,
+        evidence,
     })
 }
 

@@ -40,19 +40,6 @@ impl Check for T5 {
             "no linter in CI",
         ));
 
-        findings.extend(support::run_declared_command(
-            ctx,
-            self.id(),
-            "lint",
-            lint.as_deref(),
-        ));
-        findings.extend(support::run_declared_command(
-            ctx,
-            self.id(),
-            "format",
-            format.as_deref(),
-        ));
-
         findings
     }
 }

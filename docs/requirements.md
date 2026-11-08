@@ -38,7 +38,9 @@ repeating those keys. The Declaration file section gives the format. The file st
 - the project status and security response time (D9);
 - the provenance and licence statement (D7);
 - the commit at which the convention was adopted;
-- for level 2 and above: the thresholds and tools of T2, T7 and T8;
+- for level 2 and above: the thresholds and tools of T2, T7 and T8, and the
+  evidence files for coverage and audit (`convention.evidence.coverage`,
+  `convention.evidence.audit`), plus `outdated` when no update bot is configured;
 - for level 3: the audit directory, the audit cadence, and whether a blind
   test applies.
 - Evidence: the file. A template is in `templates/VIBECODING.md`.
@@ -83,7 +85,10 @@ that produced a change is never its only reviewer.
 convention check, produced by the check itself and not typed by hand:
 - `audit/status.json` holds the claimed level, the date, the commit checked,
   the verdict (`pass`, `pass with findings`, `fail`, `stale`), the number of
-  open findings by severity, and the tool and model that ran the check. Its
+  open findings by severity, the evidence files it was computed from, and the
+  tool and model that ran the check. It is written by `vibecheck
+  --write-status`, normally from the project's CI after its own checks passed,
+  otherwise by a maintainer. Its
   top-level fields follow the shields.io endpoint schema (`schemaVersion`,
   `label`, `message`, `color`), so the README badge is a dynamic badge that
   reads this file and cannot be edited without a visible commit under
@@ -112,7 +117,7 @@ names the safeguards used, if any (vendor code-reference filters, snippet
 scanning, a human check of long generated blocks).
 - Evidence: the statement.
 - Checked: the statement is present and complete; where a snippet scanner is
-  declared, the auditor runs it.
+  declared, CI runs it and the auditor reads its output.
 
 **D8. Contribution policy.** `CONTRIBUTING.md` states the project's policy for
 incoming AI-assisted contributions: accepted with disclosure, accepted with
@@ -167,17 +172,21 @@ push or pull request. The default branch is green. The build runs from a clean
 checkout with the steps the documentation gives, so that a stranger can build
 the project.
 - Evidence: the CI configuration and the latest run on the default branch.
-- Checked: the CI job runs the test command from a clean checkout; the last
-  run passed.
+- Checked: the CI configuration contains the test command and runs it on
+  every push or pull request. Whether the default branch is green is read by
+  the auditor on the platform; vibecheck does not check it.
 
 **T2. Coverage at the declared threshold.** `VIBECODING.md` declares a line (or
 statement) coverage threshold and the tool that measures it. The measured
 coverage is at or above the threshold. The recommended threshold for software
 used in production is 80 %. A lower threshold is allowed and must be
 explained in one sentence.
-- Evidence: the coverage report produced by CI, or the command that produces it
-  locally.
-- Checked: the auditor runs the command and compares.
+- Evidence: the coverage report CI writes to the file named by
+  `convention.evidence.coverage`.
+- Checked: the coverage tool appears in the CI configuration; CI runs the tool
+  and writes `evidence.coverage`; vibecheck reads it and compares the figure to
+  the threshold (lcov: LH/LF; cobertura: line-rate; cargo-llvm-cov summary or
+  JSON; otherwise the last percentage in the text).
 
 **T3. Tests assert behaviour.** Tests check results, not only that the code ran.
 No test is skipped or disabled without a comment giving the reason. A failing
@@ -218,9 +227,12 @@ the check does not matter; that it runs against the registry, and not against
 the model's memory, does. This is the answer to hallucinated package names and
 to the packages attackers register under them.
 - Evidence: the lockfile, the CI step or release checklist and the tool used,
-  the recorded checks.
-- Checked: the auditor runs the tools, lists dependencies added since the last
-  check and reports those without a recorded check.
+  the audit output in `convention.evidence.audit`, the recorded checks.
+- Checked: the lockfile is committed; CI or the release checklist contains the
+  audit command; CI runs the tool and writes `evidence.audit`, which vibecheck
+  reads (any unresolved vulnerability is a failure); vibecheck lists
+  dependencies added since the last check and reports those without a recorded
+  check.
 
 **T7. Secrets and static analysis.** A secrets scanner runs as a pre-commit
 hook, so that a secret never enters the history, and again in CI, so that the
@@ -235,9 +247,9 @@ promise the absence of vulnerabilities, which nobody can prove; it asks that
 the known classes be looked for by a tool, every time.
 - Evidence: the pre-commit configuration (for example `.pre-commit-config.yaml`
   with gitleaks or an equivalent), the CI steps, the last run.
-- Checked: both steps exist; the auditor runs the secrets scanner over the
-  full history and the static analyser over the tree and reports findings not
-  listed as accepted.
+- Checked: both steps exist; vibecheck scans the working tree for secrets
+  with its built-in scanner; the secrets scanner and the static analyser run in
+  CI, where their findings not listed as accepted fail the job.
 
 **T8. Maintainability signals.** The project declares a tool and thresholds for
 at least: code duplication, function complexity (cyclomatic or cognitive),
@@ -255,9 +267,13 @@ find the existing one, the single file that grows with every prompt until it
 holds the whole program, and the `TODO: implement` a model leaves behind. A
 comment density is deliberately not measured: it is a bad metric in both
 directions; the signal-over-noise judgement belongs to A1.
-- Evidence: the tool output, the numbers in `audit/status.json`.
-- Checked: the auditor runs the tool and compares with the thresholds and with
-  the previous check.
+- Evidence: `convention.evidence.maintainability`, the numbers in
+  `audit/status.json`.
+- Checked: the thresholds are declared; vibecheck measures file length,
+  function length and leftover markers itself; CI mentions the maintainability
+  and documentation lint commands when declared; CI runs the declared tool and
+  writes `evidence.maintainability`, which vibecheck records in the status file
+  for the agents.
 
 **T9. Dependency freshness.** A model proposes the library versions and APIs
 it memorised, not today's, so an AI-written project is behind from its first
@@ -276,12 +292,14 @@ the latest" but "no unjustified lag". Three moments:
   counter-indication; it is the only thing that justifies a lag.
 No dependency flagged as unmaintained or abandoned by the ecosystem's advisory
 database stays without such an exception.
-- Evidence: the update configuration or the declared command, the outdated
-  report, the exceptions, `metrics.outdated` in `audit/status.json`.
-- Checked: the update mechanism exists; with the declared command, the auditor
-  counts the outdated dependencies and the oldest lag and compares them to the
-  limits, minus the declared exceptions; the advisory tool of T6 reports no
-  unmaintained dependency without an exception.
+- Evidence: the update configuration or `convention.evidence.outdated`, the
+  exceptions, `metrics.outdated` in `audit/status.json`.
+- Checked: an update bot configuration exists or `evidence.outdated` is
+  declared (neither is a failure); CI runs the outdated tool and writes
+  `evidence.outdated`; vibecheck reads it, counts the outdated dependencies not
+  listed under "Dependencies held back" against `max_outdated` and records
+  `metrics.outdated`; unmaintained or yanked items in `evidence.audit` without
+  a held-back entry are failures.
 
 ### Level 3: Audited
 
@@ -379,8 +397,11 @@ on its core modules and declares the score and its threshold in
 `VIBECODING.md`. Mutation testing measures whether the tests fail when the
 code is changed, which is the objective form of T3. It is recommended rather
 than required because tooling is uneven across languages.
-- Evidence: the tool output, the numbers in `audit/status.json`.
-- Checked: where declared, the auditor runs the tool and compares.
+- Evidence: `convention.evidence.mutation`, the numbers in
+  `audit/status.json`.
+- Checked: where `convention.mutation` and `evidence.mutation` are declared, CI
+  runs the tool and writes the evidence file; vibecheck reads it and compares
+  the figure to the threshold.
 
 **A8. Tooling configuration is code.** Everything that executes with access to
 the repository or the developers' machines is versioned, reviewed like code
@@ -488,6 +509,12 @@ convention:
   licence: MIT
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
   maintainability: { tool: rust-code-analysis, duplication_max: 5, complexity_max: 15, function_max: 60, file_max: 600 }
+  evidence:                                    # tool outputs written by CI, read by vibecheck; paths relative to the repository root
+    coverage: audit/evidence/coverage.txt
+    audit: audit/evidence/audit.json
+    outdated: audit/evidence/outdated.txt      # optional when an update bot is configured
+    maintainability: audit/evidence/maintainability.json   # optional
+    mutation: audit/evidence/mutation.txt      # optional, level 3
   mutation: { tool: cargo-mutants, threshold: 70 }
   audit_dir: audit
   audit_cadence: minor
@@ -496,13 +523,25 @@ convention:
 ---
 ```
 
+The `evidence` block names the files in which the project's tools leave their
+output. The project's CI runs the tools, writes the outputs there, and then runs
+`vibecheck . --write-status`, which reads the files, compares the figures to
+the declared thresholds and writes `audit/status.json`; CI commits both back to
+the default branch (or a maintainer does). vibecheck never executes the
+project's commands, so it is safe to run on any repository. At level 2 and
+above `evidence.coverage` and `evidence.audit` are required, `outdated` only
+when no update bot is configured. A declared file that is missing or unreadable
+fails the requirement it serves; one whose last commit is older than the latest
+release tag is stale (a warning). The `commands` block stays: it tells CI
+matching and agents and humans what to run.
+
 The README disclosure (D1) is the dynamic badge of D5:
 
 ```
 [![Vibecoding Convention](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/<owner>/<repo>/main/audit/status.json)](VIBECODING.md)
 ```
 
-`audit/status.json` is written by the convention check:
+`audit/status.json` is written by `vibecheck --write-status`:
 
 ```json
 {
@@ -518,7 +557,8 @@ The README disclosure (D1) is the dynamic badge of D5:
     "report": "audit/2026-11-08-convention.md",
     "open_findings": { "BLOCKER": 0, "DOC-WRONG": 0, "PAINFUL": 1, "MINOR": 4 },
     "metrics": { "coverage": 86.2, "duplication": 2.1, "complexity_max": 12, "function_max": 48, "file_max": 512, "mutation": 74 },
-    "checked_by": "Claude Code:claude-opus-5-5",
+    "evidence": { "coverage": "audit/evidence/coverage.txt", "audit": "audit/evidence/audit.json" },
+    "checked_by": "vibecheck 0.4.0",
     "read_by": "ikarys"
   }
 }

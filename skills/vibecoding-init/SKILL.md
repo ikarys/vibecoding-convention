@@ -43,7 +43,10 @@ pre-commit or hook configuration, `README.md`, `CONTRIBUTING.md`,
 `.cursorrules`, `GEMINI.md` and the like) and the licence file. From the CI and
 the ecosystem, propose the commands for `test`, `lint`, `format`, `coverage`,
 `audit`, `static_analysis`, `secrets` and `outdated`, preferring tools the
-project already runs. Show the list and let the human confirm or change it.
+project already runs. At level 2 and above also propose the evidence paths
+(`audit/evidence/coverage.txt`, `audit/evidence/audit.json`, and
+`outdated.txt` when no update bot is configured). Show the list and let the
+human confirm or change it.
 
 ## 3. Write the declaration
 
@@ -51,7 +54,7 @@ Write `VIBECODING.md` from `templates/VIBECODING.md`: the AI-DECLARATION keys
 and the `convention` block in the front matter (level, `adopted_at` set to the
 current HEAD, status, tools, `attribution_trailers`, maintainers, review,
 security response, licence, the thresholds of the level, the confirmed
-`commands`, `agent_instruction_files` when the project uses non-standard
+`commands`, the `evidence` block (level 2 and above), `agent_instruction_files` when the project uses non-standard
 names); in the body the sections AI assistance, Review, Provenance and
 licence, Status, and Exceptions for any requirement that does not apply, each
 with its reason and date.
@@ -76,6 +79,9 @@ with its reason and date.
 - Level 2 and above: a pre-commit secrets scanner, preferring one already in
   use, `gitleaks` otherwise; the same scanner in CI; the confirmed commands in
   CI where missing. Tell the human how to install the hook.
+- Level 2 and above: add the CI steps from `templates/ci/github-actions.yml`
+  (or the platform's equivalent) that write the evidence files and run
+  `vibecheck . --write-status`.
 - `audit/README.md` from the template. Level 3: `SECURITY.md` from the
   template if missing; `ARCHITECTURE.md` and `docs/adr/` skeletons, each with a
   "Validated by <maintainer> on <date>" line left for the human to fill.
@@ -85,7 +91,8 @@ with its reason and date.
 
 ## 6. Check and hand over
 
-Run `vibecheck . --write-status` and show the findings. Fix what is yours to
+Run `vibecheck .` (no `--write-status`: the evidence does not exist yet) and
+show the findings. Explain that the first status will be written by CI. Fix what is yours to
 fix (a missing field, a wrong path); leave to the human what needs a decision
 and say so. Show the whole diff. Give the first commit message as text to
 copy, ending with the chosen trailer. Stop: the human commits.

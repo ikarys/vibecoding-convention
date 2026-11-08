@@ -97,20 +97,6 @@ fn t6_does_not_warn_for_new_dependency_with_registry_check() {
 }
 
 #[test]
-fn t6_fails_when_audit_command_fails_with_run() {
-    let dir = tempfile::tempdir().unwrap();
-    common::finalize_level2_fixture(dir.path());
-    minimal_level2(dir.path(), "null", 80, "true", "\"exit 2\"", "null");
-    let report = run_with(dir.path(), true);
-    assert!(has_finding(
-        report.findings.iter(),
-        "T6",
-        Severity::Fail,
-        "exit"
-    ));
-}
-
-#[test]
 fn t3_warns_for_unexplained_ignore() {
     let dir = tempfile::tempdir().unwrap();
     common::finalize_level2_fixture(dir.path());
@@ -172,17 +158,6 @@ fn t8_fails_for_long_python_function() {
         "functions",
         "big.py"
     ));
-}
-
-#[test]
-fn t8_does_not_report_unmeasured_when_maintainability_command_succeeds() {
-    let dir = tempfile::tempdir().unwrap();
-    common::finalize_level2_fixture(dir.path());
-    minimal_level2(dir.path(), "null", 80, "true", "null", "\"true\"");
-    let report = run_with(dir.path(), true);
-    assert!(!report.findings.iter().any(|f| f.id == "T8"
-        && f.severity == Severity::Info
-        && f.problem.contains("not measured")));
 }
 
 #[test]

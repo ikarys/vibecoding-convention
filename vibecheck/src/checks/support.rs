@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use crate::checks::Context;
 use crate::ci;
-use crate::exec;
+use crate::evidence;
 use crate::finding::Finding;
 use crate::util;
 
@@ -32,52 +32,31 @@ pub fn last_lines(text: &str, count: usize) -> String {
     }
 }
 
-pub fn run_declared_command(
-    ctx: &Context,
-    id: &str,
-    name: &str,
-    command: Option<&str>,
-) -> Vec<Finding> {
-    if !ctx.run {
-        return Vec::new();
-    }
-    let Some(command) = command else {
-        return vec![Finding::not_run(
+/// Reads the evidence file `path`; a missing or unreadable file is a FAIL
+/// for the requirement `id`.
+pub fn read_evidence(ctx: &Context, id: &str, path: &str) -> Result<String, Box<Finding>> {
+    evidence::read(&ctx.root, path).map_err(|err| {
+        Box::new(Finding::fail(
             id,
-            "command not declared",
-            format!("commands.{name} not declared"),
-            None,
-        )];
-    };
+            "evidence",
+            err.to_string(),
+            Some(path.to_string()),
+            Some("have CI write the declared evidence file".to_string()),
+        ))
+    })
+}
 
-    match exec::run_command(&ctx.root, command) {
-        Ok(outcome) => {
-            if outcome.success {
-                Vec::new()
-            } else {
-                let tail = last_lines(&outcome.output, 5);
-                let problem = if tail.is_empty() {
-                    format!("command failed: {command}")
-                } else {
-                    format!("command failed: {command}\n{tail}")
-                };
-                vec![Finding::fail(
-                    id,
-                    "command failed",
-                    problem,
-                    None,
-                    Some("fix the command".to_string()),
-                )]
-            }
-        }
-        Err(err) => vec![Finding::fail(
+/// A warning when a release tag is newer than the evidence file.
+pub fn stale_evidence(ctx: &Context, id: &str, path: &str) -> Option<Finding> {
+    evidence::staleness(path, &ctx.git).map(|text| {
+        Finding::warn(
             id,
-            "command failed",
-            format!("failed to run `{command}`: {err}"),
-            None,
-            None,
-        )],
-    }
+            "stale evidence",
+            text,
+            Some(path.to_string()),
+            Some("regenerate the evidence in CI for the release".to_string()),
+        )
+    })
 }
 
 pub fn no_ci(id: &str) -> Finding {

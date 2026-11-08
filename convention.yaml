@@ -35,6 +35,7 @@ requirements:
       - VIBECODING.md exists with YAML front matter
       - front matter has version, level, processes, convention.version, convention.level, convention.adopted_at, convention.status, convention.tools, convention.maintainers, convention.review, convention.security_response, convention.licence
       - convention.level 2+ also has convention.coverage and convention.maintainability
+      - convention.level 2+ also has convention.evidence.coverage and convention.evidence.audit
       - convention.level 3 also has convention.audit_dir, convention.audit_cadence, convention.blind_test, convention.check_interval
       - convention.adopted_at is a commit in the repository
       - every tool in convention.tools appears in at least one Assisted-by or Generated-by trailer since adoption, or is marked unused
@@ -63,13 +64,14 @@ requirements:
   - id: D5
     level: 1
     title: Dated check
-    statement: audit/status.json holds the level, date, commit and verdict of the last check, feeds the README badge, and is stale after the declared interval or a release.
+    statement: audit/status.json holds the level, date, commit and verdict of the last check and names the evidence it was computed from; it is written by vibecheck --write-status, normally from the project's CI after its own checks passed, otherwise by a maintainer; it feeds the README badge and is stale after the declared interval or a release.
     evidence: [audit/status.json, README.md]
     check: mechanical
     mechanical:
       - audit/status.json exists and parses with schemaVersion, label, message, color and a vibecoding object
       - vibecoding.commit exists in the repository
       - vibecoding.level equals convention.level
+      - vibecoding.evidence names the evidence files the status was computed from
       - vibecoding.date is newer than the latest release tag and younger than convention.check_interval (default 6 months), else verdict is stale
       - README.md references audit/status.json through a badge, or links VIBECODING.md (D1)
 
@@ -127,21 +129,21 @@ requirements:
     level: 2
     title: Tests run in CI
     statement: Automated tests run on every push or pull request from a clean checkout; the default branch is green.
-    evidence: [CI configuration, latest run]
+    evidence: [CI configuration]
     check: mechanical
     mechanical:
       - a CI configuration exists and contains convention.commands.test
-      - where the platform exposes it, the latest run on the default branch passed
 
   - id: T2
     level: 2
     title: Coverage at threshold
     statement: Coverage measured by the declared tool is at or above the declared threshold; 80 % recommended; a lower threshold is explained in one sentence.
-    evidence: [coverage report or command]
+    evidence: [convention.evidence.coverage]
     check: mechanical
     mechanical:
       - convention.coverage has threshold, kind, tool
-      - with --run, run convention.commands.coverage and compare the reported figure to the threshold
+      - the coverage tool appears in the CI configuration
+      - "convention.evidence.coverage is read and the figure compared to the threshold (lcov: LH/LF; cobertura: line-rate; cargo-llvm-cov summary or JSON; otherwise the last percentage in the text)"
 
   - id: T3
     level: 2
@@ -172,11 +174,12 @@ requirements:
     level: 2
     title: Dependency hygiene and provenance
     statement: Lockfile committed; vulnerability and licence checks run in CI or before release; every new dependency is checked against the registry before merge and the check is recorded.
-    evidence: [lockfile, CI configuration, git history]
+    evidence: [lockfile, CI configuration, convention.evidence.audit, git history]
     check: mechanical
     mechanical:
       - a lockfile for the detected ecosystem is committed
       - CI configuration or release checklist contains convention.commands.audit
+      - convention.evidence.audit is read and any unresolved vulnerability is a failure
       - list dependencies added since the last check whose commit or pull request has no "dependency check" record
 
   - id: T7
@@ -188,31 +191,30 @@ requirements:
     mechanical:
       - a pre-commit configuration exists and names a secrets scanner (gitleaks, trufflehog, detect-secrets or declared equivalent)
       - CI configuration contains the same scanner and convention.commands.static_analysis
-      - with --run, scan the full history for secrets
 
   - id: T8
     level: 2
     title: Maintainability signals
     statement: Duplication, complexity, function length, file length and leftover markers (TODO, placeholders, commented-out code) are measured with a declared tool and thresholds, in CI or at release, and recorded in the status file; public API documentation is linted where the ecosystem has a lint.
-    evidence: [tool output, audit/status.json]
+    evidence: [convention.evidence.maintainability, audit/status.json]
     check: mechanical
     mechanical:
       - convention.maintainability has tool, duplication_max, complexity_max, function_max, file_max, markers_max (default 0)
-      - with --run, run convention.commands.maintainability and compare
-      - built-in fallback without a tool: file length, function length and leftover markers by language heuristics
-      - CI mentions convention.commands.doc_lint when declared
+      - built-in measurement of file length, function length and leftover markers by language heuristics
+      - CI mentions convention.commands.maintainability and convention.commands.doc_lint when declared
+      - convention.evidence.maintainability, when declared, is recorded in the status file for the agents
 
   - id: T9
     level: 2
     title: Dependency freshness
     statement: New dependencies are taken at the registry's current version; an update mechanism (bot or declared cadence and command) exists; the lag is measured against declared limits (max_outdated, max_lag_months) minus declared exceptions; no unmaintained dependency without an exception.
-    evidence: [dependabot.yml or renovate.json or convention.commands.outdated, outdated report, VIBECODING.md exceptions, audit/status.json metrics.outdated]
+    evidence: [dependabot.yml or renovate.json or convention.evidence.outdated, VIBECODING.md exceptions, audit/status.json metrics.outdated]
     check: mechanical
     mechanical:
-      - .github/dependabot.yml, renovate.json (or .renovaterc*) exists, or convention.commands.outdated is declared; neither is a failure
+      - an update bot configuration (.github/dependabot.yml, renovate.json or .renovaterc*) exists or convention.evidence.outdated is declared; neither is a failure
       - convention.freshness has max_outdated and max_lag_months
-      - with --run, run convention.commands.outdated, count outdated dependencies not listed in exceptions, compare to max_outdated; record metrics.outdated
-      - unmaintained advisories from the T6 audit tool without a declared exception are failures
+      - when convention.evidence.outdated exists, outdated dependencies not listed under "Dependencies held back" are counted against max_outdated and recorded as metrics.outdated
+      - unmaintained or yanked items in convention.evidence.audit without a held-back entry are failures
 
   - id: A1
     level: 3
@@ -280,11 +282,11 @@ requirements:
     level: 3
     title: Mutation score
     statement: A mutation testing tool runs on the core modules and the score is at or above the declared threshold. Recommended, not required.
-    evidence: [tool output]
+    evidence: [convention.evidence.mutation]
     check: mechanical
     recommended: true
     mechanical:
-      - when convention.mutation is declared and --run is given, run convention.commands.mutation and compare
+      - when convention.mutation and convention.evidence.mutation are declared, the figure in the evidence file is compared to the threshold
 
   - id: A8
     level: 3
@@ -321,9 +323,9 @@ contributions:
     statement: The contributor answers review themselves within the time the project expects; an unanswered AI-assisted contribution may be closed without discussion.
     evidence: [review thread]
 
-# Commands a project declares in VIBECODING.md under convention.commands so that
-# tools can run them without guessing. All optional; a missing command makes the
-# corresponding --run check "not run".
+# Commands a project declares in VIBECODING.md under convention.commands. They
+# are declared so that CI matching (T1, T5, T6, T7) and agents and humans know
+# what to run; vibecheck never executes them. All optional.
 commands:
   test: run the test suite
   coverage: produce the coverage figure
@@ -336,3 +338,15 @@ commands:
   outdated: list dependencies with a newer version available
   doc_lint: public API documentation lint (missing_docs, pydocstyle, eslint-plugin-jsdoc ...)
   mutation: mutation testing
+
+# Evidence files a project declares in VIBECODING.md under convention.evidence:
+# the outputs of its tools, written by CI, read by vibecheck. Paths are relative
+# to the repository root. A declared file that is missing or unreadable fails
+# the requirement it serves; one whose last commit is older than the latest
+# release tag is stale (a warning).
+evidence:
+  coverage: cargo-llvm-cov summary text, lcov.info, cobertura.xml, cargo-llvm-cov JSON, or any text whose last percentage is the line coverage (required at level 2+)
+  audit: cargo-audit JSON, npm/pnpm audit JSON, pip-audit JSON, or the tool's text output (required at level 2+)
+  outdated: output of cargo outdated, npm outdated or pip list --outdated, text or JSON (required only when no update bot configuration exists)
+  maintainability: the declared maintainability tool's output (optional)
+  mutation: the declared mutation tool's output (optional, level 3, when convention.mutation is declared)

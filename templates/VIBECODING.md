@@ -27,7 +27,13 @@ convention:
   # level 2 and above
   coverage: { threshold: <N>, kind: <line | branch>, tool: <tool> }
   maintainability: { tool: <tool>, duplication_max: <percent>, complexity_max: <N>, function_max: <lines>, file_max: <lines>, markers_max: 0 }
-  freshness: { max_outdated: <N>, max_lag_months: <N> }   # T9; update bot config or commands.outdated must exist
+  freshness: { max_outdated: <N>, max_lag_months: <N> }   # T9; update bot config or evidence.outdated must exist
+  evidence:                                    # outputs of the project's tools, written by CI, read by vibecheck; paths relative to the repository root
+    coverage: audit/evidence/coverage.txt      # cargo-llvm-cov summary text, lcov.info, cobertura.xml, cargo-llvm-cov JSON, or any text whose last percentage is the line coverage
+    audit: audit/evidence/audit.json           # cargo-audit JSON, npm/pnpm audit JSON, pip-audit JSON, or the tool's text output
+    outdated: audit/evidence/outdated.txt      # output of cargo outdated / npm outdated / pip list --outdated (text or JSON); optional when an update bot is configured
+    maintainability: audit/evidence/maintainability.json   # optional, the declared tool's output
+    mutation: audit/evidence/mutation.txt      # optional, level 3, when convention.mutation is declared
   # level 3
   mutation: { tool: <tool>, threshold: <N> }   # recommended, remove if not measured
   audit_dir: audit
@@ -35,7 +41,7 @@ convention:
   blind_test: <required | not-applicable>
   check_interval: <6m>
   agent_permissions: "<sandbox or permission model the agents run under>"
-  # commands tools may run (all optional)
+  # commands: declared for CI matching and for agents; vibecheck does not run them (all optional)
   commands:
     test: "<command>"
     coverage: "<command>"

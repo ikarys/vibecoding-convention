@@ -24,6 +24,8 @@ jobs:
   vibecheck:
     name: Build, lint, test, coverage, self-check
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: vibecheck
@@ -49,11 +51,25 @@ jobs:
       - name: Install coverage and audit tools
         run: cargo install cargo-llvm-cov cargo-audit --locked
       - name: Coverage (threshold 80 %)
-        run: cargo llvm-cov --manifest-path vibecheck/Cargo.toml --summary-only --fail-under-lines 80
+        run: |
+          set -o pipefail
+          mkdir -p audit/evidence
+          cargo llvm-cov --manifest-path vibecheck/Cargo.toml --summary-only --fail-under-lines 80 | tee audit/evidence/coverage.txt
         working-directory: .
       - name: Dependency audit
-        run: cargo audit --file vibecheck/Cargo.lock
+        run: |
+          set -o pipefail
+          mkdir -p audit/evidence
+          cargo audit --file vibecheck/Cargo.lock --json | tee audit/evidence/audit.json
         working-directory: .
       - name: Self-check against the convention
-        run: cargo run --manifest-path vibecheck/Cargo.toml -- . --strict
+        run: cargo run --manifest-path vibecheck/Cargo.toml -- . --write-status --strict
+        working-directory: .
+      - name: Commit refreshed status and evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git add audit/status.json audit/evidence
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'ci: refresh convention status and evidence [skip ci]'
+          git push
         working-directory: .

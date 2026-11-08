@@ -92,6 +92,8 @@ pub struct Report {
     pub checked_commit: Option<String>,
     pub date: chrono::NaiveDate,
     pub metrics: BTreeMap<String, Value>,
+    /// Declared evidence keys and their paths, recorded in `status.json`.
+    pub evidence: BTreeMap<String, String>,
 }
 
 impl Report {

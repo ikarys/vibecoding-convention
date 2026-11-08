@@ -2,7 +2,9 @@ use std::path::PathBuf;
 
 use crate::checks::support;
 use crate::checks::{Check, Context};
+use crate::declaration::Declaration;
 use crate::ecosystem;
+use crate::evidence;
 use crate::finding::Finding;
 use crate::status;
 use crate::util;
@@ -87,16 +89,58 @@ impl Check for T6 {
                 ));
             }
         }
-        findings.extend(support::run_declared_command(
-            ctx,
-            self.id(),
-            "audit",
-            audit.as_deref(),
-        ));
+        findings.extend(audit_evidence(ctx, decl));
 
         findings.extend(new_dependency_warnings(ctx));
         findings
     }
+}
+
+fn audit_evidence(ctx: &Context, decl: &Declaration) -> Vec<Finding> {
+    let id = "T6";
+    let Some(path) = decl
+        .convention
+        .evidence
+        .as_ref()
+        .and_then(|e| e.audit.as_deref())
+    else {
+        return vec![Finding::not_run(
+            id,
+            "audit evidence not declared",
+            "audit evidence not declared",
+            None,
+        )];
+    };
+    let text = match support::read_evidence(ctx, id, path) {
+        Ok(text) => text,
+        Err(finding) => return vec![*finding],
+    };
+    let mut findings = vec![match evidence::vulnerability_count(&text) {
+        Some(0) => Finding::info(
+            id,
+            "no vulnerabilities",
+            format!("no vulnerabilities in {path}"),
+            None,
+        ),
+        Some(count) => Finding::fail(
+            id,
+            "unresolved vulnerabilities",
+            format!("{count} unresolved vulnerabilities in {path}"),
+            Some(path.to_string()),
+            Some("update or replace the affected dependencies".to_string()),
+        ),
+        None => Finding::warn(
+            id,
+            "vulnerability count unreadable",
+            format!("could not read a vulnerability count from {path}"),
+            Some(path.to_string()),
+            Some(
+                "write cargo-audit, npm audit or pip-audit output to the evidence file".to_string(),
+            ),
+        ),
+    }];
+    findings.extend(support::stale_evidence(ctx, id, path));
+    findings
 }
 
 fn release_docs(root: &std::path::Path) -> Vec<PathBuf> {

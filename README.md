@@ -52,9 +52,10 @@ that cannot see the source, and a dated check that marks itself stale.
 The convention is a text. The tooling in this repository helps apply it from
 AI coding tools:
 
-- `vibecheck/` — a command-line validator with no AI in it: runs every
-  mechanical check, locally, in pre-commit and in CI, and writes
-  `audit/status.json`.
+- `vibecheck/` — a command-line validator with no AI in it. It is read-only: it
+  never runs the project's commands; it reads the declaration, the repository
+  and the evidence files the project's CI wrote, runs every mechanical check
+  and writes `audit/status.json`.
 - `convention.yaml` — the requirements as data, for tools.
 - `skills/` — procedures loaded into the main assistant: bootstrap a project,
   prepare a release, check a contribution before sending it.
@@ -62,7 +63,8 @@ AI coding tools:
   `vibecoding-blind-test`, `vibecoding-architecture`, `vibecoding-security`.
 - `agents/fennec/` — the same four agents for [Fennec](https://github.com/ikarys/fennec).
 - `templates/` — `VIBECODING.md`, `audit/README.md`, `audit/status.json`,
-  report skeletons.
+  report skeletons, and `ci/` with a GitHub Actions job that writes the
+  evidence and the status.
 
 Tooling is optional. A project can satisfy the convention by hand.
 

@@ -1,7 +1,8 @@
 use crate::checks::support;
 use crate::checks::{Check, Context};
 use crate::ci;
-use crate::exec;
+use crate::declaration::Declaration;
+use crate::evidence;
 use crate::finding::Finding;
 use serde_json::json;
 
@@ -66,71 +67,58 @@ impl Check for T2 {
             ));
         }
 
-        if ctx.run {
-            if let Some(command) = &decl.convention.commands.coverage {
-                match exec::run_command(&ctx.root, command) {
-                    Ok(outcome) => {
-                        if !outcome.success {
-                            let tail = support::last_lines(&outcome.output, 5);
-                            findings.push(Finding::fail(
-                                self.id(),
-                                "coverage command failed",
-                                format!("coverage command failed: {command}\n{tail}"),
-                                None,
-                                None,
-                            ));
-                        }
-                        if let Some(percent) = exec::last_percent(&outcome.output) {
-                            ctx.metrics
-                                .borrow_mut()
-                                .insert("coverage".to_string(), json!(percent));
-                            if percent < f64::from(coverage.threshold) {
-                                findings.push(Finding::fail(
-                                    self.id(),
-                                    "coverage below threshold",
-                                    format!(
-                                        "coverage {percent:.2} % below threshold {} %",
-                                        coverage.threshold
-                                    ),
-                                    None,
-                                    None,
-                                ));
-                            } else {
-                                findings.push(Finding::info(
-                                    self.id(),
-                                    "coverage ok",
-                                    format!("coverage {percent:.2} %"),
-                                    None,
-                                ));
-                            }
-                        } else {
-                            findings.push(Finding::warn(
-                                self.id(),
-                                "coverage percentage unreadable",
-                                "could not read a percentage from the output",
-                                None,
-                                None,
-                            ));
-                        }
-                    }
-                    Err(err) => findings.push(Finding::fail(
-                        self.id(),
-                        "coverage command failed",
-                        format!("failed to run `{command}`: {err}"),
-                        None,
-                        None,
-                    )),
-                }
-            } else {
-                findings.push(Finding::not_run(
-                    self.id(),
-                    "coverage command not declared",
-                    "commands.coverage not declared",
-                    None,
-                ));
-            }
-        }
-
+        findings.extend(coverage_evidence(ctx, decl, coverage.threshold));
         findings
     }
+}
+
+fn coverage_evidence(ctx: &Context, decl: &Declaration, threshold: u32) -> Vec<Finding> {
+    let id = "T2";
+    let Some(path) = decl
+        .convention
+        .evidence
+        .as_ref()
+        .and_then(|e| e.coverage.as_deref())
+    else {
+        return vec![Finding::not_run(
+            id,
+            "coverage evidence not declared",
+            "coverage evidence not declared",
+            None,
+        )];
+    };
+    let text = match support::read_evidence(ctx, id, path) {
+        Ok(text) => text,
+        Err(finding) => return vec![*finding],
+    };
+    let Some(percent) = evidence::coverage_percent(&text) else {
+        return vec![Finding::fail(
+            id,
+            "coverage figure missing",
+            format!("no coverage figure in {path}"),
+            Some(path.to_string()),
+            Some("have CI write the coverage summary to the evidence file".to_string()),
+        )];
+    };
+    ctx.metrics
+        .borrow_mut()
+        .insert("coverage".to_string(), json!(percent));
+    let mut findings = vec![if percent < f64::from(threshold) {
+        Finding::fail(
+            id,
+            "coverage below threshold",
+            format!("coverage {percent:.2} % below threshold {threshold} % ({path})"),
+            Some(path.to_string()),
+            None,
+        )
+    } else {
+        Finding::info(
+            id,
+            "coverage ok",
+            format!("coverage {percent:.2} % ({path})"),
+            None,
+        )
+    }];
+    findings.extend(support::stale_evidence(ctx, id, path));
+    findings
 }

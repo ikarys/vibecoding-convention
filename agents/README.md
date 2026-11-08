@@ -49,4 +49,4 @@ a source tree.
 Have `vibecheck` installed and the project's `VIBECODING.md` in place; the
 auditors read `vibecheck --format json` and do not redo it. Tell the agent
 whether it may run the project's commands (tests, scanners); without that it
-reports those checks as not run.
+reports those checks as not run. vibecheck itself never runs them.

@@ -56,7 +56,6 @@ mod tests {
             decl_error: None,
             git: Git::new(PathBuf::from(root)),
             level: 1,
-            run: false,
             metrics: Default::default(),
         }
     }

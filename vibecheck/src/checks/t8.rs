@@ -2,6 +2,7 @@ use std::fs;
 
 use crate::checks::support;
 use crate::checks::{Check, Context};
+use crate::declaration::Declaration;
 use crate::finding::Finding;
 use serde_json::json;
 
@@ -162,90 +163,52 @@ impl Check for T8 {
             ));
         }
 
-        let maintainability_command = decl.convention.commands.maintainability.clone();
-        let mut maintainability_ran_ok = false;
-        if ctx.run {
-            if let Some(command) = &maintainability_command {
-                match crate::exec::run_command(&ctx.root, command) {
-                    Ok(outcome) => {
-                        maintainability_ran_ok = outcome.success;
-                        if !outcome.success {
-                            let tail = support::last_lines(&outcome.output, 5);
-                            findings.push(Finding::fail(
-                                self.id(),
-                                "maintainability command failed",
-                                format!("maintainability command failed: {command}\n{tail}"),
-                                None,
-                                None,
-                            ));
-                        }
-                    }
-                    Err(err) => findings.push(Finding::fail(
-                        self.id(),
-                        "maintainability command failed",
-                        format!("failed to run `{command}`: {err}"),
-                        None,
-                        None,
-                    )),
-                }
-            }
-        }
+        findings.extend(maintainability_evidence(ctx, decl, &maintainability.tool));
 
-        if !maintainability_ran_ok {
+        if let Some(command) = decl.convention.commands.doc_lint.clone() {
+            if crate::ci::ci_mentions(&ctx.root, &command).is_none() {
+                findings.push(Finding::fail(
+                    self.id(),
+                    "doc_lint not in CI",
+                    format!("doc_lint command not in CI: {command}"),
+                    None,
+                    Some("add the doc_lint command to CI".to_string()),
+                ));
+            }
+        } else {
             findings.push(Finding::info(
-                self.id(),
-                "duplication and complexity not measured",
-                format!(
-                    "duplication and complexity need the declared tool ({})",
-                    maintainability.tool
-                ),
-                None,
-            ));
-        }
-
-        match decl.convention.commands.doc_lint.clone() {
-            Some(command) => {
-                if crate::ci::ci_mentions(&ctx.root, &command).is_none() {
-                    findings.push(Finding::fail(
-                        self.id(),
-                        "doc_lint not in CI",
-                        format!("doc_lint command not in CI: {command}"),
-                        None,
-                        Some("add the doc_lint command to CI".to_string()),
-                    ));
-                }
-                if ctx.run {
-                    match crate::exec::run_command(&ctx.root, &command) {
-                        Ok(outcome) if !outcome.success => {
-                            let tail = support::last_lines(&outcome.output, 5);
-                            findings.push(Finding::fail(
-                                self.id(),
-                                "doc_lint failed",
-                                format!("doc_lint command failed: {command}\n{tail}"),
-                                None,
-                                None,
-                            ));
-                        }
-                        Ok(_) => {}
-                        Err(err) => findings.push(Finding::fail(
-                            self.id(),
-                            "doc_lint failed",
-                            format!("failed to run `{command}`: {err}"),
-                            None,
-                            None,
-                        )),
-                    }
-                }
-            }
-            None => findings.push(Finding::info(
                 self.id(),
                 "doc_lint",
                 "no public API documentation lint declared",
                 None,
-            )),
+            ));
         }
 
         findings
+    }
+}
+
+fn maintainability_evidence(ctx: &Context, decl: &Declaration, tool: &str) -> Vec<Finding> {
+    let id = "T8";
+    let declared = decl
+        .convention
+        .evidence
+        .as_ref()
+        .and_then(|e| e.maintainability.as_deref());
+    match declared.map(|path| (path, support::read_evidence(ctx, id, path))) {
+        Some((path, Ok(_))) => vec![Finding::info(
+            id,
+            "maintainability evidence",
+            format!("maintainability evidence present ({path})"),
+            None,
+        )],
+        Some((_, Err(finding))) => vec![*finding],
+        None => vec![Finding::info(
+            id,
+            "duplication and complexity not measured",
+            format!("duplication and complexity need the declared tool ({tool})"),
+            None,
+        )],
     }
 }
 

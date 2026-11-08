@@ -2,7 +2,6 @@ use crate::checks::support;
 use crate::checks::{Check, Context};
 use crate::ci;
 use crate::ecosystem;
-use crate::exec;
 use crate::finding::Finding;
 
 pub struct T1;
@@ -59,35 +58,6 @@ impl Check for T1 {
             findings.push(support::no_ci(self.id()));
         } else if ci::ci_mentions(&ctx.root, &command).is_none() {
             findings.push(support::command_not_in_ci(self.id(), &command));
-        }
-
-        if ctx.run {
-            match exec::run_command(&ctx.root, &command) {
-                Ok(outcome) => {
-                    if !outcome.success {
-                        let tail = support::last_lines(&outcome.output, 5);
-                        let problem = if tail.is_empty() {
-                            format!("test command failed: {command}")
-                        } else {
-                            format!("test command failed: {command}\n{tail}")
-                        };
-                        findings.push(Finding::fail(
-                            self.id(),
-                            "test command failed",
-                            problem,
-                            None,
-                            Some("make the test command pass".to_string()),
-                        ));
-                    }
-                }
-                Err(err) => findings.push(Finding::fail(
-                    self.id(),
-                    "test command failed",
-                    format!("failed to run `{command}`: {err}"),
-                    None,
-                    None,
-                )),
-            }
         }
 
         findings

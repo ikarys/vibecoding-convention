@@ -82,6 +82,16 @@ impl Git {
         })
     }
 
+    /// Commit time of the last commit that changed `path` (relative to the
+    /// root); `None` when the path was never committed.
+    pub fn last_commit_time(&self, path: &str) -> Option<DateTime<Utc>> {
+        let out = self.output(&["log", "-1", "--format=%cI", "--", path])?;
+        let text = String::from_utf8_lossy(&out.stdout);
+        DateTime::parse_from_rfc3339(text.trim())
+            .ok()
+            .map(|value| value.with_timezone(&Utc))
+    }
+
     pub fn show_stat(&self, hash: &str) -> String {
         self.output(&["show", "--stat", "--format=", hash])
             .map(|out| String::from_utf8_lossy(&out.stdout).into_owned())

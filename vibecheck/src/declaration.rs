@@ -80,6 +80,8 @@ pub struct Convention {
     pub agent_permissions: String,
     #[serde(default)]
     pub commands: Commands,
+    #[serde(default)]
+    pub evidence: Option<Evidence>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -148,6 +150,47 @@ pub struct Commands {
     pub outdated: Option<String>,
     #[serde(default)]
     pub doc_lint: Option<String>,
+}
+
+/// Paths, relative to the repository root, of tool outputs written by the
+/// project's CI; vibecheck reads them instead of running the tools.
+#[derive(Debug, Default, Clone, serde::Deserialize)]
+pub struct Evidence {
+    pub coverage: Option<String>,
+    pub audit: Option<String>,
+    pub outdated: Option<String>,
+    pub maintainability: Option<String>,
+    pub mutation: Option<String>,
+}
+
+impl Evidence {
+    /// The declared entries as `(key, path)` pairs, in a stable order.
+    pub fn entries(&self) -> Vec<(&'static str, &str)> {
+        [
+            ("coverage", &self.coverage),
+            ("audit", &self.audit),
+            ("outdated", &self.outdated),
+            ("maintainability", &self.maintainability),
+            ("mutation", &self.mutation),
+        ]
+        .into_iter()
+        .filter_map(|(key, path)| path.as_deref().map(|p| (key, p)))
+        .collect()
+    }
+}
+
+/// Declared evidence as a key to path map, for `status.json`.
+pub fn declared_evidence(decl: &Declaration) -> std::collections::BTreeMap<String, String> {
+    decl.convention
+        .evidence
+        .as_ref()
+        .map(|e| {
+            e.entries()
+                .into_iter()
+                .map(|(k, v)| (k.to_string(), v.to_string()))
+                .collect()
+        })
+        .unwrap_or_default()
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -344,30 +387,4 @@ impl Convention {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn parses_intervals() {
-        assert_eq!(parse_interval("90d").unwrap(), Duration::days(90));
-        assert_eq!(parse_interval("6m").unwrap(), Duration::days(180));
-        assert_eq!(parse_interval("1y").unwrap(), Duration::days(365));
-        assert!(parse_interval("6x").is_err());
-    }
-
-    #[test]
-    fn splits_front_matter() {
-        let text = "---\nlevel: 1\n---\n# Body\n";
-        let (yaml, body) = split_front_matter(text).unwrap();
-        assert_eq!(yaml, "level: 1");
-        assert_eq!(body, "# Body");
-    }
-
-    #[test]
-    fn reports_missing_required_keys() {
-        let text = "---\nversion: \"0.1\"\n---\n";
-        let missing = missing_required_keys(text);
-        assert!(missing.contains(&"level".to_string()));
-        assert!(missing.contains(&"convention".to_string()));
-    }
-}
+mod tests;

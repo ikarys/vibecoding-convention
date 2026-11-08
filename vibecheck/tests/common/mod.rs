@@ -61,10 +61,6 @@ pub fn write_compliant_project(dir: &Path) {
 }
 
 pub fn finalize_fixture(dir: &Path) {
-    // The fixtures' commands are harmless (`true`, `echo`), so these tests
-    // may run them even when the suite itself was started by a parent
-    // `vibecheck --run`, which sets the recursion marker.
-    std::env::remove_var(vibecheck::exec::NESTED_MARKER);
     git(dir, &["init"]);
     write_compliant_project(dir);
     commit_all(
@@ -123,15 +119,25 @@ pub fn write_level2_project(dir: &Path) {
     .unwrap();
     fs::create_dir_all(dir.join("tests/e2e")).unwrap();
     fs::write(dir.join("tests/e2e/README.md"), "End-to-end tests.\n").unwrap();
+    fs::create_dir_all(dir.join("audit/evidence")).unwrap();
+    fs::write(
+        dir.join("audit/evidence/coverage.txt"),
+        "Filename   Lines  Missed  Cover
+TOTAL      100    9       91.00%
+",
+    )
+    .unwrap();
+    fs::write(
+        dir.join("audit/evidence/audit.json"),
+        "{\"vulnerabilities\":{\"count\":0,\"list\":[]},\"warnings\":{}}
+",
+    )
+    .unwrap();
     fs::create_dir_all(dir.join("src")).unwrap();
     fs::write(dir.join("src/lib.rs"), "pub fn one() -> u32 {\n    1\n}\n").unwrap();
 }
 
 pub fn finalize_level2_fixture(dir: &Path) {
-    // The fixtures' commands are harmless (`true`, `echo`), so these tests
-    // may run them even when the suite itself was started by a parent
-    // `vibecheck --run`, which sets the recursion marker.
-    std::env::remove_var(vibecheck::exec::NESTED_MARKER);
     git(dir, &["init"]);
     write_level2_project(dir);
     commit_all(
@@ -231,7 +237,7 @@ convention:
     static_analysis: "echo static"
     secrets: "echo secrets"
     coverage: "echo lines 91%"
-    outdated: "echo none"
+  evidence: { coverage: audit/evidence/coverage.txt, audit: audit/evidence/audit.json }
 ---
 # Vibecoding
 

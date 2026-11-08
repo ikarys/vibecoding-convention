@@ -22,15 +22,12 @@ struct Args {
     write_status: bool,
     #[arg(long)]
     strict: bool,
-    #[arg(long)]
-    run: bool,
 }
 
 fn main() -> process::ExitCode {
     let args = Args::parse();
     let opts = vibecheck::Options {
         level_override: args.level,
-        run: args.run,
     };
 
     match vibecheck::run(&args.path, opts) {
