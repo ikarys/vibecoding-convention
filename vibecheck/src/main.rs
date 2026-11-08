@@ -10,6 +10,7 @@ enum Format {
 }
 
 #[derive(Parser)]
+#[command(version, about = "Validator for the Vibecoding Convention")]
 struct Args {
     #[arg(default_value = ".")]
     path: PathBuf,

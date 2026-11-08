@@ -67,6 +67,8 @@ pub struct Convention {
     #[serde(default)]
     pub mutation: Option<Mutation>,
     #[serde(default)]
+    pub freshness: Option<Freshness>,
+    #[serde(default)]
     pub audit_dir: String,
     #[serde(default)]
     pub audit_cadence: String,
@@ -102,6 +104,8 @@ pub struct Maintainability {
     pub function_max: u32,
     #[serde(default)]
     pub file_max: u32,
+    #[serde(default)]
+    pub markers_max: u32,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -110,6 +114,14 @@ pub struct Mutation {
     pub tool: String,
     #[serde(default)]
     pub threshold: u32,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct Freshness {
+    #[serde(default)]
+    pub max_outdated: u32,
+    #[serde(default)]
+    pub max_lag_months: u32,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -132,6 +144,10 @@ pub struct Commands {
     pub maintainability: Option<String>,
     #[serde(default)]
     pub mutation: Option<String>,
+    #[serde(default)]
+    pub outdated: Option<String>,
+    #[serde(default)]
+    pub doc_lint: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -278,7 +294,7 @@ pub fn missing_required_keys(text: &str) -> Vec<String> {
 
             if let Some(level) = convention.get("level").and_then(|v| v.as_u64()) {
                 if level >= 2 {
-                    for key in ["coverage", "maintainability"] {
+                    for key in ["coverage", "maintainability", "freshness"] {
                         if convention.get(key).is_none() {
                             missing.push(format!("convention.{key}"));
                         }

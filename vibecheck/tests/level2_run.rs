@@ -121,7 +121,7 @@ fn t2_warns_when_coverage_tool_not_in_ci() {
     replace_in_file(
         dir.path(),
         "VIBECODING.md",
-        "coverage: \"cargo llvm-cov --summary-only\"",
+        "coverage: \"echo lines 91%\"",
         "coverage: \"cov-tool\"",
     );
     let report = run_default(dir.path());
@@ -167,12 +167,7 @@ fn t4_informs_when_cypress_directory_exists() {
 fn t1_warns_when_assuming_cargo_test() {
     let dir = tempfile::tempdir().unwrap();
     common::finalize_level2_fixture(dir.path());
-    replace_in_file(
-        dir.path(),
-        "VIBECODING.md",
-        "test: \"cargo test\"",
-        "test: null",
-    );
+    replace_in_file(dir.path(), "VIBECODING.md", "test: \"true\"", "test: null");
     let report = run_default(dir.path());
     assert!(has_finding(
         report.findings.iter(),
@@ -186,12 +181,7 @@ fn t1_warns_when_assuming_cargo_test() {
 fn t1_fails_when_no_test_command_and_no_manifest() {
     let dir = tempfile::tempdir().unwrap();
     common::finalize_level2_fixture(dir.path());
-    replace_in_file(
-        dir.path(),
-        "VIBECODING.md",
-        "test: \"cargo test\"",
-        "test: null",
-    );
+    replace_in_file(dir.path(), "VIBECODING.md", "test: \"true\"", "test: null");
     fs::remove_file(dir.path().join("Cargo.toml")).unwrap();
     let report = run_default(dir.path());
     assert!(has_finding(

@@ -61,6 +61,10 @@ pub fn write_compliant_project(dir: &Path) {
 }
 
 pub fn finalize_fixture(dir: &Path) {
+    // The fixtures' commands are harmless (`true`, `echo`), so these tests
+    // may run them even when the suite itself was started by a parent
+    // `vibecheck --run`, which sets the recursion marker.
+    std::env::remove_var(vibecheck::exec::NESTED_MARKER);
     git(dir, &["init"]);
     write_compliant_project(dir);
     commit_all(
@@ -85,7 +89,7 @@ pub fn write_level2_project(dir: &Path) {
     fs::write(dir.join("VIBECODING.md"), level2_declaration()).unwrap();
     fs::write(
         dir.join("AGENTS.md"),
-        "Follow VIBECODING.md. Add Assisted-by trailers. Run cargo test.\n",
+        "Follow VIBECODING.md. Add Assisted-by trailers. Run true.\n",
     )
     .unwrap();
     fs::write(
@@ -97,7 +101,13 @@ pub fn write_level2_project(dir: &Path) {
     fs::create_dir_all(dir.join(".github/workflows")).unwrap();
     fs::write(
         dir.join(".github/workflows/ci.yml"),
-        "name: ci\non: push\njobs:\n  test:\n    steps:\n      - run: cargo test\n      - run: cargo clippy -- -D warnings\n      - run: cargo fmt --check\n      - run: cargo audit\n      - run: cargo clippy\n      - run: gitleaks detect\n      - run: cargo llvm-cov --summary-only\n",
+        "name: ci\non: push\njobs:\n  test:\n    steps:\n      - run: true\n      - run: echo lint\n      - run: echo format\n      - run: echo audit\n      - run: echo static\n      - run: gitleaks detect\n      - run: echo lines 91% # cargo-llvm-cov stand-in\n",
+    )
+    .unwrap();
+    fs::create_dir_all(dir.join(".github")).unwrap();
+    fs::write(
+        dir.join(".github/dependabot.yml"),
+        "version: 2\nupdates: []\n",
     )
     .unwrap();
     fs::write(
@@ -118,6 +128,10 @@ pub fn write_level2_project(dir: &Path) {
 }
 
 pub fn finalize_level2_fixture(dir: &Path) {
+    // The fixtures' commands are harmless (`true`, `echo`), so these tests
+    // may run them even when the suite itself was started by a parent
+    // `vibecheck --run`, which sets the recursion marker.
+    std::env::remove_var(vibecheck::exec::NESTED_MARKER);
     git(dir, &["init"]);
     write_level2_project(dir);
     commit_all(
@@ -207,15 +221,17 @@ convention:
   security_response: "72h"
   licence: MIT
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
-  maintainability: { tool: rust-code-analysis, duplication_max: 5, complexity_max: 15, function_max: 60, file_max: 600 }
+  maintainability: { tool: rust-code-analysis, duplication_max: 5, complexity_max: 15, function_max: 60, file_max: 600, markers_max: 0 }
+  freshness: { max_outdated: 3, max_lag_months: 6 }
   commands:
-    test: "cargo test"
-    lint: "cargo clippy -- -D warnings"
-    format: "cargo fmt --check"
-    audit: "cargo audit"
-    static_analysis: "cargo clippy"
-    secrets: "gitleaks detect"
-    coverage: "cargo llvm-cov --summary-only"
+    test: "true"
+    lint: "echo lint"
+    format: "echo format"
+    audit: "echo audit"
+    static_analysis: "echo static"
+    secrets: "echo secrets"
+    coverage: "echo lines 91%"
+    outdated: "echo none"
 ---
 # Vibecoding
 

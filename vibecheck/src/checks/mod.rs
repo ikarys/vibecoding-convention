@@ -17,6 +17,7 @@ pub mod t5;
 pub mod t6;
 pub mod t7;
 pub mod t8;
+pub mod t9;
 
 use std::cell::RefCell;
 use std::collections::BTreeMap;
@@ -64,6 +65,7 @@ pub fn all() -> Vec<Box<dyn Check>> {
         Box::new(t6::T6),
         Box::new(t7::T7),
         Box::new(t8::T8),
+        Box::new(t9::T9),
     ]
 }
 
@@ -82,8 +84,8 @@ mod tests {
     #[test]
     fn all_contains_level_one_and_level_two_checks() {
         let checks = all();
-        assert_eq!(checks.len(), 18);
+        assert_eq!(checks.len(), 19);
         assert_eq!(checks.iter().filter(|check| check.level() == 1).count(), 10);
-        assert_eq!(checks.iter().filter(|check| check.level() == 2).count(), 8);
+        assert_eq!(checks.iter().filter(|check| check.level() == 2).count(), 9);
     }
 }

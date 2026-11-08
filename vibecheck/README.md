@@ -23,7 +23,7 @@ vibecheck [PATH] [--level N] [--format text|json] [--write-status] [--run] [--st
 | `--level N` | check at level N instead of the level declared in `VIBECODING.md` |
 | `--format json` | machine-readable output: findings, summary, metrics |
 | `--write-status` | write `audit/status.json` after the run (the badge reads it) |
-| `--run` | also execute the commands declared under `convention.commands` |
+| `--run` | also execute the commands declared under `convention.commands` (each under `sh -c`, in its own process group, killed after 15 minutes; `VIBECHECK_RUNNING=1` is set so a nested vibecheck refuses to run commands again) |
 | `--strict` | warnings make the exit code non-zero too |
 
 Exit code 0 when no requirement fails (and no warning with `--strict`), 1
@@ -60,7 +60,10 @@ tests, T4 an end-to-end suite, T5 lint and format in CI, T6 lockfile,
 vulnerability check, new dependencies without a recorded registry check, T7
 secrets scanner in pre-commit and CI, static analyser in CI, a built-in scan of
 the tree for secret patterns, T8 file and function length against the declared
-thresholds (duplication and complexity need the declared tool).
+thresholds, leftover markers, and `doc_lint` in CI (duplication and complexity
+need the declared tool), T9 dependency freshness: an update bot or
+`commands.outdated`, outdated dependency count against `max_outdated`, and
+unmaintained or yanked audit items without a declared held-back exception.
 
 CI configuration is recognised for GitHub Actions, GitLab CI, Woodpecker,
 Forgejo, Jenkins, CircleCI, Azure Pipelines, Bitbucket and Drone. Ecosystems
@@ -90,4 +93,3 @@ cargo test
 cargo clippy --all-targets -- -D warnings
 cargo fmt --check
 cargo run -- ..          # the convention repository checks itself
-```

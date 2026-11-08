@@ -69,6 +69,13 @@ every change.
 Active. This repository holds no running software; there is no security
 response commitment.
 
+## Dependencies held back
+
+- `unsafe-libyaml` (pulled by `serde_yaml_ng`, the maintained YAML parser for
+  serde): flagged unmaintained by RUSTSEC-2024-0449. No maintained serde YAML
+  parser without it exists yet; revisit at each minor release. Declared
+  2026-11-08.
+
 ## Exceptions
 
 - T8: duplication and complexity are not measured yet; no tool is chosen for

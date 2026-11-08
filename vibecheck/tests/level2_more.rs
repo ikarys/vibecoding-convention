@@ -15,7 +15,7 @@ fn t6_fails_when_audit_command_not_in_ci() {
     replace_in_file(
         dir.path(),
         "VIBECODING.md",
-        "audit: \"cargo audit\"",
+        "audit: \"echo audit\"",
         "audit: \"cargo audit --locked\"",
     );
     let report = run_default(dir.path());
@@ -34,7 +34,7 @@ fn t6_informs_when_release_doc_mentions_audit_tool() {
     replace_in_file(
         dir.path(),
         "VIBECODING.md",
-        "audit: \"cargo audit\"",
+        "audit: \"echo audit\"",
         "audit: null",
     );
     fs::write(

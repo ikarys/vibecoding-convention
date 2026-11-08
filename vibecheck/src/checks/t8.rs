@@ -10,6 +10,21 @@ const SOURCE_EXTENSIONS: &[&str] = &[
     "h", "hpp", "swift",
 ];
 
+const MARKER_PATTERNS: &[&str] = &[
+    "TODO",
+    "FIXME",
+    "XXX",
+    "HACK",
+    "PLACEHOLDER",
+    "placeholder",
+    "implement me",
+    "not implemented",
+    "unimplemented!(",
+    "todo!(",
+    "NotImplementedError",
+    "raise NotImplemented",
+];
+
 pub struct T8;
 
 impl Check for T8 {
@@ -58,6 +73,8 @@ impl Check for T8 {
         let mut function_max = 0usize;
         let mut file_failures = 0;
         let mut function_failures = 0;
+        let mut marker_count = 0usize;
+        let mut marker_locations = Vec::new();
 
         for path in support::source_files(ctx, SOURCE_EXTENSIONS) {
             let Ok(text) = fs::read_to_string(&path) else {
@@ -100,6 +117,19 @@ impl Check for T8 {
                 ));
                 function_failures += 1;
             }
+
+            for (index, line) in lines.iter().enumerate() {
+                if is_marker_line(line) {
+                    marker_count += 1;
+                    if marker_locations.len() < 10 {
+                        marker_locations.push(format!(
+                            "{}:{}",
+                            support::relative_path(&ctx.root, &path),
+                            index + 1
+                        ));
+                    }
+                }
+            }
         }
 
         ctx.metrics
@@ -108,6 +138,29 @@ impl Check for T8 {
         ctx.metrics
             .borrow_mut()
             .insert("function_max".to_string(), json!(function_max));
+        ctx.metrics
+            .borrow_mut()
+            .insert("markers".to_string(), json!(marker_count));
+
+        if marker_count > maintainability.markers_max as usize {
+            findings.push(Finding::fail(
+                self.id(),
+                "leftover markers",
+                format!(
+                    "{} leftover markers (max {})",
+                    marker_count, maintainability.markers_max
+                ),
+                Some(marker_locations.join(", ")),
+                Some("remove leftover markers".to_string()),
+            ));
+        } else {
+            findings.push(Finding::info(
+                self.id(),
+                "leftover markers",
+                format!("{marker_count} leftover markers"),
+                None,
+            ));
+        }
 
         let maintainability_command = decl.convention.commands.maintainability.clone();
         let mut maintainability_ran_ok = false;
@@ -148,6 +201,48 @@ impl Check for T8 {
                 ),
                 None,
             ));
+        }
+
+        match decl.convention.commands.doc_lint.clone() {
+            Some(command) => {
+                if crate::ci::ci_mentions(&ctx.root, &command).is_none() {
+                    findings.push(Finding::fail(
+                        self.id(),
+                        "doc_lint not in CI",
+                        format!("doc_lint command not in CI: {command}"),
+                        None,
+                        Some("add the doc_lint command to CI".to_string()),
+                    ));
+                }
+                if ctx.run {
+                    match crate::exec::run_command(&ctx.root, &command) {
+                        Ok(outcome) if !outcome.success => {
+                            let tail = support::last_lines(&outcome.output, 5);
+                            findings.push(Finding::fail(
+                                self.id(),
+                                "doc_lint failed",
+                                format!("doc_lint command failed: {command}\n{tail}"),
+                                None,
+                                None,
+                            ));
+                        }
+                        Ok(_) => {}
+                        Err(err) => findings.push(Finding::fail(
+                            self.id(),
+                            "doc_lint failed",
+                            format!("failed to run `{command}`: {err}"),
+                            None,
+                            None,
+                        )),
+                    }
+                }
+            }
+            None => findings.push(Finding::info(
+                self.id(),
+                "doc_lint",
+                "no public API documentation lint declared",
+                None,
+            )),
         }
 
         findings
@@ -201,6 +296,61 @@ fn indent(line: &str) -> usize {
     line.chars().take_while(|c| c.is_whitespace()).count()
 }
 
+fn is_marker_line(line: &str) -> bool {
+    if marker_occurrences(line) > 2 {
+        return false;
+    }
+    if has_marker_outside_string(line) {
+        return true;
+    }
+    is_commented_code(line)
+}
+
+fn marker_occurrences(line: &str) -> usize {
+    MARKER_PATTERNS
+        .iter()
+        .filter(|pattern| line.contains(**pattern))
+        .count()
+}
+
+fn has_marker_outside_string(line: &str) -> bool {
+    for pattern in MARKER_PATTERNS {
+        for (index, _) in line.match_indices(pattern) {
+            let quotes = line[..index].chars().filter(|c| *c == '"').count();
+            if quotes % 2 == 0 {
+                return true;
+            }
+        }
+    }
+    false
+}
+
+fn is_commented_code(line: &str) -> bool {
+    let trimmed = line.trim_start();
+    let Some(prefix) = ["//", "#", "--", "/*", "*"]
+        .iter()
+        .find(|prefix| trimmed.starts_with(**prefix))
+    else {
+        return false;
+    };
+
+    let content = trimmed[prefix.len()..].trim();
+    if !content.ends_with([';', '{', '}', ')']) {
+        return false;
+    }
+    if !content.contains('(') && !content.contains('=') {
+        return false;
+    }
+    if content.len() > 1
+        && content.starts_with(|c: char| c.is_ascii_alphabetic())
+        && content.as_bytes()[1] == b' '
+        && !content.contains('(')
+    {
+        return false;
+    }
+    true
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -214,5 +364,21 @@ mod tests {
             "}".to_string(),
         ];
         assert_eq!(function_lengths(&lines), vec![4]);
+    }
+
+    #[test]
+    fn detects_leftover_markers() {
+        assert!(is_marker_line("// TODO: implement"));
+        assert!(is_marker_line("todo!()"));
+        assert!(is_marker_line("// foo();"));
+        assert!(is_marker_line("// let x = 1;"));
+        assert!(!is_marker_line("// the counter is reset here"));
+    }
+
+    #[test]
+    fn ignores_markers_inside_strings() {
+        let marker = ["TO", "D"].concat();
+        let line = format!("let s = \"{marker} in a string\";");
+        assert!(!is_marker_line(&line));
     }
 }
