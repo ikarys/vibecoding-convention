@@ -163,7 +163,9 @@ audit time. Keep the file short enough to be read whole by the model; no size,
 no structure and no file name is mandated: tools differ, and the convention has
 no opinion on them. A project with no such file is not required to add one.
 - Evidence: the file.
-- Checked: where present, the file contains the four points and no secret.
+- Checked: where present, the file contains the four points and no secret;
+  `vibecheck` verifies the declared level, the `VIBECODING.md` link, a
+  declared trailer and the declared test command.
 
 ### Level 2: Tested
 

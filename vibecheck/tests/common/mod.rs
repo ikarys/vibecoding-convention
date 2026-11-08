@@ -55,7 +55,7 @@ pub fn write_compliant_project(dir: &Path) {
     .unwrap();
     fs::write(
         dir.join("AGENTS.md"),
-        "Follow VIBECODING.md. Add Assisted-by trailers.\n",
+        "Convention level 1. Follow VIBECODING.md. Add Assisted-by trailers.\n",
     )
     .unwrap();
 }
@@ -85,7 +85,7 @@ pub fn write_level2_project(dir: &Path) {
     fs::write(dir.join("VIBECODING.md"), level2_declaration()).unwrap();
     fs::write(
         dir.join("AGENTS.md"),
-        "Follow VIBECODING.md. Add Assisted-by trailers. Run true.\n",
+        "Convention level 2. Follow VIBECODING.md. Add Assisted-by trailers. Run true.\n",
     )
     .unwrap();
     fs::write(

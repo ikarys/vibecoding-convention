@@ -122,7 +122,7 @@ requirements:
     check: mechanical
     mechanical:
       - instruction files are the known names plus convention.agent_instruction_files
-      - for each present file, it links VIBECODING.md, names at least one declared attribution trailer, and contains the test command declared in convention.commands.test
+      - for each present file, it names the level declared in convention.level, links VIBECODING.md, names at least one declared attribution trailer, and contains the test command declared in convention.commands.test
       - it contains no secret (same scanner as T7)
 
   - id: T1

@@ -3,9 +3,9 @@
 This repository holds the Vibecoding Convention text, its machine-readable
 list, templates, and the `vibecheck` validator (Rust, in `vibecheck/`).
 
-## Vibecoding Convention (level 1)
+## Vibecoding Convention (level 2)
 
-This project follows its own convention at level 1; see `VIBECODING.md`.
+This project follows its own convention at level 2; see `VIBECODING.md`.
 
 Before calling a change done, these must pass:
 - `cargo test --manifest-path vibecheck/Cargo.toml`
