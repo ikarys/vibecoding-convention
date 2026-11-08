@@ -21,7 +21,8 @@ with their sources: see [docs/criticisms.md](docs/criticisms.md).
 | 3 | **Audited** | versioned audit reports in the repository: architecture review, security audit, blind usability test when applicable, architecture documents validated by a named human, each finding with a decision. |
 
 A project picks a level and proves it. Nobody is asked to reach level 3 for a
-weekend script. The full text is in [CONVENTION.md](CONVENTION.md).
+weekend script. The one-page text is [CONVENTION.md](CONVENTION.md); the
+detail of each requirement is in [docs/requirements.md](docs/requirements.md).
 
 ## What it reuses
 
@@ -46,6 +47,10 @@ that cannot see the source, and a dated check that marks itself stale.
 The convention is a text. The tooling in this repository helps apply it from
 AI coding tools:
 
+- `vibecheck/` — a command-line validator with no AI in it: runs every
+  mechanical check, locally, in pre-commit and in CI, and writes
+  `audit/status.json`.
+- `convention.yaml` — the requirements as data, for tools.
 - `skills/` — procedures loaded into the main assistant: bootstrap a project,
   prepare a release.
 - `agents/claude-code/` — Claude Code subagents: convention auditor, blind

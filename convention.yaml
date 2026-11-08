@@ -1,0 +1,297 @@
+# Vibecoding Convention, machine-readable list of requirements.
+# Source of truth for tools (vibecheck, agents). The human text is CONVENTION.md
+# and docs/requirements.md; the three must say the same thing.
+#
+# check: mechanical | judgement | both
+# evidence: what the checker looks at
+# mechanical: for tools, what can be verified without judgement (informative)
+
+version: "0.1"
+levels:
+  1: Declared
+  2: Tested
+  3: Audited
+severities: [BLOCKER, DOC-WRONG, PAINFUL, MINOR]
+decisions: [fixed, documented, "won't fix", open]
+ai_specific: [D1, D2, D3, D7, A3]
+
+requirements:
+  - id: D1
+    level: 1
+    title: README discloses AI assistance
+    statement: The README says the project is wholly or partly written with AI assistance and links to VIBECODING.md.
+    evidence: [README.md]
+    check: mechanical
+    mechanical:
+      - README.md exists and contains a link to VIBECODING.md (text or badge)
+
+  - id: D2
+    level: 1
+    title: Declaration file
+    statement: VIBECODING.md declares AI involvement (AI-DECLARATION.md keys), convention level, tools and models, maintainers, review policy, status, provenance, adoption commit and thresholds, and matches the repository.
+    evidence: [VIBECODING.md]
+    check: mechanical
+    mechanical:
+      - VIBECODING.md exists with YAML front matter
+      - front matter has version, level, processes, convention.version, convention.level, convention.adopted_at, convention.status, convention.tools, convention.maintainers, convention.review, convention.security_response, convention.licence
+      - convention.level 2+ also has convention.coverage and convention.maintainability
+      - convention.level 3 also has convention.audit_dir, convention.audit_cadence, convention.blind_test, convention.check_interval
+      - convention.adopted_at is a commit in the repository
+      - every tool in convention.tools appears in at least one Assisted-by or Generated-by trailer since adoption, or is marked unused
+
+  - id: D3
+    level: 1
+    title: Commit attribution
+    statement: Every commit with AI-written content carries "Assisted-by: <Tool>:<model>" or "Generated-by:"; never Co-Authored-By or Signed-off-by naming a model.
+    evidence: [git history since convention.adopted_at]
+    check: mechanical
+    mechanical:
+      - no commit since adoption has a Co-Authored-By trailer whose value matches a declared tool or a known model vendor address
+      - no Signed-off-by trailer names a declared tool or model
+      - report the share of commits since adoption with an Assisted-by or Generated-by trailer (informative, no threshold)
+
+  - id: D4
+    level: 1
+    title: Human review before merge
+    statement: No AI-written change reaches the default branch without a human review step; the tool that produced a change is never its only reviewer.
+    evidence: [VIBECODING.md convention.review, pull request history, review-gate configuration]
+    check: both
+    mechanical:
+      - convention.review is non-empty
+      - where the platform exposes it, every merged pull request with an AI-attributed commit has at least one human approval
+
+  - id: D5
+    level: 1
+    title: Dated check
+    statement: audit/status.json holds the level, date, commit and verdict of the last check, feeds the README badge, and is stale after the declared interval or a release.
+    evidence: [audit/status.json, README.md]
+    check: mechanical
+    mechanical:
+      - audit/status.json exists and parses with schemaVersion, label, message, color and a vibecoding object
+      - vibecoding.commit exists in the repository
+      - vibecoding.level equals convention.level
+      - vibecoding.date is newer than the latest release tag and younger than convention.check_interval (default 6 months), else verdict is stale
+      - README.md references audit/status.json through a badge, or links VIBECODING.md (D1)
+
+  - id: D6
+    level: 1
+    title: Test changes are explained
+    statement: A change that deletes a test, weakens an assertion, skips a test or raises a tolerance states why in its message or pull request, and a human approves.
+    evidence: [git history]
+    check: both
+    mechanical:
+      - list commits since the last check whose diff removes test functions or files, adds skip/ignore markers, or deletes assertions, and whose message has no explanation keyword (why, because, reason, replaced, moved, obsolete, flaky)
+
+  - id: D7
+    level: 1
+    title: Provenance and licence statement
+    statement: VIBECODING.md states the licence, the copyright stance on AI-written parts, that no licence-incompatible code was knowingly reproduced, and the safeguards used.
+    evidence: [VIBECODING.md]
+    check: mechanical
+    mechanical:
+      - convention.licence is set and a LICENSE file exists
+      - the body has a "Provenance and licence" section mentioning copyright and safeguards
+
+  - id: D8
+    level: 1
+    title: Contribution policy
+    statement: CONTRIBUTING.md states the policy for incoming AI-assisted contributions and requires disclosure and verification evidence in pull requests; outgoing contributions disclose.
+    evidence: [CONTRIBUTING.md, pull request template]
+    check: mechanical
+    mechanical:
+      - CONTRIBUTING.md exists and mentions Assisted-by
+      - a pull request template exists when the repository is on a platform that supports one (warning otherwise)
+
+  - id: D9
+    level: 1
+    title: Project status
+    statement: VIBECODING.md states the project status (active, maintenance, archived) and the security response time, matching SECURITY.md.
+    evidence: [VIBECODING.md, SECURITY.md]
+    check: mechanical
+    mechanical:
+      - convention.status is one of active, maintenance, archived
+      - convention.security_response is set; when not "none", SECURITY.md exists and contains the same value
+
+  - id: D10
+    level: 1
+    title: Agent instructions carry the convention
+    statement: Where an agent instruction file exists, it names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the edit-time rules and lists what the agent never does without a human.
+    evidence: [AGENTS.md, CLAUDE.md, .cursorrules, equivalents]
+    check: mechanical
+    mechanical:
+      - for each present instruction file, it links VIBECODING.md, mentions Assisted-by, and contains the test command declared in convention.commands.test
+      - it contains no secret (same scanner as T7)
+
+  - id: T1
+    level: 2
+    title: Tests run in CI
+    statement: Automated tests run on every push or pull request from a clean checkout; the default branch is green.
+    evidence: [CI configuration, latest run]
+    check: mechanical
+    mechanical:
+      - a CI configuration exists and contains convention.commands.test
+      - where the platform exposes it, the latest run on the default branch passed
+
+  - id: T2
+    level: 2
+    title: Coverage at threshold
+    statement: Coverage measured by the declared tool is at or above the declared threshold; 80 % recommended; a lower threshold is explained in one sentence.
+    evidence: [coverage report or command]
+    check: mechanical
+    mechanical:
+      - convention.coverage has threshold, kind, tool
+      - with --run, run convention.commands.coverage and compare the reported figure to the threshold
+
+  - id: T3
+    level: 2
+    title: Tests assert behaviour
+    statement: Tests check results; no unexplained skips; every behaviour change lands with its test; a failing test means the software is wrong.
+    evidence: [test suite, git history]
+    check: judgement
+    mechanical:
+      - count skipped or ignored tests without a reason comment (informative)
+
+  - id: T4
+    level: 2
+    title: End-to-end tests
+    statement: User-facing software has tests that exercise its main user journeys end to end against real dependencies or declared stand-ins.
+    evidence: [e2e suite]
+    check: judgement
+
+  - id: T5
+    level: 2
+    title: Lint and format enforced
+    statement: A linter and a formatter run in CI and fail on warnings; exceptions are listed with a reason.
+    evidence: [CI configuration, lint configuration]
+    check: mechanical
+    mechanical:
+      - CI configuration contains convention.commands.lint and convention.commands.format
+
+  - id: T6
+    level: 2
+    title: Dependency hygiene and provenance
+    statement: Lockfile committed; vulnerability and licence checks run in CI or before release; every new dependency is checked against the registry before merge and the check is recorded.
+    evidence: [lockfile, CI configuration, git history]
+    check: mechanical
+    mechanical:
+      - a lockfile for the detected ecosystem is committed
+      - CI configuration or release checklist contains convention.commands.audit
+      - list dependencies added since the last check whose commit or pull request has no "dependency check" record
+
+  - id: T7
+    level: 2
+    title: Secrets and static analysis
+    statement: A secrets scanner runs as a pre-commit hook and in CI; a static analyser runs in CI; findings are fixed or accepted with a reason.
+    evidence: [pre-commit configuration, CI configuration]
+    check: mechanical
+    mechanical:
+      - a pre-commit configuration exists and names a secrets scanner (gitleaks, trufflehog, detect-secrets or declared equivalent)
+      - CI configuration contains the same scanner and convention.commands.static_analysis
+      - with --run, scan the full history for secrets
+
+  - id: T8
+    level: 2
+    title: Maintainability signals
+    statement: Duplication, complexity, function length and file length are measured with a declared tool and thresholds, in CI or at release, and recorded in the status file.
+    evidence: [tool output, audit/status.json]
+    check: mechanical
+    mechanical:
+      - convention.maintainability has tool, duplication_max, complexity_max, function_max, file_max
+      - with --run, run convention.commands.maintainability and compare
+      - built-in fallback without a tool: file length and function length by language heuristics
+
+  - id: A1
+    level: 3
+    title: Architecture review
+    statement: A versioned report judges the design against named principles with verdict prototype, usable with listed gaps, or production-grade; renewed at each minor release or structural change.
+    evidence: ["audit/<date>-architecture.md"]
+    check: judgement
+    mechanical:
+      - a report of kind architecture exists for the current minor version
+      - every finding in it has a decision
+
+  - id: A2
+    level: 3
+    title: Security audit
+    statement: SECURITY.md has contact, threat model and response time; every security claim is traced to a passing test; every user-data path has an authorization test; re-verified at each release.
+    evidence: [SECURITY.md, "audit/<date>-security.md"]
+    check: both
+    mechanical:
+      - SECURITY.md exists with a contact
+      - a report of kind security exists for the current minor version with every finding decided
+
+  - id: A3
+    level: 3
+    title: Blind usability test
+    statement: An AI tester with no access to the source installs and uses the software from the documentation alone and writes a friction report; blindness is enforced by the environment.
+    evidence: ["audit/<date>-blind-<campaign>.md"]
+    check: judgement
+    mechanical:
+      - when convention.blind_test is required, a report of kind blind exists for the current minor version and states how blindness was enforced
+
+  - id: A4
+    level: 3
+    title: Audit index
+    statement: audit/README.md lists every report with date, commit, kind, tool, reader and verdict; reports are never rewritten; decisions are appended.
+    evidence: [audit/README.md, audit/status.json]
+    check: mechanical
+    mechanical:
+      - every file in audit/ matching the report pattern is listed in audit/README.md
+      - every commit named in the index exists
+      - header fields of each report match the index row
+
+  - id: A5
+    level: 3
+    title: Release rule
+    statement: No release ships with an open BLOCKER or DOC-WRONG; each release names the human maintainer who approved it.
+    evidence: [audit index at the release tag, release notes]
+    check: mechanical
+    mechanical:
+      - at the latest release tag, no report of the current minor version has an open BLOCKER or DOC-WRONG
+      - the tag message or release notes name a maintainer listed in convention.maintainers
+
+  - id: A6
+    level: 3
+    title: Validated architecture documents
+    statement: An architecture overview and decision records exist, each carrying the name of the human maintainer who validated it and the date, revalidated on structural change, and matching the code.
+    evidence: [ARCHITECTURE.md or docs page, docs/adr/]
+    check: both
+    mechanical:
+      - ARCHITECTURE.md (or the declared page) and docs/adr/ exist
+      - each document has a "Validated by <maintainer> on <date>" line naming a declared maintainer
+      - the validation date is not older than the last commit touching the directories the document names (warning)
+
+  - id: A7
+    level: 3
+    title: Mutation score
+    statement: A mutation testing tool runs on the core modules and the score is at or above the declared threshold. Recommended, not required.
+    evidence: [tool output]
+    check: mechanical
+    recommended: true
+    mechanical:
+      - when convention.mutation is declared and --run is given, run convention.commands.mutation and compare
+
+  - id: A8
+    level: 3
+    title: Tooling configuration is code
+    statement: Agent instruction files, skills, hooks, plugins, CI actions and scripts are versioned, reviewed, pinned, contain no secret, and the agents' permission model is stated.
+    evidence: [the files and their history]
+    check: both
+    mechanical:
+      - CI actions and pre-commit hooks are pinned to a version or commit
+      - no secret in instruction files, skills, hooks, workflows (same scanner as T7)
+      - convention.agent_permissions is set
+
+# Commands a project declares in VIBECODING.md under convention.commands so that
+# tools can run them without guessing. All optional; a missing command makes the
+# corresponding --run check "not run".
+commands:
+  test: run the test suite
+  coverage: produce the coverage figure
+  lint: run the linter
+  format: check formatting
+  audit: dependency vulnerability and licence check
+  static_analysis: static analyser
+  secrets: secrets scanner over the tree
+  maintainability: duplication, complexity, sizes
+  mutation: mutation testing

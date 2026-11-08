@@ -31,6 +31,18 @@ convention:
   audit_cadence: <minor | major | structural>
   blind_test: <required | not-applicable>
   check_interval: <6m>
+  agent_permissions: "<sandbox or permission model the agents run under>"
+  # commands tools may run (all optional)
+  commands:
+    test: "<command>"
+    coverage: "<command>"
+    lint: "<command>"
+    format: "<command>"
+    audit: "<command>"
+    static_analysis: "<command>"
+    secrets: "<command>"
+    maintainability: "<command>"
+    mutation: "<command>"
 ---
 
 # Vibecoding declaration
