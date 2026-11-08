@@ -25,7 +25,7 @@ with their sources: see [docs/criticisms.md](docs/criticisms.md).
 A project picks a level and proves it. Nobody is asked to reach level 3 for a
 weekend script. A second part, five rules named C1 to C5, applies to anyone
 sending a pull request or a bug report to a project they do not maintain:
-disclose, read your diff, bring tests and docs, reproduce what you report,
+disclose, know what your changes do, bring tests and docs, reproduce what you report,
 respect the target's policy, answer review. The one-page text is [CONVENTION.md](CONVENTION.md); the
 detail of each requirement is in [docs/requirements.md](docs/requirements.md).
 

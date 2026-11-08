@@ -304,7 +304,7 @@ contributions:
     evidence: [description, commit trailers]
   - id: C2
     title: Read and understood
-    statement: The contributor has read every line of the diff and can explain each change when asked; the description says so.
+    statement: The contributor has read the whole diff and can say, for each change, what it does and why it is there (not how every line of the language works); the description says so.
     evidence: [description statement, review answers]
   - id: C3
     title: Complete

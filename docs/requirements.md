@@ -382,12 +382,16 @@ the D3 defaults apply. A contribution with AI-written content and no
 disclosure is dishonest, whatever its quality.
 - Evidence: the description and the commit trailers.
 
-**C2. Read and understood.** The contributor has read every line of the diff
-and can explain each change when asked. The description says so in one line.
+**C2. Read and understood.** The contributor has read the whole diff and
+can say, for each change, what it does and why it is there. Understanding the
+change is required; understanding every construct of the language is not: a
+maintainer who validates a model's Rust without being able to write it by
+hand is in the same position as any contributor working in a language they
+know less well than the project does. The description says so in one line.
 How the description was written does not matter; that it is true does.
 - Evidence: the statement, and the answers given in review. A reviewer may
-  ask about any line; an answer that does not match the diff shows the
-  statement was false, and the project may close the contribution.
+  ask what a change does and why; an answer that does not match the diff
+  shows the statement was false, and the project may close the contribution.
 
 **C3. Complete.** A change of behaviour comes with the tests that cover it and
 with the documentation it affects, in the same pull request. The description

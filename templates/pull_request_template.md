@@ -5,7 +5,7 @@
 ## Vibecoding Convention, Part B
 
 - [ ] C1. AI assistance disclosed: <none | tool and model>, and the commits carry the project's trailer
-- [ ] C2. I read every line of this diff and can explain each change
+- [ ] C2. I read the whole diff and can say what each change does and why
 - [ ] C3. Tests and documentation updated for what changed, and here is what I ran:
 
 ```

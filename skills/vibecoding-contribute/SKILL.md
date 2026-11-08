@@ -21,7 +21,8 @@ per pull request, issue first, tests required).
 ## 2. The diff (C2, C3)
 
 Show the human the whole diff, file by file, and ask them to confirm they
-have read it. For each hunk that changes behaviour, name the test that covers
+have read it and can say what each change does and why it is there (the
+change, not every construct of the language). For each hunk that changes behaviour, name the test that covers
 it; if none does, write it or say the pull request is not complete. For each
 user-visible change, name the documentation it affects; update it or say it
 is missing. Check the scope: one change, no unrelated reformatting, no
@@ -48,7 +49,7 @@ Write the description from what was actually done:
 <none | Assisted by <Tool>:<model>; every commit carries the trailer <the project's trailer>>
 
 ## Checked
-I read every line of this diff. Tests: <added or updated, names>. Docs: <updated pages, or "no user-visible change">.
+I read the whole diff and can say what each change does and why. Tests: <added or updated, names>. Docs: <updated pages, or "no user-visible change">.
 Ran: <commands> → <result>
 ```
 
