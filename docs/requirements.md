@@ -58,16 +58,19 @@ OpenInfra, OpenTelemetry, Apache), `Co-Authored-By:` (the default of several
 coding tools), `AI-Tool:`. For the record, `Assisted-by: <Tool>:<model>` is the
 form the large projects converged on, and `Co-Authored-By:` has been criticised
 for presenting a model as a legal author; that is information for the project,
-not a rule of this convention. One rule only, because it is about honesty and
-not form: a trailer that certifies origin or legal responsibility
+not a rule of this convention. Two rules only, because they are about honesty
+and not form: a trailer that certifies origin or legal responsibility
 (`Signed-off-by:` under a Developer Certificate of Origin) names a human, never
-a model. A commit without any attribution trailer is understood as
+a model; and an attribution trailer names a model the project declares (D2),
+so the declaration cannot fall behind the history. `Co-Authored-By:` is exempt
+from the second rule because it also names humans. A commit without any attribution trailer is understood as
 human-written.
 - Evidence: the git history from the adoption commit named in `VIBECODING.md`.
 - Checked: sample commits since adoption. Substantial commits without a
   trailer are a finding if the declaration says the project is mostly
   AI-written. The share of attributed commits is reported, not judged against
-  a threshold. A `Signed-off-by:` naming a model is a failure.
+  a threshold. A `Signed-off-by:` naming a model is a failure, and so is an
+  attribution trailer other than `Co-Authored-By:` naming no declared model.
 
 **D4. Human review before merge.** No AI-written change reaches the default
 branch without a human having read it and approved it. For a team this is a

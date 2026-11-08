@@ -49,6 +49,7 @@ requirements:
     mechanical:
       - attribution trailers are convention.attribution_trailers, default [Assisted-by, Generated-by, Co-Authored-By, AI-Tool]
       - a Signed-off-by trailer naming a declared tool or model is a failure
+      - an attribution trailer other than Co-Authored-By naming no declared model is a failure
       - report the share of commits since adoption with an attribution trailer (informative, no threshold)
 
   - id: D4

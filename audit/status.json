@@ -1,22 +1,25 @@
 {
-  "color": "blue",
+  "color": "yellow",
   "label": "vibecoding",
-  "message": "level 2 · checked 2026-11-08 · 1ade60f",
+  "message": "level 2 · checked 2026-11-08 · e64137c",
   "schemaVersion": 1,
   "vibecoding": {
     "checked_by": "vibecheck 0.4.0",
-    "commit": "1ade60f",
+    "commit": "e64137c",
     "date": "2026-11-08",
     "evidence": {
       "audit": "audit/evidence/audit.json",
-      "coverage": "audit/evidence/coverage.txt"
+      "coverage": "audit/evidence/coverage.txt",
+      "maintainability": "audit/evidence/jscpd-report.json",
+      "outdated": "audit/evidence/outdated.json"
     },
     "level": 2,
     "metrics": {
-      "coverage": 90.76,
+      "coverage": 90.78,
       "file_max": 390,
       "function_max": 50,
-      "markers": 0
+      "markers": 0,
+      "outdated": 0
     },
     "open_findings": {
       "BLOCKER": 0,
@@ -26,6 +29,6 @@
     },
     "read_by": null,
     "report": null,
-    "verdict": "pass"
+    "verdict": "pass with findings"
   }
 }

@@ -16,6 +16,7 @@ convention:
   tools:
     - "Claude Code:claude-fable-5-1"
     - "Claude Code:claude-opus-5-5"
+    - "Claude Code:qwen3.8-27b"
   attribution_trailers: [Assisted-by, Generated-by]
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
   maintainability: { tool: "jscpd (duplication), clippy cognitive_complexity (complexity)", duplication_max: 5, complexity_max: 15, function_max: 80, file_max: 400, markers_max: 0 }

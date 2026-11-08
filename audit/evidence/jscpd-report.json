@@ -192,6 +192,44 @@
     },
     {
       "firstFile": {
+        "end": 209,
+        "endLoc": {
+          "column": 25,
+          "line": 209,
+          "position": 6489
+        },
+        "name": "checks/d3.rs",
+        "start": 202,
+        "startLoc": {
+          "column": 46,
+          "line": 202,
+          "position": 6239
+        }
+      },
+      "format": "rust",
+      "fragment": "    fn assisted_by_undeclared_tool_is_reported() {\n        let commit = Commit {\n            hash: \"abc\".into(),\n            subject: \"s\".into(),\n            body: String::new(),\n            trailers: vec![(\"Assisted-by\".into(), \"ninfer:qwen3.8-27b\".into())],\n        };\n        let tools = vec![\"Claude Code:claude-opus-5-5\".into()];",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 8,
+      "secondFile": {
+        "end": 225,
+        "endLoc": {
+          "column": 25,
+          "line": 225,
+          "position": 7021
+        },
+        "name": "checks/d3.rs",
+        "start": 218,
+        "startLoc": {
+          "column": 39,
+          "line": 218,
+          "position": 6771
+        }
+      },
+      "tokens": 61
+    },
+    {
+      "firstFile": {
         "end": 96,
         "endLoc": {
           "column": 13,
@@ -1028,32 +1066,32 @@
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-08T22:39:35.490Z",
+    "detectionDate": "2026-11-08T23:29:55.752Z",
     "formats": {
       "rust": {
-        "clones": 27,
-        "duplicatedLines": 252,
-        "duplicatedTokens": 1655,
-        "lines": 6938,
+        "clones": 28,
+        "duplicatedLines": 260,
+        "duplicatedTokens": 1716,
+        "lines": 7199,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.6321706543672527,
-        "percentageTokens": 3.7580326528758605,
-        "sources": 46,
-        "tokens": 44039
+        "percentage": 3.6116127239894427,
+        "percentageTokens": 3.7429655804214113,
+        "sources": 47,
+        "tokens": 45846
       }
     },
     "total": {
-      "clones": 27,
-      "duplicatedLines": 252,
-      "duplicatedTokens": 1655,
-      "lines": 6938,
+      "clones": 28,
+      "duplicatedLines": 260,
+      "duplicatedTokens": 1716,
+      "lines": 7199,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.6321706543672527,
-      "percentageTokens": 3.7580326528758605,
-      "sources": 46,
-      "tokens": 44039
+      "percentage": 3.6116127239894427,
+      "percentageTokens": 3.7429655804214113,
+      "sources": 47,
+      "tokens": 45846
     }
   }
 }
