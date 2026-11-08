@@ -1,0 +1,4 @@
+.claude/worktrees/
+.agents/
+*.swp
+.DS_Store
