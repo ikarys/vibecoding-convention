@@ -34,7 +34,7 @@ would not be expected to meet is not added unless it is one of those five.
 ## Part A: a project
 
 Part A applies to a repository and the people who maintain it. It has three
-levels and twenty-six requirements. Part B, below, applies to anyone sending
+levels and twenty-seven requirements. Part B, below, applies to anyone sending
 one contribution to a project they do not maintain.
 
 ### Levels
