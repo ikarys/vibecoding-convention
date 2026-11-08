@@ -1,28 +1,65 @@
+---
+# AI involvement, AI-DECLARATION.md keys (https://github.com/DimwitLabs/AI-DECLARATION.md)
+# levels: none | hint | assist | pair | copilot | auto
+version: "0.1.1"
+level: <highest level below>
+processes:
+  design: <level>
+  implementation: <level>
+  testing: <level>
+  documentation: <level>
+  review: <level>
+  deployment: <level>
+# Vibecoding Convention (https://github.com/ikarys/vibecoding-convention)
+convention:
+  version: "0.1"
+  level: <1 | 2 | 3>
+  adopted_at: <commit hash>
+  status: <active | maintenance | archived>
+  tools:
+    - "<Tool>:<model>"            # same values as the Assisted-by trailers
+  maintainers: [<handle>]
+  review: "<reviewed pull requests | single maintainer reads every diff; enforced by <tool or workflow>>"
+  security_response: "<72h | none>"
+  licence: <SPDX identifier>
+  # level 2 and above
+  coverage: { threshold: <N>, kind: <line | branch>, tool: <tool> }
+  maintainability: { tool: <tool>, duplication_max: <percent>, complexity_max: <N> }
+  # level 3
+  mutation: { tool: <tool>, threshold: <N> }   # recommended, remove if not measured
+  audit_dir: audit
+  audit_cadence: <minor | major | structural>
+  blind_test: <required | not-applicable>
+  check_interval: <6m>
+---
+
 # Vibecoding declaration
 
-This project follows the [Vibecoding Convention](https://github.com/ikarys/vibecoding-convention) version 0.1.
+This project follows the [Vibecoding Convention](https://github.com/ikarys/vibecoding-convention) version 0.1 at level <N>.
 
-- **Level claimed:** <1 Declared | 2 Tested | 3 Audited>
-- **AI assistance:** <tools and models used, for example "Claude Code with Claude Opus 5.5; Fennec with Qwen3.8-27B">
-- **Share of AI-written content:** <honest estimate: "most of it", "about half", "the tests only">
-- **Maintainers who review and decide:** <names or handles>
-- **Review policy:** <reviewed pull requests | single maintainer reads every diff, enforced by <tool or workflow>>
-- **Adopted at commit:** <hash>
+## AI assistance
 
-## Level 2
+<Two or three sentences: what the AI tools do here, what the humans do, how
+much of the code is AI-written as an honest estimate.>
 
-- **Coverage threshold:** <N> % <line | branch> coverage, measured with <tool>, by `<command>`.
-  <One sentence if below 80 %.>
-- **Test command:** `<command>`
-- **Lint and format:** `<commands>`
-- **Dependency checks:** `<commands>`
+## Review
 
-## Level 3
+<How a change reaches the default branch, and what makes the human reading a
+step rather than an intention.>
 
-- **Audit directory:** `audit/`
-- **Architecture review:** renewed at <each minor release | major structural changes>. Last: <date>, <commit>.
-- **Security audit:** last: <date>, <commit>.
-- **Blind test:** <required at each minor release | not applicable because ...>. Last: <date>, <commit>.
+## Provenance and licence
+
+This project is licensed under <licence>. Parts of it are written by AI
+assistants and may not be protected by copyright in some jurisdictions; the
+maintainers accept this. To the maintainers' knowledge, no verbatim
+reproduction of licence-incompatible code was included. Safeguards used:
+<vendor code-reference filter | snippet scanning with <tool> | human check of
+long generated blocks | none>.
+
+## Status
+
+<active | maintenance | archived>. Security reports are acknowledged within
+<72 hours | best effort, no commitment>; see `SECURITY.md`.
 
 ## Exceptions
 
