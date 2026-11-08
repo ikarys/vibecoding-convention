@@ -1,0 +1,152 @@
+---
+layout: default
+title: Vibecoding Convention
+---
+<section class="hero">
+  <div class="hero-text">
+    <h1>Let’s vibecode properly.</h1>
+    <p class="lede">A checkable standard for software written with AI assistance. The evidence lives in your repository, and anyone can check it.</p>
+    <p class="hero-actions">
+      <a class="button primary" href="{{ '/CONVENTION.html' | relative_url }}">Read the convention</a>
+      <a class="button secondary" href="#adopt">Adopt it</a>
+    </p>
+  </div>
+
+  <figure class="yaml-card">
+    <figcaption>VIBECODING.md, at the root of a project</figcaption>
+    <pre><code>---
+<span class="k">convention</span>:
+  <span class="c"># what you claim</span>
+  <span class="k">level</span>: 2
+  <span class="c"># which models wrote code</span>
+  <span class="k">tools</span>:
+    - "Claude Code:claude-opus-5-5"
+  <span class="c"># who decides</span>
+  <span class="k">maintainers</span>: [ikarys]
+  <span class="k">review</span>: "a human reads every diff"
+  <span class="c"># measured by CI, not claimed</span>
+  <span class="k">coverage</span>: { <span class="k">threshold</span>: 80 }
+  <span class="k">status</span>: active
+---</code></pre>
+  </figure>
+</section>
+
+<section class="section">
+  <h2>The problem is not AI</h2>
+  <p class="statement">AI-assisted code is not a problem. Unframed, unreviewed, unaudited code is, whoever or whatever wrote it.</p>
+  <p>The convention says what framed, reviewed and audited mean in terms anyone can verify, and what evidence a project keeps to back the claim. Each requirement answers a <a href="{{ '/docs/criticisms.html' | relative_url }}">criticism actually made</a> of vibecoded software.</p>
+
+  <dl class="principles">
+    <div class="principle">
+      <dt>Transparency over purity</dt>
+      <dd>Say what the AI wrote; nobody is asked to avoid AI.</dd>
+    </div>
+    <div class="principle">
+      <dt>Evidence over claims</dt>
+      <dd>Every requirement names an artifact or a command anyone can run.</dd>
+    </div>
+    <div class="principle">
+      <dt>Proportionality</dt>
+      <dd>A project picks the level that fits and proves it.</dd>
+    </div>
+    <div class="principle">
+      <dt>Humans decide</dt>
+      <dd>AI proposes; a named human validates, decides and is accountable.</dd>
+    </div>
+    <div class="principle">
+      <dt>Nothing silent</dt>
+      <dd>AI-written changes are attributed where they land.</dd>
+    </div>
+    <div class="principle">
+      <dt>Outcomes, not forms</dt>
+      <dd>The convention says what must be visible, never which file name or tool to use.</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="section" id="levels">
+  <h2>Three levels, each including the one before</h2>
+  <p>A project picks a level and proves it. Nobody is asked to reach level 3 for a weekend script.</p>
+  <p class="visually-hidden">Each level includes all the requirements of the levels inside it.</p>
+
+  <section class="level level-3">
+    <div class="level-head">
+      <span class="level-num" aria-hidden="true">3</span>
+      <h3>Audited</h3>
+    </div>
+    <p>Versioned audit reports in the repository: architecture review, security audit, blind usability test, architecture documents validated by a named human, each finding with a decision.</p>
+    <p class="level-suggested">Suggested for: anything that handles other people's data, money or safety.</p>
+    <p class="level-ids">A1 to A8</p>
+
+    <section class="level level-2">
+      <div class="level-head">
+        <span class="level-num" aria-hidden="true">2</span>
+        <h3>Tested</h3>
+      </div>
+      <p>Tests that assert behaviour, a declared and met coverage threshold, green CI, lint, secrets scanning, static analysis, current dependencies, measured duplication and complexity.</p>
+      <p class="level-suggested">Suggested for: anything others depend on.</p>
+      <p class="level-ids">T1 to T9</p>
+
+      <section class="level level-1">
+        <div class="level-head">
+          <span class="level-num" aria-hidden="true">1</span>
+          <h3>Declared</h3>
+        </div>
+        <p>Tells users that AI wrote part of it, with which tools and models, who reviews and decides, how it handles contributions, its licence and provenance stance, and when it was last checked. All text, an afternoon's work.</p>
+        <p class="level-suggested">Suggested for: scripts and prototypes.</p>
+        <p class="level-ids">D1 to D10</p>
+      </section>
+    </section>
+  </section>
+
+  <p>Most of this is what a careful human-led project already does. Five requirements exist only because AI is involved: D1, D2, D3, D7 and A3, and four of them are text.</p>
+  <p><a href="{{ '/docs/requirements.html' | relative_url }}">Every requirement, its evidence and how it is checked</a></p>
+</section>
+
+<section class="section" id="contributing">
+  <h2>Sending a contribution elsewhere</h2>
+  <p>Most of the harm blamed on vibecoding comes from single contributions: a generated pull request sent unread, a bug report nobody reproduced. Five rules apply to anyone, person or agent, contributing to a project they do not maintain.</p>
+
+  <ul class="rules">
+    <li>
+      <span class="id">C1</span>
+      <p><strong>Disclose:</strong> say that AI helped, with tool and model, in the text and as the trailer the project expects.</p>
+    </li>
+    <li>
+      <span class="id">C2</span>
+      <p><strong>Know your diff:</strong> read all of it and be able to say what each change does and why.</p>
+    </li>
+    <li>
+      <span class="id">C3</span>
+      <p><strong>Bring the proof:</strong> tests and docs with every behaviour change; reproduce what you report.</p>
+    </li>
+    <li>
+      <span class="id">C4</span>
+      <p><strong>Respect the project:</strong> follow its guide and AI policy; one change per pull request.</p>
+    </li>
+    <li>
+      <span class="id">C5</span>
+      <p><strong>Answer review</strong> yourself, in the time the project expects.</p>
+    </li>
+  </ul>
+</section>
+
+<section class="section" id="adopt">
+  <h2>Adopt it</h2>
+
+  <ol class="steps">
+    <li>
+      <p>Add a <a href="https://github.com/ikarys/vibecoding-convention/tree/main/templates">VIBECODING.md declaration</a> at the root of your repository, a contribution policy, and the badge in your README.</p>
+    </li>
+    <li>
+      <p>Attribute AI-written commits with a trailer naming the tool and model:</p>
+      <pre><code>Assisted-by: Claude Code:claude-opus-5-5</code></pre>
+    </li>
+    <li>
+      <p>Run the checks for your level and keep the reports under audit/.</p>
+      <p><a href="https://github.com/ikarys/vibecoding-convention/tree/main/vibecheck">vibecheck</a>, a validator with no AI in it, reads the declaration, the repository and the evidence your CI wrote, and never runs your code.</p>
+    </li>
+  </ol>
+
+  <p>Tooling is optional. A project can meet the convention by hand.</p>
+</section>

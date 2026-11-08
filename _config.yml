@@ -1,0 +1,37 @@
+title: Vibecoding Convention
+description: A checkable standard for software written with AI assistance.
+url: https://ikarys.github.io
+baseurl: /vibecoding-convention
+repository: ikarys/vibecoding-convention
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+plugins:
+  - jekyll-optional-front-matter
+  - jekyll-titles-from-headings
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: doc
+
+exclude:
+  - vibecheck
+  - agents
+  - skills
+  - templates
+  - audit
+  - AGENTS.md
+  - CLAUDE.md
+  - README.md
+  - VIBECODING.md
+  - CONTRIBUTING.md
+  - Justfile
+  - LICENSE

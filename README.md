@@ -4,6 +4,9 @@
 
 A checkable standard for software written with AI assistance.
 
+**Read the convention: [CONVENTION.md](CONVENTION.md)** (one page), or browse it on
+the [website](https://ikarys.github.io/vibecoding-convention/).
+
 AI-assisted code is not a problem. Unframed, unreviewed, unaudited code is,
 whoever or whatever wrote it. This convention says what "framed, reviewed and
 audited" means in terms anyone can verify, and what evidence a project must

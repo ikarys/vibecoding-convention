@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ site.description }}">
+  <title>{% if page.title == site.title %}{{ site.title }}{% else %}{{ page.title }} | {{ site.title }}{% endif %}</title>
+  <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="wordmark" href="{{ '/' | relative_url }}">Vibecoding Convention</a>
+      <span class="draft-tag">Draft 0.1</span>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="{{ '/CONVENTION.html' | relative_url }}" {% if page.path == 'CONVENTION.md' %}aria-current="page"{% endif %}>Convention</a>
+        <a href="{{ '/docs/requirements.html' | relative_url }}" {% if page.path == 'docs/requirements.md' %}aria-current="page"{% endif %}>Requirements</a>
+        <a href="{{ '/docs/criticisms.html' | relative_url }}" {% if page.path == 'docs/criticisms.md' %}aria-current="page"{% endif %}>Criticisms</a>
+        <a href="https://github.com/ikarys/vibecoding-convention">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <p>Draft 0.1. MIT licence.</p>
+    <p>Written with AI assistance and reviewed by its maintainer; <a href="https://github.com/ikarys/vibecoding-convention/blob/main/VIBECODING.md">see the project's declaration.</a></p>
+  </footer>
+</body>
+</html>

@@ -33,7 +33,8 @@ Rules while editing:
   project: a README says what it is, how to install, how to use, where to go
   next; nothing written to fill space.
 - `CONVENTION.md`, `docs/requirements.md` and `convention.yaml` must say the
-  same thing; a change to one is a change to all three.
+  same thing; a change to one is a change to all three. The summaries in
+  `README.md` and the site's `index.html` follow them.
 - Everything in this repository is in English.
 
 Never without a human: merge, release, change the CI, delete data.
