@@ -277,15 +277,7 @@ fn marker_occurrences(line: &str) -> usize {
 }
 
 fn has_marker_outside_string(line: &str) -> bool {
-    for pattern in MARKER_PATTERNS {
-        for (index, _) in line.match_indices(pattern) {
-            let quotes = line[..index].chars().filter(|c| *c == '"').count();
-            if quotes % 2 == 0 {
-                return true;
-            }
-        }
-    }
-    false
+    support::contains_outside_string(line, MARKER_PATTERNS)
 }
 
 fn is_commented_code(line: &str) -> bool {

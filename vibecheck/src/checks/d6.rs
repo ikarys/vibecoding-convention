@@ -1,6 +1,6 @@
 use chrono::NaiveDate;
 
-use crate::checks::Check;
+use crate::checks::{support, Check};
 use crate::finding::Finding;
 use crate::status;
 
@@ -93,6 +93,8 @@ impl Check for D6 {
     }
 }
 
+const DOC_EXTENSIONS: [&str; 6] = [".md", ".markdown", ".rst", ".txt", ".adoc", ".html"];
+
 fn is_test_change(stat: &str, diff: &str) -> bool {
     for line in stat.lines() {
         let line = line.trim();
@@ -112,12 +114,18 @@ fn is_test_change(stat: &str, diff: &str) -> bool {
         }
     }
 
+    // Prose mentions "assert" or "test(" too; only code hunks count.
+    let mut in_docs = false;
     for line in diff.lines() {
-        if line.starts_with("---") {
+        if let Some(path) = line.strip_prefix("+++ ") {
+            in_docs = DOC_EXTENSIONS.iter().any(|ext| path.ends_with(ext));
+            continue;
+        }
+        if in_docs || line.starts_with("---") {
             continue;
         }
         if let Some(content) = line.strip_prefix('-') {
-            if contains_any(
+            if support::contains_outside_string(
                 content,
                 &[
                     "#[test]",
@@ -133,9 +141,17 @@ fn is_test_change(stat: &str, diff: &str) -> bool {
             }
         }
         if let Some(content) = line.strip_prefix('+') {
-            if contains_any(
+            if support::contains_outside_string(
                 content,
-                &["#[ignore]", ".skip(", "@skip", "xit(", "xdescribe("],
+                &[
+                    "#[ignore]",
+                    "it.skip(",
+                    "describe.skip(",
+                    "test.skip(",
+                    "@skip",
+                    "xit(",
+                    "xdescribe(",
+                ],
             ) {
                 return true;
             }
@@ -163,10 +179,6 @@ fn has_explanation(subject: &str, body: &str) -> bool {
     .any(|word| text.contains(word))
 }
 
-fn contains_any(haystack: &str, needles: &[&str]) -> bool {
-    needles.iter().any(|needle| haystack.contains(needle))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -179,6 +191,34 @@ mod tests {
     #[test]
     fn detects_added_skip_line() {
         assert!(is_test_change("", "+it.skip('x')"));
+    }
+
+    #[test]
+    fn ignores_prose_in_documentation_hunks() {
+        assert!(!is_test_change(
+            "",
+            "+++ b/README.md\n-tests that assert behaviour\n"
+        ));
+        assert!(is_test_change(
+            "",
+            "+++ b/README.md\n-tests that assert behaviour\n+++ b/src/lib.rs\n-assert!(ok);\n"
+        ));
+    }
+
+    #[test]
+    fn markers_inside_string_literals_do_not_count() {
+        assert!(!is_test_change(
+            "",
+            "+++ b/src/d6.rs\n+    &[\"#[ignore]\", \"@skip\", \"xit(\"],\n"
+        ));
+    }
+
+    #[test]
+    fn iterator_skip_is_not_a_skipped_test() {
+        assert!(!is_test_change(
+            "",
+            "+++ b/src/lib.rs\n+let rest = lines.skip(1);\n"
+        ));
     }
 
     #[test]

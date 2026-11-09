@@ -234,6 +234,16 @@ pub fn files_mentioning_any(
     None
 }
 
+/// A needle inside a string literal is data, not code: a tool that lists the
+/// markers it scans for must not flag itself. Quote parity before the match
+/// decides; good enough for one-line scans.
+pub fn contains_outside_string(line: &str, needles: &[&str]) -> bool {
+    needles.iter().any(|needle| {
+        line.match_indices(needle)
+            .any(|(index, _)| line[..index].matches('"').count().is_multiple_of(2))
+    })
+}
+
 fn in_skipped_dir(path: &Path, root: &Path, skip_dirs: &[&str]) -> bool {
     let Ok(rel) = path.strip_prefix(root) else {
         return false;
