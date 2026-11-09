@@ -456,9 +456,10 @@ the D3 defaults apply. A contribution with AI-written content and no
 disclosure is dishonest, whatever its quality.
 - Evidence: the description and the commit trailers.
 
-**C2. Read and understood.** The contributor has read the whole diff and
-can say, for each change, what it does and why it is there. Understanding the
-change is required; understanding every construct of the language is not: a
+**C2. Understood.** The contributor has gone through the whole diff and
+can say, for each change, what it does, why it is there and what it affects.
+Understanding the change is required; reading every line and understanding
+every construct of the language is not: a
 maintainer who validates a model's Rust without being able to write it by
 hand is in the same position as any contributor working in a language they
 know less well than the project does. The description says so in one line.
