@@ -26,7 +26,7 @@ The sandbox may lack network. Use only read-only commands.
 ## Steps
 1. Read `VIBECODING.md` with `read_file`.
 2. Read `ARCHITECTURE.md` or the page the declaration names.
-3. Read `docs/adr/`.
+3. Read the decision records where the overview says they are (`docs/adr/` when it says nothing).
 4. Read the code in scope.
 5. Compare every architecture statement to the code.
 6. Judge one responsibility per module and type.

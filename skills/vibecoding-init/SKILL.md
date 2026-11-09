@@ -28,9 +28,9 @@ Ask, in one message, for what only they can decide:
 - The licence and the copyright stance on AI-written parts (the template has
   a sentence to accept or edit).
 - For level 2 and above: coverage threshold (80 % recommended, a lower value
-  needs one sentence of reason), maintainability thresholds, freshness
-  limits, audit cadence; for level 3: audit directory, check interval,
-  whether a blind test applies.
+  needs one sentence of reason), maintainability thresholds, the freshness
+  limit when no update bot is configured; for level 3: audit directory, audit cadence, whether a blind test
+  applies (it does where the software has user documentation).
 
 Do not ask what you can read: ecosystem, existing CI, hooks, instruction
 files, licence file.
@@ -76,9 +76,10 @@ with its reason and date.
 
 ## 5. Hooks, CI and audit directory
 
-- Level 2 and above: a pre-commit secrets scanner, preferring one already in
-  use, `gitleaks` otherwise; the same scanner in CI; the confirmed commands in
-  CI where missing. Tell the human how to install the hook.
+- Level 2 and above: a secrets scanner in CI, preferring one already in use,
+  `gitleaks` otherwise; the same scanner as a pre-commit hook (recommended, not
+  required; tell the human how to install it); the confirmed commands in CI
+  where missing.
 - Level 2 and above: add the CI steps from `templates/ci/github-actions.yml`
   (or the platform's equivalent) that write the evidence files and run
   `vibecheck . --write-status`.

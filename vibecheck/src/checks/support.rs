@@ -2,8 +2,11 @@ use std::fs;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 
+use std::path::Component;
+
 use crate::checks::Context;
 use crate::ci;
+use crate::declaration::Declaration;
 use crate::evidence;
 use crate::finding::Finding;
 use crate::util;
@@ -15,6 +18,21 @@ pub fn missing_declaration(id: &str) -> Vec<Finding> {
         "VIBECODING.md is missing",
         None,
     )]
+}
+
+/// The declared audit directory, `audit` by default. None when it is not a
+/// plain relative path: `..`, an absolute path or a drive prefix would let a
+/// hostile declaration point the directory listing outside the repository.
+pub fn audit_dir(decl: &Declaration) -> Option<String> {
+    let dir = if decl.convention.audit_dir.is_empty() {
+        "audit"
+    } else {
+        decl.convention.audit_dir.as_str()
+    };
+    Path::new(dir)
+        .components()
+        .all(|component| matches!(component, Component::Normal(_)))
+        .then(|| dir.to_string())
 }
 
 pub fn relative_path(root: &Path, path: &Path) -> String {
@@ -232,6 +250,16 @@ pub fn files_mentioning_any(
     }
     let _ = root;
     None
+}
+
+/// A needle inside a string literal is data, not code: a tool that lists the
+/// markers it scans for must not flag itself. Quote parity before the match
+/// decides; good enough for one-line scans.
+pub fn contains_outside_string(line: &str, needles: &[&str]) -> bool {
+    needles.iter().any(|needle| {
+        line.match_indices(needle)
+            .any(|(index, _)| line[..index].matches('"').count().is_multiple_of(2))
+    })
 }
 
 fn in_skipped_dir(path: &Path, root: &Path, skip_dirs: &[&str]) -> bool {

@@ -24,8 +24,8 @@ says the project is wholly or partly written with AI assistance and links to
 
 **D2. Declaration file.** The repository root has a `VIBECODING.md` whose
 front matter uses the [AI-DECLARATION.md](https://github.com/DimwitLabs/AI-DECLARATION.md)
-keys for the degree of AI involvement (`version`, `level`, `processes`,
-`components`), so that the same information is written once and existing
+keys for the degree of AI involvement (`version`, `level`, `processes`, and
+`components` where the project uses it), so that the same information is written once and existing
 badges keep working, plus a `convention` block for this convention's fields.
 A project that already has an `AI-DECLARATION.md` may point to it instead of
 repeating those keys. The Declaration file section gives the format. The file states, at least:
@@ -89,9 +89,10 @@ convention check, produced by the check itself and not typed by hand:
 - `audit/status.json` holds the claimed level, the date, the commit checked,
   the verdict (`pass`, `pass with findings`, `fail`, `stale`), the number of
   open findings by severity, the evidence files it was computed from, and the
-  tool and model that ran the check. It is written by `vibecheck
-  --write-status`, normally from the project's CI after its own checks passed,
-  otherwise by a maintainer. Its
+  tool and model that ran the check. It is written by the check itself
+  (`vibecheck --write-status` does it; any tool producing the same file will
+  do), normally from the project's CI after its own checks passed, otherwise
+  by a maintainer running the check, never typed by hand. Its
   top-level fields follow the shields.io endpoint schema (`schemaVersion`,
   `label`, `message`, `color`), so the README badge is a dynamic badge that
   reads this file and cannot be edited without a visible commit under
@@ -130,8 +131,10 @@ read, tests and documentation with the change, and what was run. The pull
 request template carries them as checkboxes. Contributions the project makes
 to other projects follow Part B.
 - Evidence: `CONTRIBUTING.md` and the pull request template.
-- Checked: both exist and say this; the auditor samples merged pull requests
-  from outside contributors for the trailer and a human approval.
+- Checked: both exist and say this; vibecheck verifies that
+  `CONTRIBUTING.md` names one of the project's declared trailers (D3 defaults
+  otherwise); the auditor samples merged pull requests from outside
+  contributors for the trailer and a human approval.
 
 **D9. Project status.** `VIBECODING.md` states the project status: `active`,
 `maintenance` (fixes only), or `archived`. For `active` and `maintenance`
@@ -148,23 +151,20 @@ instruction files, under whatever name its tools use (`AGENTS.md`, `CLAUDE.md`,
 `.cursorrules`, `GEMINI.md` and the like, or the paths the project declares in
 `convention.agent_instruction_files`), each such file names the convention level and links to
 `VIBECODING.md`; gives the build, test, lint and scan commands an agent must
-pass before calling a change done; states the edit-time rules (the D3 trailer,
-a reason for every test change under D6, the registry check of T6 for new
-dependencies and the registry's current version under T9, no secrets, every
-input treated as hostile and the project's security checklist followed, and
-signal over noise: a comment states a reason, a constraint or a trap, never
-what the line does; a docstring says what the caller must know, not the
-signature again; the public API is documented; no TODO, placeholder,
-commented-out or dead code in a delivered change; documentation proportionate
-to the project, a README that says what it is, how to install it, how to use
-it and where to go next, and nothing generated to fill space); and lists what
-the agent does not do without a human (merge, release, change the CI, delete
-data). The noise rules are here because the instruction file is the only
-place where noise is prevented rather than reviewed away. This is the only place
-where the convention acts while the code is being written rather than at
-audit time. Keep the file short enough to be read whole by the model; no size,
-no structure and no file name is mandated: tools differ, and the convention has
-no opinion on them. A project with no such file is not required to add one.
+pass before calling a change done; states the rules the project's humans are
+already held to (the D3 trailer, a reason for every test change under D6, the
+registry check of T6 for new dependencies, no secrets); and lists what the
+agent does not do without a human (merge, release, change the CI, delete
+data). The agent is held to the same rules as a human contributor, no more:
+this is the only place where the convention acts while the code is being
+written rather than at audit time, and the convention does not use it to add
+rules of its own. `templates/AGENTS-section.md` carries a recommended
+wording, including the project's security checklist and a "signal over
+noise" paragraph that many projects want in this file; those are advice, not
+requirements. Keep the file short enough to be read whole by the model; no
+size, no structure and no file name is mandated: tools differ, and the
+convention has no opinion on them. A project with no such file is not
+required to add one.
 - Evidence: the file.
 - Checked: where present, the file contains the four points and no secret;
   `vibecheck` verifies the declared level, the `VIBECODING.md` link, a
@@ -230,7 +230,10 @@ or the reason for taking a young one is stated, and it is the package the code
 needs. The check is recorded in the commit or pull request. Who or what runs
 the check does not matter; that it runs against the registry, and not against
 the model's memory, does. This is the answer to hallucinated package names and
-to the packages attackers register under them.
+to the packages attackers register under them. It is also the one place where
+the convention asks for a recorded step rather than a measured result: a
+package that does not exist, or exists only because an attacker registered
+the hallucinated name, leaves nothing to measure once it is in the lockfile.
 - Evidence: the lockfile, the CI step or release checklist and the tool used,
   the audit output in `convention.evidence.audit`, the recorded checks.
 - Checked: the lockfile is committed; CI or the release checklist contains the
@@ -239,9 +242,12 @@ to the packages attackers register under them.
   dependencies added since the last check and reports those without a recorded
   check.
 
-**T7. Secrets and static analysis.** A secrets scanner runs as a pre-commit
-hook, so that a secret never enters the history, and again in CI, so that the
-hook cannot be bypassed silently. A static analyser for the language runs in
+**T7. Secrets and static analysis.** A secrets scanner runs in CI on every
+change, so that no secret reaches the default branch unnoticed. Running the
+same scanner as a pre-commit hook catches the secret before it enters the
+history at all and is recommended; the convention does not require it, since
+a hook is a working method and a local one, and the CI run is where the
+outcome is enforced. A static analyser for the language runs in
 CI, with a rule set that covers the known vulnerability classes the project
 names in its threat model (A2) or, below level 3, the classes relevant to its
 kind of software: injection, path traversal, unsafe deserialization, broken
@@ -250,11 +256,12 @@ software; the CWE Top 25 as the general list. Findings are fixed, or listed as
 accepted with a reason in the tool's configuration. The convention does not
 promise the absence of vulnerabilities, which nobody can prove; it asks that
 the known classes be looked for by a tool, every time.
-- Evidence: the pre-commit configuration (for example `.pre-commit-config.yaml`
-  with gitleaks or an equivalent), the CI steps, the last run.
-- Checked: both steps exist; vibecheck scans the working tree for secrets
-  with its built-in scanner; the secrets scanner and the static analyser run in
-  CI, where their findings not listed as accepted fail the job.
+- Evidence: the CI steps, the last run, and the pre-commit configuration
+  where there is one (for example `.pre-commit-config.yaml` with gitleaks).
+- Checked: the secrets scanner and the static analyser run in CI, where their
+  findings not listed as accepted fail the job; vibecheck scans the working
+  tree for secrets with its built-in scanner and notes, without failing,
+  whether a pre-commit hook runs the scanner too.
 
 **T8. Maintainability signals.** The project declares a tool and thresholds for
 at least: code duplication, function complexity (cyclomatic or cognitive),
@@ -286,12 +293,13 @@ day and falls further behind at every regeneration. The rule is not "always
 the latest" but "no unjustified lag". Three moments:
 - At addition: the version taken is the registry's current one, read from the
   registry and not from memory (this completes the T6 check).
-- Over time: an update mechanism exists, either a bot (Dependabot, Renovate or
-  an equivalent) or a declared cadence with a declared command (`cargo
-  outdated`, `npm outdated`, `pip list --outdated`, and the like), and the
-  check measures the lag: the number of dependencies with a newer major or
-  minor version available, and the age of the oldest lag. The project declares
-  its limits (`convention.freshness`: `max_outdated`, `max_lag_months`).
+- Over time: an update mechanism exists. Either a bot (Dependabot, Renovate or
+  an equivalent) keeps the lag down and nothing more is declared, or the
+  project runs an outdated command (`cargo outdated`, `npm outdated`, `pip
+  list --outdated`, and the like), commits its output as evidence and declares
+  the limit it holds itself to (`convention.freshness`: `max_outdated`, the
+  number of dependencies with a newer version available). The convention does
+  not pick the mechanism; it asks for one and reads what it produces.
 - Exceptions: a dependency held back for incompatibility or stability is
   listed in `VIBECODING.md` with the reason. That is the human
   counter-indication; it is the only thing that justifies a lag.
@@ -300,9 +308,10 @@ database stays without such an exception.
 - Evidence: the update configuration or `convention.evidence.outdated`, the
   exceptions, `metrics.outdated` in `audit/status.json`.
 - Checked: an update bot configuration exists or `evidence.outdated` is
-  declared (neither is a failure); CI runs the outdated tool and writes
-  `evidence.outdated`; vibecheck reads it, counts the outdated dependencies not
-  listed under "Dependencies held back" against `max_outdated` and records
+  declared (neither is a failure); `max_outdated` is required only with
+  `evidence.outdated`; when declared, CI runs the outdated tool and writes
+  the file, vibecheck counts the outdated dependencies not listed under
+  "Dependencies held back" against `max_outdated` and records
   `metrics.outdated`; unmaintained or yanked items in `evidence.audit` without
   a held-back entry are failures.
 
@@ -350,10 +359,13 @@ versioned report.
 
 **A3. Blind usability test.** When the software has user documentation and is
 meant to be used by people other than its authors (libraries, command-line
-tools, APIs, applications), an AI tester with no access to the source code uses
-it from the documentation alone to build or do something real, and writes a
-friction report. The tester's blindness is enforced by the environment it runs
-in, not by an instruction. The tester also judges the documentation itself:
+tools, APIs, applications), a tester with no access to the source code, human
+or AI, uses it from the documentation alone to build or do something real,
+and writes a friction report. The tester's blindness is enforced by the
+environment, not by an instruction: a human who has never seen the code, or
+an agent in a sandbox that only holds the documentation. An AI tester is the
+cheap way to repeat the test at every minor version, which is why the agents
+in this repository do it, not a requirement. The tester also judges the documentation itself:
 pages that drown the needed information in generated prose, a README that
 lists every feature instead of saying how to start, are `PAINFUL` findings;
 the right amount of documentation is the amount the task needed. The tester installs the software the way the
@@ -371,21 +383,26 @@ tool and model that produced it, human who commissioned and read it, verdict,
 number of open findings. Reports are not rewritten after the fact. Decisions
 are appended.
 - Evidence: `audit/README.md`, `audit/status.json`.
-- Checked: every file in `audit/` is listed; every listed commit exists;
-  commits and dates in the index match the report headers and the status file.
+- Checked: vibecheck lists every report in `audit/`: each is in the index with
+  the same date, commit, kind and reader; every listed commit exists; the
+  report named by `audit/status.json` is one of them; a report edited after
+  its first commit is a warning (a correction must say so in its commit).
 
 **A5. Release rule.** No release is published with an open finding of
 severity `BLOCKER` or `DOC-WRONG` (Findings and decisions) in any audit report of the
 current minor version. Each release names, in its notes or tag message, the
 human maintainer who approved it; that person is listed in `VIBECODING.md`.
 - Evidence: the audit index at the release commit, the release notes.
-- Checked: the auditor lists open findings by severity at the release tag and
-  reads the approver's name.
+- Checked: vibecheck reads every report at the latest release tag and fails
+  on an open `BLOCKER` or `DOC-WRONG` (an old finding is decided, not left
+  open); the tag message or the release notes section for that version must
+  name a declared maintainer.
 
 **A6. Validated architecture documents.** The repository has an architecture
 overview (`ARCHITECTURE.md` or a docs page) naming the components, the data
-flow, the main invariants and the known weak points, and decision records
-(`docs/adr/`) for the structural choices. Each of these documents may be
+flow, the main invariants and the known weak points, and decision records for
+the structural choices, kept where the overview says (`docs/adr/` when it
+says nothing). Each of these documents may be
 written by anyone or anything; each carries the name of the human maintainer
 who validated it and the date, and is revalidated when the structure changes.
 This is the convention's answer to "nobody understands the code": a human has

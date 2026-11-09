@@ -277,20 +277,13 @@ fn marker_occurrences(line: &str) -> usize {
 }
 
 fn has_marker_outside_string(line: &str) -> bool {
-    for pattern in MARKER_PATTERNS {
-        for (index, _) in line.match_indices(pattern) {
-            let quotes = line[..index].chars().filter(|c| *c == '"').count();
-            if quotes % 2 == 0 {
-                return true;
-            }
-        }
-    }
-    false
+    support::contains_outside_string(line, MARKER_PATTERNS)
 }
 
 fn is_commented_code(line: &str) -> bool {
     let trimmed = line.trim_start();
-    let Some(prefix) = ["//", "#", "--", "/*", "*"]
+    // A block-comment continuation is `* text`; a bare `*` starts a deref.
+    let Some(prefix) = ["//", "#", "--", "/*", "* "]
         .iter()
         .find(|prefix| trimmed.starts_with(**prefix))
     else {
@@ -336,6 +329,8 @@ mod tests {
         assert!(is_marker_line("// foo();"));
         assert!(is_marker_line("// let x = 1;"));
         assert!(!is_marker_line("// the counter is reset here"));
+        assert!(is_marker_line(" * foo();"));
+        assert!(!is_marker_line("*count += 1;"));
     }
 
     #[test]

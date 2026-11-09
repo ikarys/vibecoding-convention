@@ -1,6 +1,7 @@
 # Vibecoding Convention, machine-readable list of requirements.
-# Source of truth for tools (vibecheck, agents). The human text is CONVENTION.md
-# and docs/requirements.md; the three must say the same thing.
+# The human text is CONVENTION.md and docs/requirements.md; the three must say
+# the same thing (vibecheck/tests/spec_consistency.rs checks ids, levels and
+# check kinds). vibecheck hardcodes its rules and does not read this file.
 #
 # check: mechanical | judgement | both
 # evidence: what the checker looks at
@@ -13,7 +14,7 @@ levels:
   3: Audited
 severities: [BLOCKER, DOC-WRONG, PAINFUL, MINOR]
 decisions: [fixed, documented, "won't fix", open]
-ai_specific: [D1, D2, D3, D7, A3]
+ai_specific: [D1, D2, D3, D7, D10, A3]
 
 requirements:
   - id: D1
@@ -65,7 +66,7 @@ requirements:
   - id: D5
     level: 1
     title: Dated check
-    statement: audit/status.json holds the level, date, commit and verdict of the last check and names the evidence it was computed from; it is written by vibecheck --write-status, normally from the project's CI after its own checks passed, otherwise by a maintainer; it feeds the README badge and is stale after the declared interval or a release.
+    statement: audit/status.json holds the level, date, commit and verdict of the last check and names the evidence it was computed from; it is written by the check itself (vibecheck --write-status does it), normally from the project's CI after its own checks passed, otherwise by a maintainer, never by hand; it feeds the README badge and is stale after the declared interval or a release.
     evidence: [audit/status.json, README.md]
     check: mechanical
     mechanical:
@@ -98,11 +99,11 @@ requirements:
   - id: D8
     level: 1
     title: Contribution policy
-    statement: CONTRIBUTING.md states the policy for incoming AI-assisted contributions and asks for C1 to C3 of Part B in pull requests; outgoing contributions follow Part B.
+    statement: CONTRIBUTING.md states the policy for incoming AI-assisted contributions and, where they are accepted, names the project's attribution trailer and asks for C1 to C3 of Part B in pull requests; outgoing contributions follow Part B.
     evidence: [CONTRIBUTING.md, pull request template]
     check: mechanical
     mechanical:
-      - CONTRIBUTING.md exists and mentions Assisted-by
+      - CONTRIBUTING.md exists and names one of the declared attribution trailers (D3 defaults otherwise)
       - a pull request template exists when the repository is on a platform that supports one (warning otherwise)
 
   - id: D9
@@ -118,7 +119,7 @@ requirements:
   - id: D10
     level: 1
     title: Agent instructions carry the convention
-    statement: Where the project has agent instruction files (any name its tools use, or the paths it declares), each names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the edit-time rules (attribution, test changes, dependencies, secrets, signal over noise in code and docs) and lists what the agent never does without a human.
+    statement: Where the project has agent instruction files (any name its tools use, or the paths it declares), each names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the rules the project's humans are held to (attribution, test changes, dependencies, secrets) and lists what the agent never does without a human; the template carries the recommended wording.
     evidence: [AGENTS.md, CLAUDE.md, .cursorrules, GEMINI.md, convention.agent_instruction_files]
     check: mechanical
     mechanical:
@@ -174,7 +175,7 @@ requirements:
   - id: T6
     level: 2
     title: Dependency hygiene and provenance
-    statement: Lockfile committed; vulnerability and licence checks run in CI or before release; every new dependency is checked against the registry before merge and the check is recorded.
+    statement: Lockfile committed; vulnerability and licence checks run in CI or before release; every new dependency is checked against the registry before merge and the check is recorded (the one recorded step the convention asks for, because a hallucinated name is caught before merge or not at all).
     evidence: [lockfile, CI configuration, convention.evidence.audit, git history]
     check: mechanical
     mechanical:
@@ -186,12 +187,13 @@ requirements:
   - id: T7
     level: 2
     title: Secrets and static analysis
-    statement: A secrets scanner runs as a pre-commit hook and in CI; a static analyser runs in CI with rules covering the vulnerability classes the project names; findings are fixed or accepted with a reason.
+    statement: A secrets scanner runs in CI on every change, so that no secret reaches the default branch (a pre-commit hook catches it earlier and is recommended); a static analyser runs in CI with rules covering the vulnerability classes the project names; findings are fixed or accepted with a reason.
     evidence: [pre-commit configuration, CI configuration]
     check: mechanical
     mechanical:
-      - a pre-commit configuration exists and names a secrets scanner (gitleaks, trufflehog, detect-secrets or declared equivalent)
-      - CI configuration contains the same scanner and convention.commands.static_analysis
+      - CI configuration names a secrets scanner (gitleaks, trufflehog, detect-secrets or convention.commands.secrets) and convention.commands.static_analysis
+      - a pre-commit configuration naming the scanner is noted; its absence is informative, not a failure
+      - the working tree is scanned for secret patterns
 
   - id: T8
     level: 2
@@ -208,12 +210,12 @@ requirements:
   - id: T9
     level: 2
     title: Dependency freshness
-    statement: New dependencies are taken at the registry's current version; an update mechanism (bot or declared cadence and command) exists; the lag is measured against declared limits (max_outdated, max_lag_months) minus declared exceptions; no unmaintained dependency without an exception.
+    statement: New dependencies are taken at the registry's current version; an update mechanism exists, either an update bot or an outdated command whose committed output is measured against a declared limit (max_outdated) minus declared exceptions; no unmaintained dependency without an exception.
     evidence: [dependabot.yml or renovate.json or convention.evidence.outdated, VIBECODING.md exceptions, audit/status.json metrics.outdated]
     check: mechanical
     mechanical:
       - an update bot configuration (.github/dependabot.yml, renovate.json or .renovaterc*) exists or convention.evidence.outdated is declared; neither is a failure
-      - convention.freshness has max_outdated and max_lag_months
+      - convention.freshness.max_outdated is required only when convention.evidence.outdated is declared; a project with an update bot declares nothing more
       - when convention.evidence.outdated exists, outdated dependencies not listed under "Dependencies held back" are counted against max_outdated and recorded as metrics.outdated
       - unmaintained or yanked items in convention.evidence.audit without a held-back entry are failures
 
@@ -241,7 +243,7 @@ requirements:
   - id: A3
     level: 3
     title: Blind usability test
-    statement: An AI tester with no access to the source installs and uses the software from the documentation alone and writes a friction report; blindness is enforced by the environment.
+    statement: Where the software has user documentation, a tester (human or AI) with no access to the source installs and uses the software from the documentation alone and writes a friction report; blindness is enforced by the environment.
     evidence: ["audit/<date>-blind-<campaign>.md"]
     check: judgement
     mechanical:
@@ -254,9 +256,10 @@ requirements:
     evidence: [audit/README.md, audit/status.json]
     check: mechanical
     mechanical:
-      - every file in audit/ matching the report pattern is listed in audit/README.md
+      - every report file in audit/ is listed in audit/README.md with the same date, commit, kind and reader
       - every commit named in the index exists
-      - header fields of each report match the index row
+      - the report named by audit/status.json is one of the report files
+      - a report edited after its first commit is a warning
 
   - id: A5
     level: 3
@@ -265,17 +268,17 @@ requirements:
     evidence: [audit index at the release tag, release notes]
     check: mechanical
     mechanical:
-      - at the latest release tag, no report of the current minor version has an open BLOCKER or DOC-WRONG
-      - the tag message or release notes name a maintainer listed in convention.maintainers
+      - at the latest release tag, no report has an open BLOCKER or DOC-WRONG
+      - the tag message or the release notes section for that version name a maintainer listed in convention.maintainers
 
   - id: A6
     level: 3
     title: Validated architecture documents
-    statement: An architecture overview and decision records exist, each carrying the name of the human maintainer who validated it and the date, revalidated on structural change, and matching the code.
+    statement: An architecture overview and decision records exist, the records where the overview says (docs/adr/ by default), each carrying the name of the human maintainer who validated it and the date, revalidated on structural change, and matching the code.
     evidence: [ARCHITECTURE.md or docs page, docs/adr/]
     check: both
     mechanical:
-      - ARCHITECTURE.md (or the declared page) and docs/adr/ exist
+      - ARCHITECTURE.md (or the declared page) exists and the decision records it links to (docs/adr/ when it names none) exist
       - each document has a "Validated by <maintainer> on <date>" line naming a declared maintainer
       - the validation date is not older than the last commit touching the directories the document names (warning)
 
@@ -296,7 +299,7 @@ requirements:
     evidence: [the files and their history]
     check: both
     mechanical:
-      - CI actions and pre-commit hooks are pinned to a version or commit
+      - CI actions and, where they exist, pre-commit hooks are pinned to a version or commit
       - no secret in instruction files, skills, hooks, workflows (same scanner as T7)
       - convention.agent_permissions is set
 

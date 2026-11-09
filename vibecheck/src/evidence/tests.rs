@@ -170,3 +170,21 @@ fn recognises_outdated_rows() {
     assert!(!is_outdated_row("Package Version Latest"));
     assert!(!is_outdated_row("serde 1.0.0"));
 }
+
+#[test]
+fn mutation_score_from_cargo_mutants_json() {
+    let text = r#"{"caught": 90, "missed": 8, "timeout": 2, "unviable": 5}"#;
+    assert_eq!(mutation_score(text), Some(90.0));
+    assert_eq!(
+        mutation_score(r#"{"caught": 90, "missed": 10}"#),
+        Some(90.0)
+    );
+    assert_eq!(mutation_score(r#"{"caught": 0, "missed": 0}"#), None);
+}
+
+#[test]
+fn mutation_score_from_explicit_json_and_text() {
+    assert_eq!(mutation_score(r#"{"mutationScore": 83.3}"#), Some(83.3));
+    assert_eq!(mutation_score("Mutation score: 77.5%"), Some(77.5));
+    assert_eq!(mutation_score(""), None);
+}

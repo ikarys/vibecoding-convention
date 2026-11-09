@@ -69,15 +69,6 @@ impl Check for D2 {
                     Some("Add convention.coverage".into()),
                 ));
             }
-            if decl.convention.freshness.is_none() {
-                findings.push(Finding::fail(
-                    "D2",
-                    "Declaration",
-                    "level 2 requires convention.freshness",
-                    Some("VIBECODING.md".into()),
-                    Some("Add convention.freshness".into()),
-                ));
-            }
             if decl.convention.maintainability.is_none() {
                 findings.push(Finding::fail(
                     "D2",

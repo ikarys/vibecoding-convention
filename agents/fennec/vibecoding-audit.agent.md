@@ -36,7 +36,7 @@ The sandbox may lack network. Use only read-only commands.
 10. Judge T3 by sampling 10 to 40 tests.
 11. Judge T4 for the main user journeys named in the docs.
 12. Judge T9 for declared dependency exceptions.
-13. At level 3, judge A4, A5, A6, and report presence for A1, A2, A3.
+13. At level 3, judge A6, report presence for A1, A2, A3, and carry over vibecheck's A4, A5 and A7 findings.
 14. Keep at most 15 findings.
 15. Put extra findings in one line.
 
@@ -50,8 +50,7 @@ The sandbox may lack network. Use only read-only commands.
 - T3: disabled tests need a dated reason.
 - T4: an end-to-end test must exercise the named journey.
 - T9: an exception must be credible, dated, and scoped.
-- A4: the audit index must match every report file.
-- A5: at the release tag, no open BLOCKER or DOC-WRONG may remain.
+- A4, A5, A7: vibecheck's findings are reported as they are; judge only a report rewritten with a stated correction (A4 WARN).
 - A6: validation lines must name a declared maintainer and a current date.
 - A1, A2, A3: check report presence only; other agents judge content.
 

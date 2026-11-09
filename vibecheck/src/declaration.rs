@@ -122,8 +122,6 @@ pub struct Mutation {
 pub struct Freshness {
     #[serde(default)]
     pub max_outdated: u32,
-    #[serde(default)]
-    pub max_lag_months: u32,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -337,7 +335,7 @@ pub fn missing_required_keys(text: &str) -> Vec<String> {
 
             if let Some(level) = convention.get("level").and_then(|v| v.as_u64()) {
                 if level >= 2 {
-                    for key in ["coverage", "maintainability", "freshness"] {
+                    for key in ["coverage", "maintainability"] {
                         if convention.get(key).is_none() {
                             missing.push(format!("convention.{key}"));
                         }

@@ -1,4 +1,5 @@
 use crate::checks::Check;
+use crate::declaration::Convention;
 use crate::finding::Finding;
 use crate::util;
 
@@ -27,13 +28,24 @@ impl Check for D8 {
             )),
             Some(path) => {
                 let text = util::read_file_if_exists(&path).unwrap_or_default();
-                if !util::case_insensitive_contains(&text, "Assisted-by") {
+                let trailers = ctx
+                    .decl
+                    .as_ref()
+                    .map(|decl| decl.convention.attribution_trailers())
+                    .unwrap_or_else(|| Convention::default().attribution_trailers());
+                if !trailers
+                    .iter()
+                    .any(|trailer| util::case_insensitive_contains(&text, trailer))
+                {
                     findings.push(Finding::fail(
                         "D8",
                         "Contribution policy",
-                        "CONTRIBUTING.md does not mention Assisted-by",
+                        format!(
+                            "CONTRIBUTING.md names none of the declared attribution trailers ({})",
+                            trailers.join(", ")
+                        ),
                         Some(path.display().to_string()),
-                        Some("Document the Assisted-by trailer requirement".into()),
+                        Some("say which trailer AI-assisted pull requests must carry".into()),
                     ));
                 }
             }
@@ -82,5 +94,29 @@ mod tests {
         let ctx = Context::for_test(dir.path(), None);
         let findings = D8.run(&ctx);
         assert!(findings.is_empty());
+    }
+
+    #[test]
+    fn accepts_the_declared_trailer_only() {
+        let dir = tempfile::tempdir().unwrap();
+        fs::write(dir.path().join("CONTRIBUTING.md"), "Assisted-by").unwrap();
+        let ctx = Context::for_test(dir.path(), Some(decl_with_trailer("AI-Tool")));
+        assert!(D8.run(&ctx).iter().any(|f| f
+            .problem
+            .contains("none of the declared attribution trailers")));
+
+        fs::write(dir.path().join("CONTRIBUTING.md"), "AI-Tool: x").unwrap();
+        let ctx = Context::for_test(dir.path(), Some(decl_with_trailer("AI-Tool")));
+        assert!(!D8.run(&ctx).iter().any(|f| f.problem.contains("trailers")));
+    }
+
+    fn decl_with_trailer(trailer: &str) -> crate::declaration::Declaration {
+        crate::declaration::Declaration {
+            convention: Convention {
+                attribution_trailers: vec![trailer.to_string()],
+                ..Default::default()
+            },
+            ..Default::default()
+        }
     }
 }

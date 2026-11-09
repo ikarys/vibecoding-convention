@@ -228,7 +228,7 @@ convention:
   licence: MIT
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
   maintainability: { tool: rust-code-analysis, duplication_max: 5, complexity_max: 15, function_max: 60, file_max: 600, markers_max: 0 }
-  freshness: { max_outdated: 3, max_lag_months: 6 }
+  freshness: { max_outdated: 3 }
   commands:
     test: "true"
     lint: "echo lint"

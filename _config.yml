@@ -33,5 +33,6 @@ exclude:
   - README.md
   - VIBECODING.md
   - CONTRIBUTING.md
+  - SECURITY.md
   - Justfile
   - LICENSE

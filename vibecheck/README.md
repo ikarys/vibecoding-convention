@@ -33,8 +33,8 @@ Findings carry the requirement identifier, a severity, the place, the problem
 and the fix:
 
 ```
-T7  FAIL  no secrets scanner in a pre-commit hook  (.pre-commit-config.yaml)
-    fix: add gitleaks (or an equivalent) to a pre-commit hook
+T7  FAIL  no secrets scanner in CI  (.github/workflows/ci.yml)
+    fix: add gitleaks (or an equivalent) to the CI configuration
 ```
 
 Severities: `FAIL` (requirement not met), `WARN` (cannot be determined, or
@@ -59,12 +59,12 @@ and the figure in the coverage evidence file measured against the threshold, T3 
 tests, T4 an end-to-end suite, T5 lint and format in CI, T6 lockfile,
 vulnerability check in CI, unresolved vulnerabilities in the audit evidence,
 new dependencies without a recorded registry check, T7
-secrets scanner in pre-commit and CI, static analyser in CI, a built-in scan of
+secrets scanner in CI (a pre-commit hook is noted, not required), static analyser in CI, a built-in scan of
 the tree for secret patterns, T8 file and function length against the declared
 thresholds, leftover markers, and `doc_lint` in CI (duplication and complexity
 need the declared tool; its evidence file is noted, agents read it), T9
-dependency freshness: an update bot or `evidence.outdated`, outdated
-dependency count against `max_outdated`, and unmaintained or yanked audit
+dependency freshness: an update bot, or `evidence.outdated` counted against
+`max_outdated` (required only then), and unmaintained or yanked audit
 items without a declared held-back exception. At level 2, D2 also requires
 `evidence.coverage` and `evidence.audit`.
 
@@ -73,7 +73,11 @@ Forgejo, Jenkins, CircleCI, Azure Pipelines, Bitbucket and Drone. Ecosystems
 for lockfiles and default test commands: Rust, Node, Python, Go, Java, .NET,
 Ruby, PHP, in the root and its direct subdirectories.
 
-Level 3 checks are not implemented yet.
+Level 3: A4 reads the audit index, the report headers and decisions, and
+the git history of each report (a report edited after its first commit is a
+WARN); A5 reads the reports, the tag message and the release notes section
+at the latest tag; A7 compares the mutation score to the declared threshold.
+The M half of A2, A6 and A8 is done by the agents.
 
 ## Evidence
 
@@ -97,7 +101,7 @@ convention:
 | `audit` | cargo-audit JSON or text, npm/pnpm audit JSON, pip-audit JSON, or a text with `N vulnerabilities` | T6 (count), T9 (unmaintained, yanked) |
 | `outdated` | cargo-outdated JSON, npm outdated JSON, or a text table with `name current latest` rows | T9 |
 | `maintainability` | any file; its presence is noted for agents | T8 |
-| `mutation` | any file; recorded in `status.json`, read by agents | none |
+| `mutation` | cargo-mutants `outcomes.json` (`caught` over `caught + missed + timeout`), a JSON `mutationScore`/`mutation_score` number, or a text summary (the last percentage wins) | A7 |
 
 A declared file that is missing, unreadable, outside the repository (absolute
 path, `..`, a symlink out of the tree) or larger than 16 MiB is a FAIL; a file

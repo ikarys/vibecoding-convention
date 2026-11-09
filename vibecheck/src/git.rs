@@ -104,6 +104,76 @@ impl Git {
             .unwrap_or_default()
     }
 
+    /// Message of an annotated tag (the commit message for a lightweight tag).
+    pub fn tag_message(&self, tag: &str) -> String {
+        let ref_name = format!("refs/tags/{tag}");
+        self.output(&["for-each-ref", "--format=%(contents)", &ref_name])
+            .filter(|output| output.status.success())
+            .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())
+            .unwrap_or_default()
+    }
+
+    /// Content of `path` at `rev`; None when it does not exist there. `rev`
+    /// is a tag or hash git itself returned, so it cannot start with `-`.
+    pub fn show_at(&self, rev: &str, path: &str) -> Option<String> {
+        let spec = format!("{rev}:{path}");
+        self.output(&["show", &spec])
+            .filter(|output| output.status.success())
+            .map(|output| String::from_utf8_lossy(&output.stdout).into_owned())
+    }
+
+    /// Paths (relative to the root) of the files directly under `dir` at `rev`.
+    pub fn files_at(&self, rev: &str, dir: &str) -> Vec<String> {
+        // `--` keeps a directory name taken from the declaration from being
+        // read as an option.
+        let dir_arg = format!("{dir}/");
+        self.output(&["ls-tree", "--name-only", rev, "--", &dir_arg])
+            .filter(|output| output.status.success())
+            .map(|output| {
+                String::from_utf8_lossy(&output.stdout)
+                    .lines()
+                    .filter(|line| !line.is_empty())
+                    .map(ToString::to_string)
+                    .collect()
+            })
+            .unwrap_or_default()
+    }
+
+    /// Commits that touched `path`, newest first: (hash, lines added, lines
+    /// deleted). A binary file counts as 0/0.
+    pub fn numstat_history(&self, path: &str) -> Vec<(String, u64, u64)> {
+        // `--` keeps a path taken from the tree from being read as an option.
+        let Some(output) = self.output(&["log", "--format=%H", "--numstat", "--", path]) else {
+            return Vec::new();
+        };
+        if !output.status.success() {
+            return Vec::new();
+        }
+        let text = String::from_utf8_lossy(&output.stdout);
+        let mut history = Vec::new();
+        let mut current_hash: Option<String> = None;
+        for line in text.lines().map(str::trim).filter(|line| !line.is_empty()) {
+            if line.len() == 40 && line.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+                current_hash = Some(line.to_string());
+                continue;
+            }
+            let Some(hash) = current_hash.clone() else {
+                continue;
+            };
+            let mut parts = line.split('\t');
+            let added = parts
+                .next()
+                .and_then(|value| value.parse().ok())
+                .unwrap_or(0);
+            let deleted = parts
+                .next()
+                .and_then(|value| value.parse().ok())
+                .unwrap_or(0);
+            history.push((hash, added, deleted));
+        }
+        history
+    }
+
     fn run_ok(&self, args: &[&str]) -> bool {
         Command::new("git")
             .args(args)

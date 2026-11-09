@@ -1,6 +1,6 @@
 # Vibecoding Convention
 
-Version 0.1, draft. Last changed 2026-11-08.
+Version 0.1, draft. Last changed 2026-11-09.
 
 Software written wholly or partly by AI assistants can be as trustworthy as any
 other software, provided it is framed, reviewed and audited. This page defines
@@ -20,16 +20,20 @@ Tools read the same list from [convention.yaml](convention.yaml).
 - **Humans decide.** AI proposes; a named human validates, decides and is accountable. Nothing has to be written by a human; everything has to be validated by one.
 - **Nothing silent.** AI-written changes are attributed where they land.
 - **Measure the product, not the process.** The convention says what the result must show, not how to work.
-- **Outcomes, not forms.** The convention says what must be visible, never which file name, trailer wording or tool to use. Where tools need a form, the project declares the one it uses; the defaults are the common ones.
+- **Outcomes, not forms.** The convention says what must be visible, never which tool to use or how to work. Where a check needs a form (a trailer wording, a report layout, a file to read), the project declares the one it uses and the defaults are the common ones. A fixed name is kept only where a reader or a tool needs an anchor: the declaration, the status file, the audit index, and the files the hosting platforms already recognise.
 
 ## Parity with human-led projects
 
 Most requirements below are what a careful human-led project of the same size
 is already expected to have, and a human-led project can adopt the convention
-unchanged. Five exist only because AI is involved: D1, D2, D3, D7 and A3. They
-are the price of a trust deficit, and four of them are text. The parity test
-governs the convention's evolution: a requirement that a human-led project
-would not be expected to meet is not added unless it is one of those five.
+unchanged. Six exist only because AI is involved: D1, D2, D3, D7, D10 and A3.
+They are the price of a trust deficit, and all but A3 are text. One step
+inside T6, the recorded registry check of a new dependency, is there for the
+same reason, and is the one place where the convention asks for a recorded
+step rather than a measured result: a hallucinated package name cannot be
+measured after the fact, only caught before merge. The parity test governs
+the convention's evolution: a requirement that a human-led project would not
+be expected to meet is not added unless it is one of those.
 
 ## Part A: a project
 
@@ -58,29 +62,29 @@ Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 |---|---|---|---|---|
 | D1 | 1 | README discloses AI assistance and links to `VIBECODING.md` | README | M |
 | D2 | 1 | `VIBECODING.md` declares AI involvement (AI-DECLARATION.md keys), convention level, tools and models, maintainers, review policy, status, provenance, adoption commit, thresholds; from level 2, the evidence files for coverage and audit | the file | M |
-| D3 | 1 | AI-written commits carry a machine-readable trailer naming the tool and model (`Assisted-by:`, `Generated-by:`, `Co-Authored-By:` or another the project declares); a model never signs a certificate of origin | git history | M |
+| D3 | 1 | AI-written commits carry a machine-readable trailer naming the tool and model (`Assisted-by:`, `Generated-by:`, `Co-Authored-By:`, `AI-Tool:` or another the project declares); a model never signs a certificate of origin | git history | M |
 | D4 | 1 | No AI-written change reaches the default branch without a human review step; the generator is never the only reviewer | policy, PR history, review gates | M+J |
-| D5 | 1 | `audit/status.json` holds the date, commit and verdict of the last check and names the evidence it was computed from; it is written by `vibecheck --write-status`, normally from CI, and feeds the README badge; it marks itself stale after the declared interval or a release | status file, badge | M |
+| D5 | 1 | `audit/status.json` holds the date, commit and verdict of the last check and names the evidence it was computed from; it is written by the check, not by hand, and feeds the README badge; it marks itself stale after the declared interval or a release | status file, badge | M |
 | D6 | 1 | A change that deletes, skips or weakens a test states why, and a human approves | git history | M+J |
 | D7 | 1 | Declaration states licence, copyright stance on AI-written parts, no known licence-incompatible reproduction, safeguards used | the declaration | M |
-| D8 | 1 | `CONTRIBUTING.md` states the policy for incoming AI contributions and asks for C1 to C3 in pull requests; outgoing contributions follow Part B | the file, PR template | M |
+| D8 | 1 | `CONTRIBUTING.md` states the policy for incoming AI contributions and, where they are accepted, names the project's trailer and asks for C1 to C3 in pull requests; outgoing contributions follow Part B | the file, PR template | M |
 | D9 | 1 | Declaration states project status (active, maintenance, archived) and security response time, matching `SECURITY.md` | the files | M |
-| D10 | 1 | Where the project has agent instruction files (whatever their name), they name the level, the commands to pass, the edit-time rules (attribution, test changes, dependencies, secrets, every input hostile and the project's security checklist, signal over noise in code and docs) and what the agent never does alone | the files | M |
+| D10 | 1 | Where the project has agent instruction files (whatever their name), they name the level and link `VIBECODING.md`, give the commands to pass before a change is done, the rules the project's humans are held to (attribution, test changes, dependencies, secrets) and what the agent never does alone | the files | M |
 | T1 | 2 | Tests run in CI on every change from a clean checkout | CI config | M |
 | T2 | 2 | Coverage measured by a declared tool is at or above the declared threshold (80 % recommended); CI writes the report to the declared evidence file | coverage evidence file | M |
 | T3 | 2 | Tests assert behaviour; no unexplained skips; every behaviour change lands with its test | test suite, history | J |
 | T4 | 2 | User-facing software has end-to-end tests of its main journeys | e2e suite | J |
 | T5 | 2 | Lint and format run in CI and fail on warnings, exceptions listed with a reason | CI config | M |
-| T6 | 2 | Lockfile committed; vulnerability and licence checks run in CI and their output is the declared evidence file; every new dependency is checked against the registry before merge and the check is recorded | lockfile, CI, audit evidence file, history | M |
-| T7 | 2 | Secrets scanner in pre-commit and in CI; static analyser in CI whose rules cover the vulnerability classes the project names; findings fixed or accepted with a reason | hook config, CI | M |
-| T8 | 2 | Duplication, complexity, function length, file length, and leftover markers (TODO, placeholders, commented-out code) measured with declared tool and thresholds; public API documentation linted; numbers recorded in the status file | tool output, evidence file | M |
-| T9 | 2 | Dependencies are current: new ones taken at the registry's current version, an update mechanism in place, lag measured against declared limits, no abandoned dependency; exceptions declared with a reason | update config, outdated evidence file, declaration | M |
+| T6 | 2 | Lockfile committed; vulnerability and licence checks run in CI or before each release and their output is the declared evidence file; every new dependency is checked against the registry before merge and the check is recorded | lockfile, CI, audit evidence file, history | M |
+| T7 | 2 | Secrets scanner in CI on every change (a pre-commit hook is recommended); static analyser in CI whose rules cover the vulnerability classes the project names; findings fixed or accepted with a reason | CI, hook config | M |
+| T8 | 2 | Duplication, complexity, function length, file length, and leftover markers (TODO, placeholders, commented-out code) measured with declared tool and thresholds; public API documentation linted where the ecosystem has a lint; numbers recorded in the status file | tool output, evidence file | M |
+| T9 | 2 | Dependencies are current: new ones taken at the registry's current version, an update mechanism in place (a bot, or a measured lag against a declared limit), no unmaintained dependency; exceptions declared with a reason | update config, outdated evidence file, declaration | M |
 | A1 | 3 | Architecture review against named design principles, including signal over noise (comments that say why, no paraphrase, no dead code), with verdict `prototype`, `usable with listed gaps` or `production-grade`; renewed at each minor or structural change | `audit/*-architecture.md` | J |
 | A2 | 3 | `SECURITY.md` with contact, response time and a threat model that names the known vulnerability classes relevant to this kind of software, each with the tool or test covering it; every security claim traced to a passing test; every user-data path has an authorization test; re-verified at each release | `audit/*-security.md` | M+J |
-| A3 | 3 | Blind usability test: an AI with no access to the source installs and uses the software from the docs alone; blindness enforced by the environment | `audit/*-blind-*.md` | J |
+| A3 | 3 | Blind usability test, where the software has user documentation: a tester, human or AI, with no access to the source installs and uses the software from the docs alone; blindness enforced by the environment | `audit/*-blind-*.md` | J |
 | A4 | 3 | `audit/README.md` indexes every report with date, commit, kind, tool, reader, verdict; reports never rewritten, decisions appended | the index | M |
 | A5 | 3 | No release with an open `BLOCKER` or `DOC-WRONG`; each release names the human who approved it | index at tag, release notes | M |
-| A6 | 3 | Architecture overview and decision records exist, each validated by a named human with a date, revalidated on structural change, and match the code | the documents | M+J |
+| A6 | 3 | Architecture overview and decision records exist where the overview says, each validated by a named human with a date, revalidated on structural change, and match the code | the documents | M+J |
 | A7 | 3 | Mutation score measured on core modules and at or above the declared threshold (recommended) | mutation evidence file | M |
 | A8 | 3 | Everything that executes with repository access (agent configs, skills, hooks, CI actions, scripts) is versioned, reviewed, pinned, secret-free, with a stated permission model | the files | M+J |
 
@@ -122,7 +126,8 @@ same checks the same way everywhere:
 
 - `vibecheck`, a command-line validator with no AI in it. It runs none of
   the project's code: it reads the declaration, the repository and the
-  evidence files the project's CI wrote, does every **M** check, and writes
+  evidence files the project's CI wrote, does every **M** check (at level 3,
+  the M half of A2, A6 and A8 stays with the agents) and writes
   `audit/status.json`. It is safe to run on any repository, which is the
   point: auditors and blind testers run it on code they do not trust. The
   CI already runs the tools and is the single source of the figures; the
@@ -133,7 +138,7 @@ same checks the same way everywhere:
   write the reports. They read `vibecheck`'s output rather than redoing it.
 - Skills (`vibecoding-init`, `vibecoding-release`) bootstrap a project and
   prepare a release; `vibecoding-contribute` checks a contribution against
-  Part B before it is sent.
+  C1 to C4 of Part B before it is sent.
 - A ten-line block in the agent instruction file (D10) is all that sits in a
   model's context during ordinary work.
 
