@@ -6,12 +6,14 @@ pub mod ecosystem;
 pub mod evidence;
 pub mod finding;
 pub mod git;
+pub mod review;
 pub mod status;
 pub mod util;
 
 use std::path::Path;
 
 pub use finding::Report;
+pub use review::run_review;
 
 /// Settings that change what is checked, not how: vibecheck runs no project code.
 #[derive(Default, Clone, Copy)]

@@ -95,7 +95,7 @@ impl Check for D6 {
 
 const DOC_EXTENSIONS: [&str; 6] = [".md", ".markdown", ".rst", ".txt", ".adoc", ".html"];
 
-fn is_test_change(stat: &str, diff: &str) -> bool {
+pub(crate) fn is_test_change(stat: &str, diff: &str) -> bool {
     for line in stat.lines() {
         let line = line.trim();
         if let Some(pipe) = line.find('|') {
@@ -161,7 +161,7 @@ fn is_test_change(stat: &str, diff: &str) -> bool {
     false
 }
 
-fn has_explanation(subject: &str, body: &str) -> bool {
+pub(crate) fn has_explanation(subject: &str, body: &str) -> bool {
     let text = format!("{subject}\n{body}").to_lowercase();
     [
         "why",

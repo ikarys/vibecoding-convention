@@ -84,12 +84,13 @@ impl Check for D3 {
     }
 }
 
-const SIGNED_OFF_FIX: &str = "Only a human signs off; remove the model from Signed-off-by";
-const UNDECLARED_TOOL_FIX: &str = "Declare the tool and model in convention.tools";
+pub(crate) const SIGNED_OFF_FIX: &str =
+    "Only a human signs off; remove the model from Signed-off-by";
+pub(crate) const UNDECLARED_TOOL_FIX: &str = "Declare the tool and model in convention.tools";
 
 /// A `Signed-off-by` trailer naming a model: it certifies origin, which only a
 /// human can do.
-fn offending_reason(commit: &Commit, tools: &[String]) -> Option<String> {
+pub(crate) fn offending_reason(commit: &Commit, tools: &[String]) -> Option<String> {
     commit.trailers.iter().find_map(|(key, value)| {
         (key.eq_ignore_ascii_case("Signed-off-by")
             && (matches_tool(value, tools) || matches_noreply(value)))
@@ -100,7 +101,11 @@ fn offending_reason(commit: &Commit, tools: &[String]) -> Option<String> {
 /// Reports an attribution trailer whose model is not declared, since the
 /// declaration (D2) must match the history. Stricter than `matches_tool`,
 /// which accepts the tool name alone because a Signed-off-by may omit the model.
-fn undeclared_tool(commit: &Commit, tools: &[String], accepted: &[String]) -> Option<String> {
+pub(crate) fn undeclared_tool(
+    commit: &Commit,
+    tools: &[String],
+    accepted: &[String],
+) -> Option<String> {
     commit.trailers.iter().find_map(|(key, value)| {
         let key = key.to_lowercase();
         // `co-authored-by` may name humans, so it cannot be judged.

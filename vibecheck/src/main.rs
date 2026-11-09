@@ -22,15 +22,31 @@ struct Args {
     write_status: bool,
     #[arg(long)]
     strict: bool,
+    /// Review only the commits HEAD adds beyond BASE (pull-request mode).
+    #[arg(long, value_name = "BASE")]
+    pr_review: Option<String>,
 }
 
 fn main() -> process::ExitCode {
     let args = Args::parse();
-    let opts = vibecheck::Options {
-        level_override: args.level,
+
+    let result = match &args.pr_review {
+        Some(base) => {
+            if args.write_status {
+                eprintln!("vibecheck: --write-status does not apply to a pull-request review");
+                return process::ExitCode::from(2);
+            }
+            vibecheck::run_review(&args.path, base)
+        }
+        None => vibecheck::run(
+            &args.path,
+            vibecheck::Options {
+                level_override: args.level,
+            },
+        ),
     };
 
-    match vibecheck::run(&args.path, opts) {
+    match result {
         Ok(report) => {
             match args.format {
                 Format::Text => println!("{}", report.to_text()),
@@ -52,7 +68,7 @@ fn main() -> process::ExitCode {
         }
         Err(err) => {
             eprintln!("vibecheck: {err}");
-            process::ExitCode::FAILURE
+            process::ExitCode::from(2)
         }
     }
 }

@@ -1,0 +1,26 @@
+# Skeleton: review incoming pull requests against the convention's commit rules
+# (attribution trailers, test changes, new dependencies, secrets, leftover
+# markers) without running the full repository check. For the owner's CI;
+# the contributor rules themselves are stated in CONTRIBUTING.md (D8).
+name: PR review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the range BASE..HEAD needs the full history
+      - name: Fetch the base branch
+        run: git fetch origin ${{ github.base_ref }}
+      # Install vibecheck from source; a release binary will follow.
+      - name: Install vibecheck
+        run: cargo install --git https://github.com/ikarys/vibecoding-convention vibecheck
+      - name: Review the pull request
+        run: vibecheck . --pr-review origin/${{ github.base_ref }} --strict   # drop --strict to let warnings through

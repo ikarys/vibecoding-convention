@@ -52,6 +52,28 @@ impl Git {
         .unwrap_or_default()
     }
 
+    /// Commits reachable from HEAD but not from `base`; the trailing `--` keeps a
+    /// base that happens to name a path from being read as one.
+    pub fn commits_in_range(&self, base: &str) -> Vec<Commit> {
+        let range = format!("{base}..HEAD");
+        self.output(&[
+            "log",
+            "--format=%H%x00%s%x00%b%x00%(trailers:only,unfold)%x1e",
+            &range,
+            "--",
+        ])
+        .map(parse_log)
+        .unwrap_or_default()
+    }
+
+    /// Patch from the merge base of `base` and HEAD to HEAD, empty when git fails.
+    pub fn range_diff(&self, base: &str) -> String {
+        let range = format!("{base}...HEAD");
+        self.output(&["diff", "--patch", "--no-color", &range, "--"])
+            .map(|out| String::from_utf8_lossy(&out.stdout).into_owned())
+            .unwrap_or_default()
+    }
+
     pub fn commits_since_date(&self, date: &NaiveDate) -> Vec<Commit> {
         if !self.is_repo() {
             return Vec::new();
