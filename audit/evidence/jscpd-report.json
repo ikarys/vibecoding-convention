@@ -120,14 +120,14 @@
         "endLoc": {
           "column": 10,
           "line": 257,
-          "position": 8723
+          "position": 8764
         },
         "name": "checks/d10.rs",
         "start": 248,
         "startLoc": {
           "column": 55,
           "line": 248,
-          "position": 8426
+          "position": 8467
         }
       },
       "format": "rust",
@@ -140,14 +140,14 @@
         "endLoc": {
           "column": 10,
           "line": 321,
-          "position": 11158
+          "position": 11199
         },
         "name": "checks/d10.rs",
         "start": 312,
         "startLoc": {
           "column": 66,
           "line": 312,
-          "position": 10861
+          "position": 10902
         }
       },
       "tokens": 73
@@ -158,14 +158,14 @@
         "endLoc": {
           "column": 18,
           "line": 284,
-          "position": 9778
+          "position": 9819
         },
         "name": "checks/d10.rs",
         "start": 277,
         "startLoc": {
           "column": 50,
           "line": 277,
-          "position": 9445
+          "position": 9486
         }
       },
       "format": "rust",
@@ -178,14 +178,14 @@
         "endLoc": {
           "column": 18,
           "line": 300,
-          "position": 10399
+          "position": 10440
         },
         "name": "checks/d10.rs",
         "start": 293,
         "startLoc": {
           "column": 25,
           "line": 293,
-          "position": 10066
+          "position": 10107
         }
       },
       "tokens": 55
@@ -1256,7 +1256,7 @@
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-09T22:20:43.246Z",
+    "detectionDate": "2026-11-09T22:34:09.164Z",
     "formats": {
       "rust": {
         "clones": 33,
