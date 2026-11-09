@@ -32,7 +32,7 @@ convention:
     secrets: "gitleaks detect --no-banner"
     outdated: "cargo outdated --manifest-path vibecheck/Cargo.toml --exit-code 1"
   maintainers: [ikarys]
-  review: "single maintainer reads every diff before it reaches main"
+  review: "single maintainer reviews every change (what it does, why, what it affects) before it reaches main"
   security_response: "report privately on GitHub, acknowledged within 7 days"
   licence: MIT
 ---
@@ -55,16 +55,16 @@ AI-written.
 
 ## Review
 
-Single maintainer. Every change is read by the maintainer before it reaches
-`main`. AI-written commits carry an `Assisted-by:` trailer naming the tool and
-model.
+Single maintainer. Every change is reviewed by the maintainer (what it does,
+why, what it affects) before it reaches `main`. AI-written commits carry an
+`Assisted-by:` trailer naming the tool and model.
 
 ## Provenance and licence
 
 This repository is licensed under MIT. Its text is written with AI assistants
 and may not be protected by copyright in some jurisdictions; the maintainer
 accepts this. To the maintainer's knowledge, no verbatim reproduction of
-licence-incompatible text was included. Safeguards used: human reading of
+licence-incompatible text was included. Safeguards used: human review of
 every change.
 
 ## Status

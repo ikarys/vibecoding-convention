@@ -21,7 +21,7 @@ convention:
   attribution_trailers: [Assisted-by]   # the trailers this project uses; default accepts Assisted-by, Generated-by, Co-Authored-By, AI-Tool
   agent_instruction_files: [AGENTS.md]  # optional; the known names are always looked at
   maintainers: [<handle>]
-  review: "<reviewed pull requests | single maintainer reads every diff; enforced by <tool or workflow>>"
+  review: "<reviewed pull requests | single maintainer reviews every change; enforced by <tool or workflow>>"
   security_response: "<72h | none>"
   licence: <SPDX identifier>
   # level 2 and above
@@ -67,7 +67,7 @@ much of the code is AI-written as an honest estimate.>
 
 ## Review
 
-<How a change reaches the default branch, and what makes the human reading a
+<How a change reaches the default branch, and what makes the human review a
 step rather than an intention.>
 
 ## Provenance and licence
