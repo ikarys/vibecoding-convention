@@ -14,6 +14,9 @@ Before calling a change done, these must pass:
 - `vibecheck .` (build it with `cargo build --manifest-path vibecheck/Cargo.toml`)
 
 Rules while editing:
+- Commit subjects follow Conventional Commits, `type(scope): summary`, with
+  the types and scopes listed in `CONTRIBUTING.md`; release notes are
+  generated from them.
 - Every commit with AI-written content ends with `Assisted-by: <Tool>:<model>`,
   the trailer this project declares.
 - Deleting, skipping or weakening a test requires the reason in the commit message.
