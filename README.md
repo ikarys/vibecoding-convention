@@ -22,7 +22,7 @@ with their sources: see [docs/criticisms.md](docs/criticisms.md).
 | Level | Name | A project at this level has... |
 |---|---|---|
 | 1 | **Declared** | told its users that AI wrote part of it, which tools and models, who reviews and decides, how it handles contributions, its licence and provenance stance, and when it was last checked. All text, an afternoon's work. |
-| 2 | **Tested** | tests that assert behaviour, a declared and met coverage threshold, green CI, lint, a secrets scanner in pre-commit and CI, static analysis, dependency checks and freshness, and measured duplication and size. |
+| 2 | **Tested** | tests that assert behaviour, a declared and met coverage threshold, green CI, lint, a secrets scanner in CI, static analysis, dependency checks and freshness, and measured duplication and size. |
 | 3 | **Audited** | versioned audit reports in the repository: architecture review, security audit, blind usability test where the software has user documentation, architecture documents validated by a named human, each finding with a decision. |
 
 A project picks a level and proves it. Nobody is asked to reach level 3 for a

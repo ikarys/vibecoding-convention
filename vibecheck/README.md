@@ -33,8 +33,8 @@ Findings carry the requirement identifier, a severity, the place, the problem
 and the fix:
 
 ```
-T7  FAIL  no secrets scanner in a pre-commit hook  (.pre-commit-config.yaml)
-    fix: add gitleaks (or an equivalent) to a pre-commit hook
+T7  FAIL  no secrets scanner in CI  (.github/workflows/ci.yml)
+    fix: add gitleaks (or an equivalent) to the CI configuration
 ```
 
 Severities: `FAIL` (requirement not met), `WARN` (cannot be determined, or
@@ -59,7 +59,7 @@ and the figure in the coverage evidence file measured against the threshold, T3 
 tests, T4 an end-to-end suite, T5 lint and format in CI, T6 lockfile,
 vulnerability check in CI, unresolved vulnerabilities in the audit evidence,
 new dependencies without a recorded registry check, T7
-secrets scanner in pre-commit and CI, static analyser in CI, a built-in scan of
+secrets scanner in CI (a pre-commit hook is noted, not required), static analyser in CI, a built-in scan of
 the tree for secret patterns, T8 file and function length against the declared
 thresholds, leftover markers, and `doc_lint` in CI (duplication and complexity
 need the declared tool; its evidence file is noted, agents read it), T9

@@ -39,13 +39,13 @@ impl Check for T7 {
                     .iter()
                     .any(|needle| ci::whitespace_contains(&text, needle))
             });
+        // A hook is local and optional; CI is where the outcome is enforced.
         if !precommit_ok {
-            findings.push(Finding::fail(
+            findings.push(Finding::info(
                 self.id(),
                 "no pre-commit secrets scanner",
-                "no secrets scanner in a pre-commit hook",
+                "no secrets scanner in a pre-commit hook (recommended)",
                 None,
-                Some("add a secrets scanner to a pre-commit hook".to_string()),
             ));
         }
 

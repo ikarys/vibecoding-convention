@@ -76,9 +76,10 @@ with its reason and date.
 
 ## 5. Hooks, CI and audit directory
 
-- Level 2 and above: a pre-commit secrets scanner, preferring one already in
-  use, `gitleaks` otherwise; the same scanner in CI; the confirmed commands in
-  CI where missing. Tell the human how to install the hook.
+- Level 2 and above: a secrets scanner in CI, preferring one already in use,
+  `gitleaks` otherwise; the same scanner as a pre-commit hook (recommended, not
+  required; tell the human how to install it); the confirmed commands in CI
+  where missing.
 - Level 2 and above: add the CI steps from `templates/ci/github-actions.yml`
   (or the platform's equivalent) that write the evidence files and run
   `vibecheck . --write-status`.
