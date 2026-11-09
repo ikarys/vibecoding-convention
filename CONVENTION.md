@@ -102,7 +102,7 @@ checkboxes of its pull request template (D8).
 | ID | Requirement | Evidence |
 |---|---|---|
 | C1 | The pull request or report discloses AI assistance, with tool and model, in its text and as the trailer the target project expects (the D3 defaults otherwise) | description, trailers |
-| C2 | The contributor has read the whole diff and can say, for each change, what it does and why it is there; not how every line of the language works | a statement in the description, answers in review |
+| C2 | The contributor knows every change in the diff and can say, for each one, what it does, why it is there and what it affects; not how every line of the language works | a statement in the description, answers in review |
 | C3 | The contribution is complete: a behaviour change comes with its tests and with the documentation it affects; the description says what was run and shows the result; a bug report was reproduced, with exact steps, versions and output; a vulnerability report has a working reproduction and no speculative claim | the diff, the description |
 | C4 | The target project's contribution guide and AI policy are read and respected; a project that refuses AI-assisted contributions receives none; one change per pull request; no unsolicited generated changes sent across many repositories | the description, the contributor's history |
 | C5 | The contributor answers review themselves, within the time the project expects; an AI-assisted contribution whose author does not answer may be closed without discussion | the review thread |

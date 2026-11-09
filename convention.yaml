@@ -311,8 +311,8 @@ contributions:
     statement: The pull request or report discloses AI assistance, with tool and model, in its text and as the trailer the target project expects (D3 defaults otherwise).
     evidence: [description, commit trailers]
   - id: C2
-    title: Read and understood
-    statement: The contributor has read the whole diff and can say, for each change, what it does and why it is there (not how every line of the language works); the description says so.
+    title: Understood
+    statement: The contributor knows every change in the diff and can say, for each one, what it does, why it is there and what it affects (not how every line of the language works); the description says so.
     evidence: [description statement, review answers]
   - id: C3
     title: Complete
