@@ -33,8 +33,11 @@ Rules while editing:
   project: a README says what it is, how to install, how to use, where to go
   next; nothing written to fill space.
 - `CONVENTION.md`, `docs/requirements.md` and `convention.yaml` must say the
-  same thing; a change to one is a change to all three. The summaries in
-  `README.md` and the site's `index.html` follow them.
+  same thing; a change to one is a change to all three
+  (`vibecheck/tests/spec_consistency.rs` checks ids, levels and check kinds;
+  wording is read by a human). `README.md`, `index.html`, `agents/README.md`
+  and the skills summarise them: a change to a requirement is checked against
+  these mirrors too.
 - Everything in this repository is in English.
 
 Never without a human: merge, release, change the CI, delete data.

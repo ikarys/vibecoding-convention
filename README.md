@@ -22,13 +22,13 @@ with their sources: see [docs/criticisms.md](docs/criticisms.md).
 | Level | Name | A project at this level has... |
 |---|---|---|
 | 1 | **Declared** | told its users that AI wrote part of it, which tools and models, who reviews and decides, how it handles contributions, its licence and provenance stance, and when it was last checked. All text, an afternoon's work. |
-| 2 | **Tested** | tests that assert behaviour, a declared and met coverage threshold, green CI, lint, a secrets scanner in pre-commit and CI, static analysis, dependency checks, and measured duplication and complexity. |
-| 3 | **Audited** | versioned audit reports in the repository: architecture review, security audit, blind usability test when applicable, architecture documents validated by a named human, each finding with a decision. |
+| 2 | **Tested** | tests that assert behaviour, a declared and met coverage threshold, green CI, lint, a secrets scanner in pre-commit and CI, static analysis, dependency checks and freshness, and measured duplication and size. |
+| 3 | **Audited** | versioned audit reports in the repository: architecture review, security audit, blind usability test where the software has user documentation, architecture documents validated by a named human, each finding with a decision. |
 
 A project picks a level and proves it. Nobody is asked to reach level 3 for a
 weekend script. A second part, five rules named C1 to C5, applies to anyone
 sending a pull request or a bug report to a project they do not maintain:
-disclose, know what your changes do, bring tests and docs, reproduce what you report,
+disclose, know what your changes do, bring tests and docs (or a reproduction),
 respect the target's policy, answer review. The one-page text is [CONVENTION.md](CONVENTION.md); the
 detail of each requirement is in [docs/requirements.md](docs/requirements.md).
 
@@ -47,7 +47,7 @@ that cannot see the source, and a dated check that marks itself stale.
 
 1. Add a `VIBECODING.md` declaration at the root of your repository (template in
    `templates/`), a contribution policy, and the badge in your README.
-2. Attribute AI-written commits with an `Assisted-by:` trailer naming the model.
+2. Attribute AI-written commits with an `Assisted-by:` trailer naming the tool and model.
 3. Run the checks for your level and commit the reports under `audit/`.
 
 ## Tooling

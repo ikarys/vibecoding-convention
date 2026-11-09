@@ -12,7 +12,8 @@ that change a repository. Four agents, the same ids on both platforms:
 | `vibecoding-security` | `audit/<date>-security.md` | A2, the T6 and T7 scans, A8 |
 
 Skills: `vibecoding-init` (bring a project to a level), `vibecoding-release`
-(check a release). The skill format is the same for both tools.
+(check a release), `vibecoding-contribute` (check a contribution against C1 to
+C4 before sending it). The skill format is the same for both tools.
 
 ## Claude Code
 
@@ -22,7 +23,7 @@ a project, and the skills to `~/.claude/skills/<name>/SKILL.md` or
 
 ```
 cp agents/claude-code/*.md ~/.claude/agents/
-cp -r skills/vibecoding-init skills/vibecoding-release ~/.claude/skills/
+cp -r skills/vibecoding-init skills/vibecoding-release skills/vibecoding-contribute ~/.claude/skills/
 ```
 
 Invoke an agent by asking Claude to use it by name, or with the Agent tool;

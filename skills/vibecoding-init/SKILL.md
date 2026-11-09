@@ -29,8 +29,8 @@ Ask, in one message, for what only they can decide:
   a sentence to accept or edit).
 - For level 2 and above: coverage threshold (80 % recommended, a lower value
   needs one sentence of reason), maintainability thresholds, freshness
-  limits, audit cadence; for level 3: audit directory, check interval,
-  whether a blind test applies.
+  limits; for level 3: audit directory, audit cadence, whether a blind test
+  applies (it does where the software has user documentation).
 
 Do not ask what you can read: ecosystem, existing CI, hooks, instruction
 files, licence file.

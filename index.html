@@ -25,7 +25,10 @@ title: Vibecoding Convention
   <span class="k">maintainers</span>: [ikarys]
   <span class="k">review</span>: "a human reads every diff"
   <span class="c"># measured by CI, not claimed</span>
-  <span class="k">coverage</span>: { <span class="k">threshold</span>: 80 }
+  <span class="k">coverage</span>: { <span class="k">threshold</span>: 80, <span class="k">kind</span>: line, <span class="k">tool</span>: cargo-llvm-cov }
+  <span class="k">maintainability</span>: { <span class="k">tool</span>: jscpd, <span class="k">duplication_max</span>: 5 }
+  <span class="c"># the tools' output, read by vibecheck</span>
+  <span class="k">evidence</span>: { <span class="k">coverage</span>: audit/evidence/coverage.txt }
   <span class="k">status</span>: active
 ---</code></pre>
   </figure>
@@ -56,6 +59,10 @@ title: Vibecoding Convention
     <div class="principle">
       <dt>Nothing silent</dt>
       <dd>AI-written changes are attributed where they land.</dd>
+    </div>
+    <div class="principle">
+      <dt>Measure the product, not the process</dt>
+      <dd>The convention says what the result must show, not how to work.</dd>
     </div>
     <div class="principle">
       <dt>Outcomes, not forms</dt>

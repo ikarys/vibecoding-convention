@@ -1,6 +1,7 @@
 # Vibecoding Convention, machine-readable list of requirements.
-# Source of truth for tools (vibecheck, agents). The human text is CONVENTION.md
-# and docs/requirements.md; the three must say the same thing.
+# The human text is CONVENTION.md and docs/requirements.md; the three must say
+# the same thing (vibecheck/tests/spec_consistency.rs checks ids, levels and
+# check kinds). vibecheck hardcodes its rules and does not read this file.
 #
 # check: mechanical | judgement | both
 # evidence: what the checker looks at
