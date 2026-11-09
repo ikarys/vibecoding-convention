@@ -2,6 +2,196 @@
   "duplicates": [
     {
       "firstFile": {
+        "end": 25,
+        "endLoc": {
+          "column": 48,
+          "line": 25,
+          "position": 543
+        },
+        "name": "checks/a4.rs",
+        "start": 17,
+        "startLoc": {
+          "column": 4,
+          "line": 17,
+          "position": 346
+        }
+      },
+      "format": "rust",
+      "fragment": "    }\n\n    fn level(&self) -> u8 {\n        3\n    }\n\n    fn run(&self, ctx: &Context) -> Vec<Finding> {\n        let Some(decl) = ctx.decl.as_ref() else {\n            return support::missing_declaration(\"A4\");",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 9,
+      "secondFile": {
+        "end": 24,
+        "endLoc": {
+          "column": 48,
+          "line": 24,
+          "position": 540
+        },
+        "name": "checks/a5.rs",
+        "start": 16,
+        "startLoc": {
+          "column": 4,
+          "line": 16,
+          "position": 343
+        }
+      },
+      "tokens": 52
+    },
+    {
+      "firstFile": {
+        "end": 25,
+        "endLoc": {
+          "column": 48,
+          "line": 25,
+          "position": 543
+        },
+        "name": "checks/a4.rs",
+        "start": 17,
+        "startLoc": {
+          "column": 4,
+          "line": 17,
+          "position": 346
+        }
+      },
+      "format": "rust",
+      "fragment": "    }\n\n    fn level(&self) -> u8 {\n        3\n    }\n\n    fn run(&self, ctx: &Context) -> Vec<Finding> {\n        let Some(decl) = ctx.decl.as_ref() else {\n            return support::missing_declaration(\"A4\");",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 9,
+      "secondFile": {
+        "end": 22,
+        "endLoc": {
+          "column": 48,
+          "line": 22,
+          "position": 501
+        },
+        "name": "checks/a7.rs",
+        "start": 14,
+        "startLoc": {
+          "column": 4,
+          "line": 14,
+          "position": 304
+        }
+      },
+      "tokens": 52
+    },
+    {
+      "firstFile": {
+        "end": 268,
+        "endLoc": {
+          "column": 40,
+          "line": 268,
+          "position": 8502
+        },
+        "name": "checks/a4.rs",
+        "start": 263,
+        "startLoc": {
+          "column": 46,
+          "line": 263,
+          "position": 8214
+        }
+      },
+      "format": "rust",
+      "fragment": "        let root = tempfile::tempdir().unwrap();\n        let ctx = Context::for_test(root.path(), Some(declaration_with_audit_dir(\"audit\")));\n        let findings = A4.run(&ctx);\n        assert!(findings.iter().any(|finding| finding.id == \"A4\"\n            && finding.severity == Severity::Fail\n            && finding.problem.contains(\"audit index missing\")));",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 6,
+      "secondFile": {
+        "end": 304,
+        "endLoc": {
+          "column": 40,
+          "line": 304,
+          "position": 9892
+        },
+        "name": "checks/a4.rs",
+        "start": 299,
+        "startLoc": {
+          "column": 8,
+          "line": 299,
+          "position": 9604
+        }
+      },
+      "tokens": 75
+    },
+    {
+      "firstFile": {
+        "end": 257,
+        "endLoc": {
+          "column": 10,
+          "line": 257,
+          "position": 8723
+        },
+        "name": "checks/d10.rs",
+        "start": 248,
+        "startLoc": {
+          "column": 55,
+          "line": 248,
+          "position": 8426
+        }
+      },
+      "format": "rust",
+      "fragment": "        fs::write(dir.path().join(\"AGENTS.md\"), \"hello\").unwrap();\n        let ctx = Context::for_test(dir.path(), None);\n        let findings = D10.run(&ctx);\n        assert!(\n            findings\n                .iter()\n                .filter(|f| f.severity == crate::finding::Severity::Fail)\n                .count()\n                >= 2\n        );",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 10,
+      "secondFile": {
+        "end": 321,
+        "endLoc": {
+          "column": 10,
+          "line": 321,
+          "position": 11158
+        },
+        "name": "checks/d10.rs",
+        "start": 312,
+        "startLoc": {
+          "column": 66,
+          "line": 312,
+          "position": 10861
+        }
+      },
+      "tokens": 73
+    },
+    {
+      "firstFile": {
+        "end": 284,
+        "endLoc": {
+          "column": 18,
+          "line": 284,
+          "position": 9778
+        },
+        "name": "checks/d10.rs",
+        "start": 277,
+        "startLoc": {
+          "column": 50,
+          "line": 277,
+          "position": 9445
+        }
+      },
+      "format": "rust",
+      "fragment": "    fn passes_when_agent_file_names_declared_level() {\n        let dir = tempfile::tempdir().unwrap();\n        let decl = declaration_with_level(dir.path(), 2);\n        fs::write(\n            dir.path().join(\"AGENTS.md\"),\n            \"Convention level 2. Follow VIBECODING.md. Add Assisted-by trailers. cargo test --manifest-path vibecheck/Cargo.toml\\n\",\n        )\n        .unwrap();",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 8,
+      "secondFile": {
+        "end": 300,
+        "endLoc": {
+          "column": 18,
+          "line": 300,
+          "position": 10399
+        },
+        "name": "checks/d10.rs",
+        "start": 293,
+        "startLoc": {
+          "column": 25,
+          "line": 293,
+          "position": 10066
+        }
+      },
+      "tokens": 55
+    },
+    {
+      "firstFile": {
         "end": 18,
         "endLoc": {
           "column": 41,
@@ -102,14 +292,14 @@
         "endLoc": {
           "column": 41,
           "line": 20,
-          "position": 384
+          "position": 395
         },
         "name": "checks/d6.rs",
         "start": 12,
         "startLoc": {
           "column": 4,
           "line": 12,
-          "position": 187
+          "position": 198
         }
       },
       "tokens": 58
@@ -1063,35 +1253,73 @@
         }
       },
       "tokens": 64
+    },
+    {
+      "firstFile": {
+        "end": 71,
+        "endLoc": {
+          "column": 23,
+          "line": 71,
+          "position": 1907
+        },
+        "name": "level3.rs",
+        "start": 65,
+        "startLoc": {
+          "column": 31,
+          "line": 65,
+          "position": 1716
+        }
+      },
+      "format": "rust",
+      "fragment": "fn a4_fails_for_unlisted_report() {\n    let dir = tempfile::tempdir().unwrap();\n    fixture_with_report(dir.path());\n    let commit = head_hash(dir.path());\n    let report = format!(\n        \"---\\n\\\n         date: 2026-11-09\\n\\",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 7,
+      "secondFile": {
+        "end": 169,
+        "endLoc": {
+          "column": 23,
+          "line": 169,
+          "position": 4663
+        },
+        "name": "level3.rs",
+        "start": 163,
+        "startLoc": {
+          "column": 34,
+          "line": 163,
+          "position": 4472
+        }
+      },
+      "tokens": 51
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-08T23:29:55.752Z",
+    "detectionDate": "2026-11-09T07:01:44.995Z",
     "formats": {
       "rust": {
-        "clones": 28,
-        "duplicatedLines": 260,
-        "duplicatedTokens": 1716,
-        "lines": 7199,
+        "clones": 34,
+        "duplicatedLines": 309,
+        "duplicatedTokens": 2074,
+        "lines": 8795,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.6116127239894427,
-        "percentageTokens": 3.7429655804214113,
-        "sources": 47,
-        "tokens": 45846
+        "percentage": 3.5133598635588403,
+        "percentageTokens": 3.7017205682872847,
+        "sources": 53,
+        "tokens": 56028
       }
     },
     "total": {
-      "clones": 28,
-      "duplicatedLines": 260,
-      "duplicatedTokens": 1716,
-      "lines": 7199,
+      "clones": 34,
+      "duplicatedLines": 309,
+      "duplicatedTokens": 2074,
+      "lines": 8795,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.6116127239894427,
-      "percentageTokens": 3.7429655804214113,
-      "sources": 47,
-      "tokens": 45846
+      "percentage": 3.5133598635588403,
+      "percentageTokens": 3.7017205682872847,
+      "sources": 53,
+      "tokens": 56028
     }
   }
 }
