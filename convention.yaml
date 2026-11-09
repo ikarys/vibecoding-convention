@@ -255,9 +255,10 @@ requirements:
     evidence: [audit/README.md, audit/status.json]
     check: mechanical
     mechanical:
-      - every file in audit/ matching the report pattern is listed in audit/README.md
+      - every report file in audit/ is listed in audit/README.md with the same date, commit, kind and reader
       - every commit named in the index exists
-      - header fields of each report match the index row
+      - the report named by audit/status.json is one of the report files
+      - a report edited after its first commit is a warning
 
   - id: A5
     level: 3
@@ -266,8 +267,8 @@ requirements:
     evidence: [audit index at the release tag, release notes]
     check: mechanical
     mechanical:
-      - at the latest release tag, no report of the current minor version has an open BLOCKER or DOC-WRONG
-      - the tag message or release notes name a maintainer listed in convention.maintainers
+      - at the latest release tag, no report has an open BLOCKER or DOC-WRONG
+      - the tag message or the release notes section for that version name a maintainer listed in convention.maintainers
 
   - id: A6
     level: 3

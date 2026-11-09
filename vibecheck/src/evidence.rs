@@ -293,6 +293,30 @@ fn has_version(token: Option<&str>) -> bool {
     })
 }
 
+/// Mutation score in percent: cargo-mutants `outcomes.json` (`caught` over
+/// `caught + missed + timeout`), a JSON `mutationScore`/`mutation_score`
+/// number, or the last percentage in a text summary.
+pub fn mutation_score(text: &str) -> Option<f64> {
+    if let Ok(value) = serde_json::from_str::<Value>(text) {
+        return explicit_mutation_score(&value).or_else(|| cargo_mutants_score(&value));
+    }
+    last_percent(text)
+}
+
+fn explicit_mutation_score(value: &Value) -> Option<f64> {
+    value
+        .get("mutationScore")
+        .or_else(|| value.get("mutation_score"))
+        .and_then(Value::as_f64)
+}
+
+fn cargo_mutants_score(value: &Value) -> Option<f64> {
+    let count = |key: &str| value.get(key).and_then(Value::as_u64);
+    let caught = count("caught")?;
+    let total = caught + count("missed")? + count("timeout").unwrap_or(0);
+    (total > 0).then(|| caught as f64 * 100.0 / total as f64)
+}
+
 /// Warning text when a release tag is newer than the last commit touching the
 /// evidence file: the file then describes a state older than the release.
 pub fn staleness(relative: &str, git: &Git) -> Option<String> {

@@ -73,7 +73,11 @@ Forgejo, Jenkins, CircleCI, Azure Pipelines, Bitbucket and Drone. Ecosystems
 for lockfiles and default test commands: Rust, Node, Python, Go, Java, .NET,
 Ruby, PHP, in the root and its direct subdirectories.
 
-Level 3 checks are not implemented yet.
+Level 3: A4 reads the audit index, the report headers and decisions, and
+the git history of each report (a report edited after its first commit is a
+WARN); A5 reads the reports, the tag message and the release notes section
+at the latest tag; A7 compares the mutation score to the declared threshold.
+The M half of A2, A6 and A8 is done by the agents.
 
 ## Evidence
 
@@ -97,7 +101,7 @@ convention:
 | `audit` | cargo-audit JSON or text, npm/pnpm audit JSON, pip-audit JSON, or a text with `N vulnerabilities` | T6 (count), T9 (unmaintained, yanked) |
 | `outdated` | cargo-outdated JSON, npm outdated JSON, or a text table with `name current latest` rows | T9 |
 | `maintainability` | any file; its presence is noted for agents | T8 |
-| `mutation` | any file; recorded in `status.json`, read by agents | none |
+| `mutation` | cargo-mutants `outcomes.json` (`caught` over `caught + missed + timeout`), a JSON `mutationScore`/`mutation_score` number, or a text summary (the last percentage wins) | A7 |
 
 A declared file that is missing, unreadable, outside the repository (absolute
 path, `..`, a symlink out of the tree) or larger than 16 MiB is a FAIL; a file

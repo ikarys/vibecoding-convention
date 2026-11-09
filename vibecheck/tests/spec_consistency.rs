@@ -164,7 +164,8 @@ fn ai_specific_matches_parity_sentence() {
     );
 }
 
-// Level 3 (A*) has no checks in vibecheck yet; widen to all levels when it does.
+// Every purely mechanical requirement has a check at every level. The M half
+// of the level-3 "both" requirements (A2, A6, A8) is still the agents' work.
 // The reverse direction only asks that each check is a known requirement at the
 // right level: vibecheck also supports judgement checks such as T3 informatively.
 #[test]
@@ -175,8 +176,9 @@ fn vibecheck_covers_mechanical_requirements() {
         .map(|c| (c.id(), c.level()))
         .collect();
     for (id, req) in &yaml {
-        let mechanical = matches!(req.check.as_deref(), Some("mechanical" | "both"));
-        if mechanical && req.level.is_some_and(|l| l <= 2) {
+        let mechanical = req.check.as_deref() == Some("mechanical")
+            || (req.check.as_deref() == Some("both") && req.level.is_some_and(|l| l <= 2));
+        if mechanical {
             assert!(
                 implemented.contains_key(id.as_str()),
                 "{id}: no check in vibecheck"

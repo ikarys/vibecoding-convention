@@ -282,7 +282,8 @@ fn has_marker_outside_string(line: &str) -> bool {
 
 fn is_commented_code(line: &str) -> bool {
     let trimmed = line.trim_start();
-    let Some(prefix) = ["//", "#", "--", "/*", "*"]
+    // A block-comment continuation is `* text`; a bare `*` starts a deref.
+    let Some(prefix) = ["//", "#", "--", "/*", "* "]
         .iter()
         .find(|prefix| trimmed.starts_with(**prefix))
     else {
@@ -328,6 +329,8 @@ mod tests {
         assert!(is_marker_line("// foo();"));
         assert!(is_marker_line("// let x = 1;"));
         assert!(!is_marker_line("// the counter is reset here"));
+        assert!(is_marker_line(" * foo();"));
+        assert!(!is_marker_line("*count += 1;"));
     }
 
     #[test]

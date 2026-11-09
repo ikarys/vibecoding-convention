@@ -122,8 +122,9 @@ same checks the same way everywhere:
 
 - `vibecheck`, a command-line validator with no AI in it. It runs none of
   the project's code: it reads the declaration, the repository and the
-  evidence files the project's CI wrote, does every **M** check of levels 1
-  and 2 (level 3 is not implemented yet), and writes `audit/status.json`. It is safe to run on any repository, which is the
+  evidence files the project's CI wrote, does every **M** check (at level 3,
+  the M half of A2, A6 and A8 stays with the agents) and writes
+  `audit/status.json`. It is safe to run on any repository, which is the
   point: auditors and blind testers run it on code they do not trust. The
   CI already runs the tools and is the single source of the figures; the
   convention requires that this evidence exists and is current, it does not

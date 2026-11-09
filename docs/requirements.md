@@ -371,16 +371,20 @@ tool and model that produced it, human who commissioned and read it, verdict,
 number of open findings. Reports are not rewritten after the fact. Decisions
 are appended.
 - Evidence: `audit/README.md`, `audit/status.json`.
-- Checked: every file in `audit/` is listed; every listed commit exists;
-  commits and dates in the index match the report headers and the status file.
+- Checked: vibecheck lists every report in `audit/`: each is in the index with
+  the same date, commit, kind and reader; every listed commit exists; the
+  report named by `audit/status.json` is one of them; a report edited after
+  its first commit is a warning (a correction must say so in its commit).
 
 **A5. Release rule.** No release is published with an open finding of
 severity `BLOCKER` or `DOC-WRONG` (Findings and decisions) in any audit report of the
 current minor version. Each release names, in its notes or tag message, the
 human maintainer who approved it; that person is listed in `VIBECODING.md`.
 - Evidence: the audit index at the release commit, the release notes.
-- Checked: the auditor lists open findings by severity at the release tag and
-  reads the approver's name.
+- Checked: vibecheck reads every report at the latest release tag and fails
+  on an open `BLOCKER` or `DOC-WRONG` (an old finding is decided, not left
+  open); the tag message or the release notes section for that version must
+  name a declared maintainer.
 
 **A6. Validated architecture documents.** The repository has an architecture
 overview (`ARCHITECTURE.md` or a docs page) naming the components, the data

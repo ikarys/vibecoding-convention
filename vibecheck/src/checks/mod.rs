@@ -1,3 +1,6 @@
+pub mod a4;
+pub mod a5;
+pub mod a7;
 pub mod d1;
 pub mod d10;
 pub mod d2;
@@ -79,6 +82,9 @@ pub fn all() -> Vec<Box<dyn Check>> {
         Box::new(t7::T7),
         Box::new(t8::T8),
         Box::new(t9::T9),
+        Box::new(a4::A4),
+        Box::new(a5::A5),
+        Box::new(a7::A7),
     ]
 }
 
@@ -95,10 +101,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn all_contains_level_one_and_level_two_checks() {
+    fn all_contains_checks_for_the_three_levels() {
         let checks = all();
-        assert_eq!(checks.len(), 19);
+        assert_eq!(checks.len(), 22);
         assert_eq!(checks.iter().filter(|check| check.level() == 1).count(), 10);
         assert_eq!(checks.iter().filter(|check| check.level() == 2).count(), 9);
+        assert_eq!(checks.iter().filter(|check| check.level() == 3).count(), 3);
     }
 }

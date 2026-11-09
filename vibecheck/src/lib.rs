@@ -1,3 +1,4 @@
+pub mod audit;
 pub mod checks;
 pub mod ci;
 pub mod declaration;
