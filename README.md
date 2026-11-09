@@ -2,6 +2,14 @@
 
 [![Vibecoding Convention](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ikarys/vibecoding-convention/main/audit/status.json)](VIBECODING.md)
 
+> ## ⚠️ Work in progress
+>
+> This repository is public so that the work can be read and argued, not
+> because it is ready. The convention text, its identifiers, the templates
+> and the `vibecheck` validator are all under active revision and change
+> without notice. Do not adopt it in a project yet. Open an issue if you
+> disagree with something; that is what this stage is for.
+
 A checkable standard for software written with AI assistance.
 
 **Read the convention: [CONVENTION.md](CONVENTION.md)** (one page), or browse it on
