@@ -122,8 +122,6 @@ pub struct Mutation {
 pub struct Freshness {
     #[serde(default)]
     pub max_outdated: u32,
-    #[serde(default)]
-    pub max_lag_months: u32,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]

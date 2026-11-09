@@ -290,8 +290,8 @@ the latest" but "no unjustified lag". Three moments:
   an equivalent) or a declared cadence with a declared command (`cargo
   outdated`, `npm outdated`, `pip list --outdated`, and the like), and the
   check measures the lag: the number of dependencies with a newer major or
-  minor version available, and the age of the oldest lag. The project declares
-  its limits (`convention.freshness`: `max_outdated`, `max_lag_months`).
+  minor version available. The project declares its limit
+  (`convention.freshness`: `max_outdated`).
 - Exceptions: a dependency held back for incompatibility or stability is
   listed in `VIBECODING.md` with the reason. That is the human
   counter-indication; it is the only thing that justifies a lag.

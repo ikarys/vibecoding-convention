@@ -209,12 +209,12 @@ requirements:
   - id: T9
     level: 2
     title: Dependency freshness
-    statement: New dependencies are taken at the registry's current version; an update mechanism (bot or declared cadence and command) exists; the lag is measured against declared limits (max_outdated, max_lag_months) minus declared exceptions; no unmaintained dependency without an exception.
+    statement: New dependencies are taken at the registry's current version; an update mechanism (bot or declared cadence and command) exists; the lag is measured against declared limit (max_outdated) minus declared exceptions; no unmaintained dependency without an exception.
     evidence: [dependabot.yml or renovate.json or convention.evidence.outdated, VIBECODING.md exceptions, audit/status.json metrics.outdated]
     check: mechanical
     mechanical:
       - an update bot configuration (.github/dependabot.yml, renovate.json or .renovaterc*) exists or convention.evidence.outdated is declared; neither is a failure
-      - convention.freshness has max_outdated and max_lag_months
+      - convention.freshness has max_outdated
       - when convention.evidence.outdated exists, outdated dependencies not listed under "Dependencies held back" are counted against max_outdated and recorded as metrics.outdated
       - unmaintained or yanked items in convention.evidence.audit without a held-back entry are failures
 
