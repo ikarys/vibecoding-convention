@@ -49,6 +49,7 @@ impl Check for D10 {
         let mut findings = Vec::new();
         for file in files {
             let text = util::read_file_if_exists(&file).unwrap_or_default();
+            let text = with_imports(&ctx.root, &text);
             let display = file.display().to_string();
 
             if !util::case_insensitive_contains(&text, "VIBECODING.md") {
@@ -124,6 +125,22 @@ impl Check for D10 {
 
         findings
     }
+}
+
+// Claude Code loads a line that is just `@path` as an import, so CLAUDE.md may
+// delegate to AGENTS.md. One level only, and `evidence::read` keeps the path
+// inside the repository.
+fn with_imports(root: &std::path::Path, text: &str) -> String {
+    let mut out = String::from(text);
+    for line in text.lines() {
+        if let Some(path) = line.trim().strip_prefix('@') {
+            if let Ok(imported) = crate::evidence::read(root, path.trim()) {
+                out.push('\n');
+                out.push_str(&imported);
+            }
+        }
+    }
+    out
 }
 
 fn agent_files(root: &std::path::Path, declared: &[String]) -> Vec<std::path::PathBuf> {
@@ -270,5 +287,38 @@ We keep copyright and safeguard the code.
         assert!(!findings.iter().any(|f| {
             f.severity == crate::finding::Severity::Fail && f.problem.contains("level")
         }));
+    }
+
+    #[test]
+    fn follows_at_imports() {
+        let dir = tempfile::tempdir().unwrap();
+        let decl = declaration_with_level(dir.path(), 2);
+        fs::write(
+            dir.path().join("AGENTS.md"),
+            "Convention level 2. Follow VIBECODING.md. Add Assisted-by trailers. cargo test --manifest-path vibecheck/Cargo.toml\n",
+        )
+        .unwrap();
+        fs::write(dir.path().join("CLAUDE.md"), "@AGENTS.md\n").unwrap();
+        let ctx = Context::for_test(dir.path(), Some(decl));
+        let findings = D10.run(&ctx);
+        assert!(!findings
+            .iter()
+            .any(|f| f.severity == crate::finding::Severity::Fail));
+    }
+
+    #[test]
+    fn ignores_imports_leaving_root() {
+        let dir = tempfile::tempdir().unwrap();
+        fs::write(dir.path().join("CLAUDE.md"), "@../outside.md\n").unwrap();
+        let ctx = Context::for_test(dir.path(), None);
+        let findings = D10.run(&ctx);
+        assert!(
+            findings
+                .iter()
+                .filter(|f| f.severity == crate::finding::Severity::Fail)
+                .count()
+                >= 2
+        );
+        assert!(!findings.iter().any(|f| f.problem.contains("outside")));
     }
 }
