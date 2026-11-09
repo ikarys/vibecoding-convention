@@ -382,18 +382,18 @@
     },
     {
       "firstFile": {
-        "end": 209,
+        "end": 214,
         "endLoc": {
           "column": 25,
-          "line": 209,
-          "position": 6489
+          "line": 214,
+          "position": 6552
         },
         "name": "checks/d3.rs",
-        "start": 202,
+        "start": 207,
         "startLoc": {
           "column": 46,
-          "line": 202,
-          "position": 6239
+          "line": 207,
+          "position": 6302
         }
       },
       "format": "rust",
@@ -402,18 +402,18 @@
       "kind": "exact",
       "lines": 8,
       "secondFile": {
-        "end": 225,
+        "end": 230,
         "endLoc": {
           "column": 25,
-          "line": 225,
-          "position": 7021
+          "line": 230,
+          "position": 7084
         },
         "name": "checks/d3.rs",
-        "start": 218,
+        "start": 223,
         "startLoc": {
           "column": 39,
-          "line": 218,
-          "position": 6771
+          "line": 223,
+          "position": 6834
         }
       },
       "tokens": 61
@@ -558,14 +558,14 @@
         "endLoc": {
           "column": 11,
           "line": 39,
-          "position": 754
+          "position": 765
         },
         "name": "checks/t6.rs",
         "start": 27,
         "startLoc": {
           "column": 4,
           "line": 27,
-          "position": 483
+          "position": 494
         }
       },
       "tokens": 73
@@ -634,14 +634,14 @@
         "endLoc": {
           "column": 11,
           "line": 45,
-          "position": 915
+          "position": 926
         },
         "name": "checks/t8.rs",
         "start": 34,
         "startLoc": {
           "column": 4,
           "line": 34,
-          "position": 683
+          "position": 694
         }
       },
       "tokens": 62
@@ -710,52 +710,14 @@
         "endLoc": {
           "column": 17,
           "line": 45,
-          "position": 921
+          "position": 932
         },
         "name": "checks/t8.rs",
         "start": 40,
         "startLoc": {
           "column": 4,
           "line": 40,
-          "position": 735
-        }
-      },
-      "tokens": 51
-    },
-    {
-      "firstFile": {
-        "end": 25,
-        "endLoc": {
-          "column": 17,
-          "line": 25,
-          "position": 516
-        },
-        "name": "checks/t2.rs",
-        "start": 20,
-        "startLoc": {
-          "column": 4,
-          "line": 20,
-          "position": 330
-        }
-      },
-      "format": "rust",
-      "fragment": "    fn run(&self, ctx: &Context) -> Vec<Finding> {\n        let Some(decl) = ctx.decl.as_ref() else {\n            return support::missing_declaration(self.id());\n        };\n\n        let Some(coverage) = decl.convention.coverage.as_ref() else {",
-      "isNew": false,
-      "kind": "exact",
-      "lines": 6,
-      "secondFile": {
-        "end": 35,
-        "endLoc": {
-          "column": 17,
-          "line": 35,
-          "position": 714
-        },
-        "name": "checks/t9.rs",
-        "start": 30,
-        "startLoc": {
-          "column": 4,
-          "line": 30,
-          "position": 528
+          "position": 746
         }
       },
       "tokens": 51
@@ -923,9 +885,9 @@
         "name": "level1.rs",
         "start": 23,
         "startLoc": {
-          "column": 53,
+          "column": 54,
           "line": 23,
-          "position": 638
+          "position": 639
         }
       },
       "format": "rust",
@@ -934,21 +896,21 @@
       "kind": "exact",
       "lines": 6,
       "secondFile": {
-        "end": 53,
+        "end": 67,
         "endLoc": {
-          "column": 24,
-          "line": 53,
-          "position": 1751
+          "column": 50,
+          "line": 67,
+          "position": 2417
         },
         "name": "level2.rs",
-        "start": 48,
+        "start": 65,
         "startLoc": {
-          "column": 61,
-          "line": 48,
-          "position": 1587
+          "column": 23,
+          "line": 65,
+          "position": 2281
         }
       },
-      "tokens": 54
+      "tokens": 53
     },
     {
       "firstFile": {
@@ -1294,32 +1256,32 @@
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-09T07:01:44.995Z",
+    "detectionDate": "2026-11-09T09:00:51.416Z",
     "formats": {
       "rust": {
-        "clones": 34,
-        "duplicatedLines": 309,
-        "duplicatedTokens": 2074,
-        "lines": 8795,
+        "clones": 33,
+        "duplicatedLines": 303,
+        "duplicatedTokens": 2022,
+        "lines": 9315,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.5133598635588403,
-        "percentageTokens": 3.7017205682872847,
-        "sources": 53,
-        "tokens": 56028
+        "percentage": 3.2528180354267313,
+        "percentageTokens": 3.3856303266748156,
+        "sources": 55,
+        "tokens": 59723
       }
     },
     "total": {
-      "clones": 34,
-      "duplicatedLines": 309,
-      "duplicatedTokens": 2074,
-      "lines": 8795,
+      "clones": 33,
+      "duplicatedLines": 303,
+      "duplicatedTokens": 2022,
+      "lines": 9315,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.5133598635588403,
-      "percentageTokens": 3.7017205682872847,
-      "sources": 53,
-      "tokens": 56028
+      "percentage": 3.2528180354267313,
+      "percentageTokens": 3.3856303266748156,
+      "sources": 55,
+      "tokens": 59723
     }
   }
 }
