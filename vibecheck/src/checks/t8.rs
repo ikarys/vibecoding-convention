@@ -6,7 +6,7 @@ use crate::declaration::Declaration;
 use crate::finding::Finding;
 use serde_json::json;
 
-const SOURCE_EXTENSIONS: &[&str] = &[
+pub(crate) const SOURCE_EXTENSIONS: &[&str] = &[
     "rs", "py", "js", "jsx", "ts", "tsx", "go", "java", "kt", "rb", "php", "cs", "c", "cc", "cpp",
     "h", "hpp", "swift",
 ];
@@ -276,7 +276,7 @@ fn marker_occurrences(line: &str) -> usize {
         .count()
 }
 
-fn has_marker_outside_string(line: &str) -> bool {
+pub(crate) fn has_marker_outside_string(line: &str) -> bool {
     support::contains_outside_string(line, MARKER_PATTERNS)
 }
 

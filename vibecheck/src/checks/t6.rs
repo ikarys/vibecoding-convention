@@ -9,7 +9,7 @@ use crate::finding::Finding;
 use crate::status;
 use crate::util;
 
-const MANIFESTS: &[&str] = &[
+pub(crate) const MANIFESTS: &[&str] = &[
     "Cargo.toml",
     "package.json",
     "pyproject.toml",
@@ -209,7 +209,7 @@ fn new_dependency_warnings(ctx: &Context) -> Vec<Finding> {
     warnings
 }
 
-fn diff_adds_dependency(diff: &str) -> bool {
+pub(crate) fn diff_adds_dependency(diff: &str) -> bool {
     let mut in_cargo_deps = false;
     for line in diff.lines() {
         if line.starts_with("+++") || line.starts_with("---") {

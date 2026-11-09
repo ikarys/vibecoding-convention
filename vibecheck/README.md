@@ -16,6 +16,7 @@ cargo install --path vibecheck
 
 ```
 vibecheck [PATH] [--level N] [--format text|json] [--write-status] [--strict]
+vibecheck [PATH] --pr-review BASE [--format text|json] [--strict]
 ```
 
 | Flag | Effect |
@@ -25,6 +26,7 @@ vibecheck [PATH] [--level N] [--format text|json] [--write-status] [--strict]
 | `--format json` | machine-readable output: findings, summary, metrics |
 | `--write-status` | write `audit/status.json` after the run (the badge reads it) |
 | `--strict` | warnings make the exit code non-zero too |
+| `--pr-review BASE` | review only the commits HEAD adds beyond BASE (pull-request mode, for the repository owner's CI); the full checks do not run |
 
 Exit code 0 when no requirement fails (and no warning with `--strict`), 1
 otherwise, 2 for a usage error.
@@ -40,6 +42,41 @@ T7  FAIL  no secrets scanner in CI  (.github/workflows/ci.yml)
 Severities: `FAIL` (requirement not met), `WARN` (cannot be determined, or
 recommended only), `INFO` (a figure worth knowing), `NOT RUN` (an input is
 missing, for example a command not declared).
+
+## Pull-request review
+
+`--pr-review BASE` is for the owner of a repository who receives pull
+requests: it reads the commits `BASE..HEAD` and the diff from their merge
+base, and nothing else. The full checks do not run, so the result says nothing
+about the project's level, only about what the branch adds:
+
+| Id | Finding | Severity |
+|---|---|---|
+| D3 | commit without any of the declared attribution trailers | WARN (AI involvement is unknown) |
+| D3 | `Signed-off-by` naming a model, or an undeclared tool or model | FAIL |
+| D6 | test removed, skipped or weakened without a reason in the message | WARN |
+| T6 | dependency added without a recorded registry check in the message | WARN |
+| T7 | secret-shaped string in an added line (the value is not printed) | FAIL |
+| T8 | leftover marker (`TODO`, `FIXME`, ...) in an added source line | WARN |
+
+`--strict` turns the warnings into a failing exit code; without it the owner
+reads them. `--write-status` is refused in this mode (exit 2), the status file
+describes the project, not a branch. A base that cannot be read as a revision
+is refused (exit 2); a base that is not in the clone is reported as NOT RUN:
+fetch it first. In GitHub Actions
+(`templates/ci/github-actions-pr-review.yml`):
+
+```yaml
+- uses: actions/checkout@v4
+  with:
+    fetch-depth: 0
+- run: git fetch origin ${{ github.base_ref }}
+- run: vibecheck . --pr-review origin/${{ github.base_ref }} --strict
+```
+
+The review mode adds no rule: it reads what D3, D6, T6, T7 and T8 already
+ask of every commit, and CONTRIBUTING.md (D8) is where the owner tells
+contributors that these rules apply to them.
 
 ## What is checked
 

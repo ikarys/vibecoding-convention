@@ -44,3 +44,18 @@ fn write_status_creates_the_badge_file() {
     let status = std::fs::read_to_string(dir.path().join("audit/status.json")).unwrap();
     assert!(status.contains("\"label\": \"vibecoding\""));
 }
+
+#[test]
+fn pr_review_refuses_write_status_with_exit_code_two() {
+    let dir = tempfile::tempdir().unwrap();
+    common::finalize_fixture(dir.path());
+    let base = common::head_hash(dir.path());
+    let out = vibecheck(&[
+        dir.path().to_str().unwrap(),
+        "--pr-review",
+        &base,
+        "--write-status",
+    ]);
+    assert_eq!(out.status.code(), Some(2));
+    assert!(String::from_utf8_lossy(&out.stderr).contains("does not apply"));
+}
