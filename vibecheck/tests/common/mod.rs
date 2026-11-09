@@ -190,7 +190,7 @@ convention:
     - "Claude Code:claude-fable-5-1"
   maintainers:
     - ikarys
-  review: "single maintainer reads every diff before it reaches main"
+  review: "single maintainer reviews every change (what it does, why, what it affects) before it reaches main"
   security_response: "72h"
   licence: MIT
 ---
@@ -223,7 +223,7 @@ convention:
     - "Claude Code:claude-fable-5-1"
   maintainers:
     - ikarys
-  review: "single maintainer reads every diff before it reaches main"
+  review: "single maintainer reviews every change (what it does, why, what it affects) before it reaches main"
   security_response: "72h"
   licence: MIT
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }

@@ -18,7 +18,7 @@ Ask, in one message, for what only they can decide:
   anything others depend on, 3 for anything handling other people's data,
   money or safety. Say that each level includes the ones below.
 - The maintainers who review and decide (names or handles), the review
-  policy (reviewed pull requests, or a single maintainer reading every diff
+  policy (reviewed pull requests, or a single maintainer reviewing every change
   and what makes that a step rather than an intention), the project status
   (active, maintenance, archived) and the security response time or "none".
 - The AI tools and models in use, and which attribution trailer the project
