@@ -24,6 +24,27 @@ you ran (C3). A pull request whose author cannot say what its changes do is clos
 The tool that wrote a change never approves it. A human maintainer reviews
 every pull request before merge.
 
+## Commit messages
+
+Subjects follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
+`type(scope): summary`, lower case, imperative, no trailing period. Types
+in use: `feat`, `fix`, `docs`, `refactor`, `test`, `ci`, `build`, `chore`,
+`revert`. Scopes are the areas of this repository: `vibecheck`, `spec` (the
+three convention texts), `site`, `templates`, `agents`, `skills`, `ci`. A
+breaking change to the convention text or to the `vibecheck` interface is
+marked with `!` after the scope. The scope may be left out for a change that
+spans several areas.
+
+```
+feat(vibecheck): --pr-review reviews what a pull request adds
+docs(spec): T7 asks for a scanner in CI, the hook is recommended
+```
+
+The history is the changelog: release notes are generated from these
+subjects, which is why the format is checked by a `commit-msg` hook
+(`pre-commit install` sets it up). Merge commits keep their
+standard git message. Commits made before this rule are not rewritten.
+
 ## Language
 
 Everything in this repository is in English.
