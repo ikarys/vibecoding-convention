@@ -4,7 +4,7 @@ level: copilot
 processes:
   design: pair
   implementation: copilot
-  testing: none
+  testing: copilot
   documentation: copilot
   review: hint
   deployment: none
@@ -33,7 +33,7 @@ convention:
     outdated: "cargo outdated --manifest-path vibecheck/Cargo.toml --exit-code 1"
   maintainers: [ikarys]
   review: "single maintainer reads every diff before it reaches main"
-  security_response: "none"
+  security_response: "report privately on GitHub, acknowledged within 7 days"
   licence: MIT
 ---
 
@@ -69,8 +69,10 @@ every change.
 
 ## Status
 
-Active. This repository holds no running software; there is no security
-response commitment.
+Active. `vibecheck` runs on repositories its users do not trust; its threat
+model and the tests behind each claim are in [SECURITY.md](SECURITY.md).
+Vulnerabilities are reported privately on GitHub and acknowledged within 7
+days.
 
 ## Dependencies held back
 
