@@ -98,7 +98,7 @@ requirements:
   - id: D8
     level: 1
     title: Contribution policy
-    statement: CONTRIBUTING.md states the policy for incoming AI-assisted contributions and asks for C1 to C3 of Part B in pull requests; outgoing contributions follow Part B.
+    statement: CONTRIBUTING.md states the policy for incoming AI-assisted contributions and, where they are accepted, asks for C1 to C3 of Part B in pull requests; outgoing contributions follow Part B.
     evidence: [CONTRIBUTING.md, pull request template]
     check: mechanical
     mechanical:
@@ -118,7 +118,7 @@ requirements:
   - id: D10
     level: 1
     title: Agent instructions carry the convention
-    statement: Where the project has agent instruction files (any name its tools use, or the paths it declares), each names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the edit-time rules (attribution, test changes, dependencies, secrets, signal over noise in code and docs) and lists what the agent never does without a human.
+    statement: Where the project has agent instruction files (any name its tools use, or the paths it declares), each names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the edit-time rules (attribution, test changes, dependencies, secrets, every input hostile and the project's security checklist, signal over noise in code and docs) and lists what the agent never does without a human.
     evidence: [AGENTS.md, CLAUDE.md, .cursorrules, GEMINI.md, convention.agent_instruction_files]
     check: mechanical
     mechanical:
@@ -241,7 +241,7 @@ requirements:
   - id: A3
     level: 3
     title: Blind usability test
-    statement: An AI tester with no access to the source installs and uses the software from the documentation alone and writes a friction report; blindness is enforced by the environment.
+    statement: Where the software has user documentation, an AI tester with no access to the source installs and uses the software from the documentation alone and writes a friction report; blindness is enforced by the environment.
     evidence: ["audit/<date>-blind-<campaign>.md"]
     check: judgement
     mechanical:

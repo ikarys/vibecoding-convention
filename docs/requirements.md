@@ -24,8 +24,8 @@ says the project is wholly or partly written with AI assistance and links to
 
 **D2. Declaration file.** The repository root has a `VIBECODING.md` whose
 front matter uses the [AI-DECLARATION.md](https://github.com/DimwitLabs/AI-DECLARATION.md)
-keys for the degree of AI involvement (`version`, `level`, `processes`,
-`components`), so that the same information is written once and existing
+keys for the degree of AI involvement (`version`, `level`, `processes`, and
+`components` where the project uses it), so that the same information is written once and existing
 badges keep working, plus a `convention` block for this convention's fields.
 A project that already has an `AI-DECLARATION.md` may point to it instead of
 repeating those keys. The Declaration file section gives the format. The file states, at least:
