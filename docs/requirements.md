@@ -286,12 +286,13 @@ day and falls further behind at every regeneration. The rule is not "always
 the latest" but "no unjustified lag". Three moments:
 - At addition: the version taken is the registry's current one, read from the
   registry and not from memory (this completes the T6 check).
-- Over time: an update mechanism exists, either a bot (Dependabot, Renovate or
-  an equivalent) or a declared cadence with a declared command (`cargo
-  outdated`, `npm outdated`, `pip list --outdated`, and the like), and the
-  check measures the lag: the number of dependencies with a newer major or
-  minor version available. The project declares its limit
-  (`convention.freshness`: `max_outdated`).
+- Over time: an update mechanism exists. Either a bot (Dependabot, Renovate or
+  an equivalent) keeps the lag down and nothing more is declared, or the
+  project runs an outdated command (`cargo outdated`, `npm outdated`, `pip
+  list --outdated`, and the like), commits its output as evidence and declares
+  the limit it holds itself to (`convention.freshness`: `max_outdated`, the
+  number of dependencies with a newer version available). The convention does
+  not pick the mechanism; it asks for one and reads what it produces.
 - Exceptions: a dependency held back for incompatibility or stability is
   listed in `VIBECODING.md` with the reason. That is the human
   counter-indication; it is the only thing that justifies a lag.
@@ -300,9 +301,10 @@ database stays without such an exception.
 - Evidence: the update configuration or `convention.evidence.outdated`, the
   exceptions, `metrics.outdated` in `audit/status.json`.
 - Checked: an update bot configuration exists or `evidence.outdated` is
-  declared (neither is a failure); CI runs the outdated tool and writes
-  `evidence.outdated`; vibecheck reads it, counts the outdated dependencies not
-  listed under "Dependencies held back" against `max_outdated` and records
+  declared (neither is a failure); `max_outdated` is required only with
+  `evidence.outdated`; when declared, CI runs the outdated tool and writes
+  the file, vibecheck counts the outdated dependencies not listed under
+  "Dependencies held back" against `max_outdated` and records
   `metrics.outdated`; unmaintained or yanked items in `evidence.audit` without
   a held-back entry are failures.
 

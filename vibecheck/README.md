@@ -63,8 +63,8 @@ secrets scanner in pre-commit and CI, static analyser in CI, a built-in scan of
 the tree for secret patterns, T8 file and function length against the declared
 thresholds, leftover markers, and `doc_lint` in CI (duplication and complexity
 need the declared tool; its evidence file is noted, agents read it), T9
-dependency freshness: an update bot or `evidence.outdated`, outdated
-dependency count against `max_outdated`, and unmaintained or yanked audit
+dependency freshness: an update bot, or `evidence.outdated` counted against
+`max_outdated` (required only then), and unmaintained or yanked audit
 items without a declared held-back exception. At level 2, D2 also requires
 `evidence.coverage` and `evidence.audit`.
 

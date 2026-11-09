@@ -28,8 +28,8 @@ Ask, in one message, for what only they can decide:
 - The licence and the copyright stance on AI-written parts (the template has
   a sentence to accept or edit).
 - For level 2 and above: coverage threshold (80 % recommended, a lower value
-  needs one sentence of reason), maintainability thresholds, freshness
-  limits; for level 3: audit directory, audit cadence, whether a blind test
+  needs one sentence of reason), maintainability thresholds, the freshness
+  limit when no update bot is configured; for level 3: audit directory, audit cadence, whether a blind test
   applies (it does where the software has user documentation).
 
 Do not ask what you can read: ecosystem, existing CI, hooks, instruction

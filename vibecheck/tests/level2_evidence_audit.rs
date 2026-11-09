@@ -206,6 +206,42 @@ fn t9_needs_a_bot_or_outdated_evidence() {
 }
 
 #[test]
+fn t9_freshness_is_optional_with_an_update_bot() {
+    let dir = fixture();
+    replace_in_file(
+        dir.path(),
+        "VIBECODING.md",
+        "  freshness: { max_outdated: 3 }\n",
+        "",
+    );
+    let report = run_default(dir.path());
+    assert!(!report
+        .findings
+        .iter()
+        .any(|f| (f.id == "T9" || f.id == "D2") && f.severity == Severity::Fail));
+}
+
+#[test]
+fn t9_outdated_evidence_needs_a_declared_limit() {
+    let dir = fixture();
+    declare_outdated(&dir);
+    write(&dir, "audit/evidence/outdated.txt", "");
+    replace_in_file(
+        dir.path(),
+        "VIBECODING.md",
+        "  freshness: { max_outdated: 3 }\n",
+        "",
+    );
+    let report = run_default(dir.path());
+    assert!(has_finding(
+        report.findings.iter(),
+        "T9",
+        Severity::Fail,
+        "without freshness.max_outdated"
+    ));
+}
+
+#[test]
 fn t9_notes_that_outdated_evidence_is_not_declared() {
     let dir = fixture();
     let report = run_default(dir.path());

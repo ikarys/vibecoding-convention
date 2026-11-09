@@ -32,16 +32,6 @@ impl Check for T9 {
             return support::missing_declaration(self.id());
         };
 
-        let Some(freshness) = decl.convention.freshness.as_ref() else {
-            return vec![Finding::fail(
-                self.id(),
-                "freshness",
-                "freshness is not declared",
-                None,
-                Some("declare convention.freshness".to_string()),
-            )];
-        };
-
         let held_back = held_back_names(&decl.body);
         let evidence = decl.convention.evidence.as_ref();
         let outdated_path = evidence.and_then(|e| e.outdated.as_deref());
@@ -50,14 +40,23 @@ impl Check for T9 {
             .find(|file| ctx.root.join(*file).is_file());
 
         let mut findings = vec![update_mechanism(bot.copied(), outdated_path)];
-        match outdated_path {
-            Some(path) => findings.extend(outdated_evidence(
+        // A bot keeps the lag down on its own; only a committed count needs
+        // a declared limit to be read against.
+        match (outdated_path, decl.convention.freshness.as_ref()) {
+            (Some(path), Some(freshness)) => findings.extend(outdated_evidence(
                 ctx,
                 path,
                 freshness.max_outdated as usize,
                 &held_back,
             )),
-            None => {
+            (Some(_), None) => findings.push(Finding::fail(
+                self.id(),
+                "freshness",
+                "evidence.outdated is declared without freshness.max_outdated",
+                None,
+                Some("declare convention.freshness: { max_outdated: <N> }".to_string()),
+            )),
+            (None, _) => {
                 if bot.is_some() {
                     findings.push(Finding::info(
                         self.id(),

@@ -27,7 +27,7 @@ convention:
   # level 2 and above
   coverage: { threshold: <N>, kind: <line | branch>, tool: <tool> }
   maintainability: { tool: <tool>, duplication_max: <percent>, complexity_max: <N>, function_max: <lines>, file_max: <lines>, markers_max: 0 }
-  freshness: { max_outdated: <N> }   # T9; update bot config or evidence.outdated must exist
+  freshness: { max_outdated: <N> }   # T9; only with evidence.outdated (no update bot); omit otherwise
   evidence:                                    # outputs of the project's tools, written by CI, read by vibecheck; paths relative to the repository root
     coverage: audit/evidence/coverage.txt      # cargo-llvm-cov summary text, lcov.info, cobertura.xml, cargo-llvm-cov JSON, or any text whose last percentage is the line coverage
     audit: audit/evidence/audit.json           # cargo-audit JSON, npm/pnpm audit JSON, pip-audit JSON, or the tool's text output
