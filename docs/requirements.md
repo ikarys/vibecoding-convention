@@ -73,10 +73,10 @@ human-written.
   attribution trailer other than `Co-Authored-By:` naming no declared model.
 
 **D4. Human review before merge.** No AI-written change reaches the default
-branch without a human having read it and approved it. For a team this is a
+branch without a human having reviewed it (C2) and approved it. For a team this is a
 reviewed pull request. For a single maintainer this is the maintainer's own
-reading of every diff, stated in `VIBECODING.md`, and a tool or workflow that
-makes that reading a step rather than an intention (review gates, a
+review of every change, stated in `VIBECODING.md`, and a tool or workflow that
+makes that review a step rather than an intention (review gates, a
 pull-request flow against oneself, a signed-off trailer). The agent or tool
 that produced a change is never its only reviewer.
 - Evidence: the review policy in `VIBECODING.md`, branch protection or pull
@@ -527,7 +527,7 @@ convention:
     - "Claude Code:claude-opus-5-5"
     - "Fennec:qwen3.8-27b"
   maintainers: [ikarys]
-  review: "single maintainer reads every diff; enforced by Fennec review gates"
+  review: "single maintainer reviews every change; enforced by Fennec review gates"
   security_response: "72h"
   licence: MIT
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }

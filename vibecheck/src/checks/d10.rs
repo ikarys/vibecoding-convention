@@ -208,7 +208,7 @@ convention:
     secrets: "gitleaks detect --no-banner"
     outdated: "cargo outdated --manifest-path vibecheck/Cargo.toml --exit-code 1"
   maintainers: [ikarys]
-  review: "single maintainer reads every diff before it reaches main"
+  review: "single maintainer reviews every change (what it does, why, what it affects) before it reaches main"
   security_response: "none"
   licence: MIT
 ---
