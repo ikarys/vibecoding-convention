@@ -65,7 +65,6 @@ commit:
 kind: convention
 tool:
 model:
-read_by:
 scope:
 verdict:
 ---

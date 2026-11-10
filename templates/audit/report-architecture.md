@@ -4,7 +4,6 @@ commit: <hash>
 kind: architecture
 tool: <Tool>
 model: <model>
-read_by: <maintainer>
 scope: <what was reviewed: whole repository, or the named crates/modules>
 verdict: <prototype | usable with listed gaps | production-grade>
 ---

@@ -4,7 +4,6 @@ commit: <hash>
 kind: security
 tool: <Tool>
 model: <model>
-read_by: <maintainer>
 scope: <whole repository, or the change range reviewed>
 verdict: <pass | pass with findings | fail>
 ---

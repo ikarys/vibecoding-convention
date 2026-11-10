@@ -8,7 +8,7 @@ description: Use when the user asks to audit a project's code quality or archite
 One pass answering: is this project clean, modular, secure and simple, at expert level? You
 measure first, then send reviewers in parallel, then consolidate into the two reports the
 convention expects: `<date>-architecture.md` (A1) and `<date>-security.md` (A2). You never fix,
-commit or push: the human reads, fills `read_by` and the decisions, and decides.
+commit or push: the human reads, signs the index row and fills the decisions, and decides.
 
 ## 1. Frame (no question unless blocked)
 
@@ -42,7 +42,7 @@ Pass each the root, the scope, the project rules found, and the metrics director
 - `vibecoding-security`: whole repo, commands allowed for the project's declared read-only checks
   (audit, scanners, targeted tests). It writes `<audit-dir>/<date>-security.md` itself in its own
   format; do not restate its steps, do not duplicate its findings elsewhere. Note `tool` and `model`
-  are yours to fill from the session; `read_by` stays empty.
+  are yours to fill from the session; it writes no `read_by`.
 - `vibecoding-architecture`: backend scope, findings returned in the answer, no file. Add: SOLID,
   KISS, clean architecture (dependencies inward, domain without IO, persistence apart from
   transport), one responsibility per file, functions over duplication (use the jscpd clones), naming.
@@ -64,7 +64,6 @@ commit:
 kind: architecture
 tool:
 model:
-read_by:
 scope:
 verdict: prototype | usable with listed gaps | production-grade
 ---
@@ -110,13 +109,14 @@ or 0. The Security score is a number computed by the same rule from the security
 its verdict goes in Evidence. PAINFUL = a maintainer pays on every change (god file, suite copied
 per backend, missing boundary); MINOR = local, fixed in one commit without redesign.
 At most 25 findings, worst first; the rest in one line. Severities are the convention's
-(`BLOCKER`, `DOC-WRONG`, `PAINFUL`, `MINOR`); never `MAJOR`. Leave `read_by` and the Decisions
-table empty for the human. Add one row per report to the index table of `<audit-dir>/README.md` (A4), `read_by` empty; columns
+(`BLOCKER`, `DOC-WRONG`, `PAINFUL`, `MINOR`); never `MAJOR`. Leave the Decisions table empty for
+the human; the report header carries no `read_by`. Add one row per report to the index table of
+`<audit-dir>/README.md` (A4), its Read by cell empty: that cell is the human's one signature; columns
 may be in any order, vibecheck finds them by header. No index table yet: add the one from the
 convention's `templates/audit/README.md`.
 
 ## 5. Answer
 
 In the user's language: both report paths, both verdicts, the scores table, the top 5 findings in
-one line each, and a reminder that `read_by` and the decisions are theirs to fill. Offer to turn
+one line each, and a reminder that the index's Read by cell and the decisions are theirs to fill. Offer to turn
 findings into fixes or backlog items; do nothing more without a yes.

@@ -388,7 +388,8 @@ vibecheck finds the ones it needs by their header. Reports are not rewritten
 after the fact. Decisions are appended.
 - Evidence: `audit/README.md`, `audit/status.json`.
 - Checked: vibecheck lists every report in `audit/`: each is in the index with
-  the same date, commit, kind and reader; every listed commit exists; the
+  the same date, commit and kind, and the same reader when the report header
+  names one; every listed commit exists; the
   report named by `audit/status.json` is one of them; a report edited after
   its first commit is a warning (a correction must say so in its commit).
 
@@ -631,8 +632,9 @@ Every report in `audit/` starts with a header and ends with the decisions
 table.
 
 Header fields: `date`, `commit`, `kind` (convention, architecture, security,
-blind), `tool` and `model` that produced it, `read_by` (the human who
-commissioned and read it), `scope`. YAML front matter between `---` lines is
+blind), `tool` and `model` that produced it, `scope`. The human who
+commissioned and read it signs once, in the index (A4); a `read_by` field in
+the header is optional and, when present, must name the same person. YAML front matter between `---` lines is
 the recommended form; vibecheck also accepts bare `key: value` lines at the
 top of the file. `date`, `commit` and `kind` are what the index is matched on;
 the rest is for the reader.

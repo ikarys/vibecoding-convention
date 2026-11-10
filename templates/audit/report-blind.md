@@ -4,7 +4,6 @@ commit: <hash>
 kind: blind-<campaign>
 tool: <Tool>
 model: <model>
-read_by: <maintainer>
 scope: <the app or task the tester had to build or do>
 verdict: <score>/10
 ---

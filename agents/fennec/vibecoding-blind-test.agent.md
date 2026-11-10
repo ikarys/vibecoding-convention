@@ -67,7 +67,6 @@ commit:
 kind: blind-<campaign>
 tool:
 model:
-read_by:
 scope:
 verdict:
 ---

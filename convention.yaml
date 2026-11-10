@@ -256,7 +256,7 @@ requirements:
     evidence: [audit/README.md, audit/status.json]
     check: mechanical
     mechanical:
-      - every report file in audit/ is listed in audit/README.md with the same date, commit, kind and reader
+      - every report file in audit/ is listed in audit/README.md with the same date, commit and kind, and the same reader when the report header names one
       - every commit named in the index exists
       - the report named by audit/status.json is one of the report files
       - a report edited after its first commit is a warning
