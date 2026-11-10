@@ -61,6 +61,7 @@ path dependency outside the working directory whose files you never open.
 Write to the report path.
 Use this header:
 ```
+---
 date:
 commit:
 kind: blind-<campaign>
@@ -69,6 +70,7 @@ model:
 read_by:
 scope:
 verdict:
+---
 ```
 Add these sections in order:
 ```

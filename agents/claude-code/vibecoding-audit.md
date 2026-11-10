@@ -49,6 +49,7 @@ Write to the declared audit directory, default `audit/`.
 Name the file `<date>-convention.md`.
 Use this header:
 ```
+---
 date:
 commit:
 kind: convention
@@ -57,6 +58,7 @@ model:
 read_by:
 scope:
 verdict:
+---
 ```
 Add one summary paragraph for mechanical findings.
 Add one section per judgement finding:

@@ -80,9 +80,9 @@ Check: **M** mechanical (a tool verifies it with no judgement), **J** judgement
 | T8 | 2 | Duplication, complexity, function length, file length, and leftover markers (TODO, placeholders, commented-out code) measured with declared tool and thresholds; public API documentation linted where the ecosystem has a lint; numbers recorded in the status file | tool output, evidence file | M |
 | T9 | 2 | Dependencies are current: new ones taken at the registry's current version, an update mechanism in place (a bot, or a measured lag against a declared limit), no unmaintained dependency; exceptions declared with a reason | update config, outdated evidence file, declaration | M |
 | A1 | 3 | Architecture review against named design principles, including signal over noise (comments that say why, no paraphrase, no dead code), with verdict `prototype`, `usable with listed gaps` or `production-grade`; renewed at each minor or structural change | `audit/*-architecture.md` | J |
-| A2 | 3 | `SECURITY.md` with contact, response time and a threat model that names the known vulnerability classes relevant to this kind of software, each with the tool or test covering it; every security claim traced to a passing test; every user-data path has an authorization test; re-verified at each release | `audit/*-security.md` | M+J |
+| A2 | 3 | `SECURITY.md` with contact, response time and a threat model that names the known vulnerability classes relevant to this kind of software, each with the tool or test covering it; every security claim traced to a passing test; when the software holds or serves user data, every such path has an authorization test; re-verified at each release | `audit/*-security.md` | M+J |
 | A3 | 3 | Blind usability test, where the software has user documentation: a tester, human or AI, with no access to the source installs and uses the software from the docs alone; blindness enforced by the environment | `audit/*-blind-*.md` | J |
-| A4 | 3 | `audit/README.md` indexes every report with date, commit, kind, tool, reader, verdict; reports never rewritten, decisions appended | the index | M |
+| A4 | 3 | `audit/README.md` indexes every report with at least date, commit, kind, tool, reader, verdict (columns in any order); reports never rewritten, decisions appended | the index | M |
 | A5 | 3 | No release with an open `BLOCKER` or `DOC-WRONG`; each release names the human who approved it | index at tag, release notes | M |
 | A6 | 3 | Architecture overview and decision records exist where the overview says, each validated by a named human with a date, revalidated on structural change, and match the code | the documents | M+J |
 | A7 | 3 | Mutation score measured on core modules and at or above the declared threshold (recommended) | mutation evidence file | M |
@@ -112,10 +112,12 @@ only AI-specific line.
 
 ## Findings and decisions
 
-Severities: `BLOCKER` (a documented task cannot be completed, or a security
+Severities, judged from the person affected (a user, a maintainer, an
+operator): `BLOCKER` (a documented task cannot be completed, or a security
 claim is false), `DOC-WRONG` (the docs say something the software does not
-do), `PAINFUL`, `MINOR`. Every finding gets one decision by a human
-maintainer: `fixed` (commit named), `documented` (commit named), `won't fix`
+do), `PAINFUL` (possible, at a cost that person would resent on every
+occurrence), `MINOR` (everything else worth writing down). Every finding gets
+one decision by a human maintainer: `fixed` (commit named), `documented` (commit named), `won't fix`
 (reason given), `open`. Findings are never deleted or downgraded. No release
 ships with an open `BLOCKER` or `DOC-WRONG`.
 
@@ -138,7 +140,9 @@ same checks the same way everywhere:
   write the reports. They read `vibecheck`'s output rather than redoing it.
 - Skills (`vibecoding-init`, `vibecoding-release`) bootstrap a project and
   prepare a release; `vibecoding-contribute` checks a contribution against
-  C1 to C4 of Part B before it is sent.
+  C1 to C4 of Part B before it is sent; `code-audit` measures size and
+  duplication, then runs the architecture and security agents and writes
+  the A1 and A2 reports.
 - A ten-line block in the agent instruction file (D10) is all that sits in a
   model's context during ordinary work.
 
