@@ -2,6 +2,82 @@
   "duplicates": [
     {
       "firstFile": {
+        "end": 114,
+        "endLoc": {
+          "column": 6,
+          "line": 114,
+          "position": 3347
+        },
+        "name": "audit_index.rs",
+        "start": 103,
+        "startLoc": {
+          "column": 91,
+          "line": 103,
+          "position": 3052
+        }
+      },
+      "format": "rust",
+      "fragment": "| 2026-11-08 | abc1234 | architecture | Claude Code:claude-fable-5-1 | ikarys | usable | 2 |\n\";\n        let rows = parse_index(text);\n        assert_eq!(rows.len(), 1);\n        assert_eq!(rows[0].date, \"2026-11-08\");\n        assert_eq!(rows[0].commit, \"abc1234\");\n        assert_eq!(rows[0].kind, \"architecture\");\n        assert_eq!(rows[0].read_by, \"ikarys\");\n    }\n\n    #[test]\n    fn parse_index_finds_columns_by_name() {",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 12,
+      "secondFile": {
+        "end": 129,
+        "endLoc": {
+          "column": 6,
+          "line": 129,
+          "position": 3825
+        },
+        "name": "audit_index.rs",
+        "start": 118,
+        "startLoc": {
+          "column": 56,
+          "line": 118,
+          "position": 3530
+        }
+      },
+      "tokens": 80
+    },
+    {
+      "firstFile": {
+        "end": 110,
+        "endLoc": {
+          "column": 35,
+          "line": 110,
+          "position": 3310
+        },
+        "name": "audit_index.rs",
+        "start": 103,
+        "startLoc": {
+          "column": 91,
+          "line": 103,
+          "position": 3052
+        }
+      },
+      "format": "rust",
+      "fragment": "| 2026-11-08 | abc1234 | architecture | Claude Code:claude-fable-5-1 | ikarys | usable | 2 |\n\";\n        let rows = parse_index(text);\n        assert_eq!(rows.len(), 1);\n        assert_eq!(rows[0].date, \"2026-11-08\");\n        assert_eq!(rows[0].commit, \"abc1234\");\n        assert_eq!(rows[0].kind, \"architecture\");\n        assert_eq!(rows[0].read_by, \"ikarys\");",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 8,
+      "secondFile": {
+        "end": 140,
+        "endLoc": {
+          "column": 35,
+          "line": 140,
+          "position": 4222
+        },
+        "name": "audit_index.rs",
+        "start": 133,
+        "startLoc": {
+          "column": 38,
+          "line": 133,
+          "position": 3964
+        }
+      },
+      "tokens": 71
+    },
+    {
+      "firstFile": {
         "end": 25,
         "endLoc": {
           "column": 48,
@@ -78,18 +154,18 @@
     },
     {
       "firstFile": {
-        "end": 268,
+        "end": 272,
         "endLoc": {
           "column": 40,
-          "line": 268,
-          "position": 8502
+          "line": 272,
+          "position": 8617
         },
         "name": "checks/a4.rs",
-        "start": 263,
+        "start": 267,
         "startLoc": {
           "column": 46,
-          "line": 263,
-          "position": 8214
+          "line": 267,
+          "position": 8329
         }
       },
       "format": "rust",
@@ -98,18 +174,18 @@
       "kind": "exact",
       "lines": 6,
       "secondFile": {
-        "end": 304,
+        "end": 308,
         "endLoc": {
           "column": 40,
-          "line": 304,
-          "position": 9892
+          "line": 308,
+          "position": 10007
         },
         "name": "checks/a4.rs",
-        "start": 299,
+        "start": 303,
         "startLoc": {
           "column": 8,
-          "line": 299,
-          "position": 9604
+          "line": 303,
+          "position": 9719
         }
       },
       "tokens": 75
@@ -1256,32 +1332,32 @@
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-09T22:34:09.164Z",
+    "detectionDate": "2026-11-10T18:51:50.515Z",
     "formats": {
       "rust": {
-        "clones": 33,
-        "duplicatedLines": 303,
-        "duplicatedTokens": 2022,
-        "lines": 9315,
+        "clones": 35,
+        "duplicatedLines": 323,
+        "duplicatedTokens": 2173,
+        "lines": 9455,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.2528180354267313,
-        "percentageTokens": 3.3856303266748156,
-        "sources": 55,
-        "tokens": 59723
+        "percentage": 3.4161819143310415,
+        "percentageTokens": 3.5788398827365855,
+        "sources": 56,
+        "tokens": 60718
       }
     },
     "total": {
-      "clones": 33,
-      "duplicatedLines": 303,
-      "duplicatedTokens": 2022,
-      "lines": 9315,
+      "clones": 35,
+      "duplicatedLines": 323,
+      "duplicatedTokens": 2173,
+      "lines": 9455,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.2528180354267313,
-      "percentageTokens": 3.3856303266748156,
-      "sources": 55,
-      "tokens": 59723
+      "percentage": 3.4161819143310415,
+      "percentageTokens": 3.5788398827365855,
+      "sources": 56,
+      "tokens": 60718
     }
   }
 }
