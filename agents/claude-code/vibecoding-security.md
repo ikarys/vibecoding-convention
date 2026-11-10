@@ -66,7 +66,6 @@ commit:
 kind: security
 tool:
 model:
-read_by:
 scope:
 verdict: pass | pass with findings | fail
 ---

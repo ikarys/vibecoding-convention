@@ -61,7 +61,6 @@ commit:
 kind: architecture
 tool:
 model:
-read_by:
 scope:
 verdict:
 ---

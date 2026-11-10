@@ -177,10 +177,9 @@ fn report_header_finding(
             Some(format!("add its row to {dir}/README.md")),
         )),
         Some(row) => {
-            if !row
-                .read_by
-                .trim()
-                .eq_ignore_ascii_case(header.read_by.trim())
+            // The index is where the human signs; a header reader is optional.
+            let header_reader = header.read_by.trim();
+            if !header_reader.is_empty() && !row.read_by.trim().eq_ignore_ascii_case(header_reader)
             {
                 Some(Finding::fail(
                     "A4",
@@ -290,6 +289,22 @@ mod tests {
             .iter()
             .any(|finding| finding.severity == Severity::Info
                 && finding.problem.contains("1 reports indexed")));
+    }
+
+    #[test]
+    fn report_without_reader_takes_the_index_signature() {
+        let root = tempfile::tempdir().unwrap();
+        write_file(root.path(), "audit/README.md", matching_index());
+        write_file(
+            root.path(),
+            "audit/2026-11-08-architecture.md",
+            &matching_report().replace("read_by: ikarys\n", ""),
+        );
+        let ctx = Context::for_test(root.path(), Some(declaration_with_audit_dir("audit")));
+        let findings = A4.run(&ctx);
+        assert!(!findings
+            .iter()
+            .any(|finding| finding.severity == Severity::Fail));
     }
 
     #[test]
