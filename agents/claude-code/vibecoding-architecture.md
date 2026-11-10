@@ -44,6 +44,7 @@ You judge whether the design is built to be used rather than to demonstrate, and
 Name the file `<date>-architecture.md`.
 Use this header:
 ```
+---
 date:
 commit:
 kind: architecture
@@ -52,6 +53,7 @@ model:
 read_by:
 scope:
 verdict:
+---
 ```
 Add a summary paragraph.
 Add one section per finding:

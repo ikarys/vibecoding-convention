@@ -55,6 +55,7 @@ Return the report as the answer.
 Name the intended file `<date>-architecture.md` in the declared audit directory.
 Use this header:
 ```
+---
 date:
 commit:
 kind: architecture
@@ -63,6 +64,7 @@ model:
 read_by:
 scope:
 verdict:
+---
 ```
 Add a summary paragraph.
 Add one section per finding:

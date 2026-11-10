@@ -155,14 +155,18 @@ fn report_header_finding(
             "Audit index",
             "report without a header",
             Some(path.to_string()),
-            Some("start the report with the front matter of templates/audit/".to_string()),
+            Some(
+                "start the report with a header: date, commit, kind (see templates/audit/)"
+                    .to_string(),
+            ),
         ));
     };
 
     let row = rows.iter().find(|row| {
         row.date == header.date
             && audit::same_commit(&row.commit, &header.commit)
-            && row.kind.trim().eq_ignore_ascii_case(header.kind.trim())
+            && (row.kind.trim().is_empty()
+                || row.kind.trim().eq_ignore_ascii_case(header.kind.trim()))
     });
     match row {
         None => Some(Finding::fail(

@@ -346,16 +346,19 @@ vulnerability classes relevant to this kind of software (from the OWASP Top
 10, the CWE Top 25, or the ecosystem's own list) and, for each, the tool rule
 or the test that covers it; a class with no coverage is a finding. Every
 security claim made in `SECURITY.md` or in the documentation points to a test
-that asserts it. The audit includes a data exposure check: every data store, table, bucket and
-endpoint that holds user data has an authorization rule, and a test that an
-unauthorized caller is refused. Because security degrades as code is
+that asserts it. When the software holds or serves user data (a service, an
+application, a store), the audit includes a data exposure check: every data
+store, table, bucket and endpoint that holds user data has an authorization
+rule, and a test that an unauthorized caller is refused. A library or a tool
+that holds no user data states so in the report and skips that check. Because security degrades as code is
 iterated, the claims are re-verified at each release. The result is a
 versioned report.
 - Evidence: `SECURITY.md`, `audit/<date>-security.md`.
 - Checked: the threat model names its classes and each has a tool rule or a
   test; each claim has a test that exists, asserts the claim and passes; every
-  user-data path has an authorization test; the scans of T6 and T7 ran;
-  findings have decisions.
+  user-data path has an authorization test, or the report states the
+  software holds none; the scans of T6 and T7 ran;
+  each finding names how it was confirmed; findings have decisions.
 
 **A3. Blind usability test.** When the software has user documentation and is
 meant to be used by people other than its authors (libraries, command-line
@@ -380,8 +383,9 @@ the Report format section.
 
 **A4. Audit index.** `audit/README.md` lists every report: date, commit, kind,
 tool and model that produced it, human who commissioned and read it, verdict,
-number of open findings. Reports are not rewritten after the fact. Decisions
-are appended.
+number of open findings. The table may carry more columns, in any order;
+vibecheck finds the ones it needs by their header. Reports are not rewritten
+after the fact. Decisions are appended.
 - Evidence: `audit/README.md`, `audit/status.json`.
 - Checked: vibecheck lists every report in `audit/`: each is in the index with
   the same date, commit, kind and reader; every listed commit exists; the
@@ -591,14 +595,16 @@ Colour: `blue` for `pass`, `yellow` for `pass with findings`, `red` for
 
 ## Findings and decisions
 
-Audit reports use four severities:
+Audit reports use four severities. They are judged from the person affected:
+a user in a blind test, a maintainer in an architecture review, an operator
+in a security review.
 
 | Severity | Meaning |
 |---|---|
-| `BLOCKER` | A user cannot complete a documented task, or a security claim is false. |
+| `BLOCKER` | That person cannot complete a documented task, or a security claim is false. |
 | `DOC-WRONG` | The documentation says something the software does not do. |
-| `PAINFUL` | The task can be completed, at a cost a reasonable user would resent. |
-| `MINOR` | Everything else worth writing down. |
+| `PAINFUL` | Possible, at a cost that person would resent on every occurrence (a god file a maintainer pays for on every change, a workaround a user repeats on every run). |
+| `MINOR` | Everything else worth writing down; fixed locally, without redesign. |
 
 Every finding gets exactly one decision, written by a human maintainer, in a
 "Decisions" table appended to the report:
@@ -616,16 +622,24 @@ to be wrong gets the decision `won't fix` with the reason "not reproduced" or
 
 ## Report format
 
+This section is a minimum, not a format: a report may add any section that
+helps its reader (scores, metrics, coverage tables, a diff since the last
+audit), as long as the parts below are present and recognisable.
+
 Every report in `audit/` starts with a header and ends with the decisions
 table.
 
 Header fields: `date`, `commit`, `kind` (convention, architecture, security,
 blind), `tool` and `model` that produced it, `read_by` (the human who
-commissioned and read it), `scope`.
+commissioned and read it), `scope`. YAML front matter between `---` lines is
+the recommended form; vibecheck also accepts bare `key: value` lines at the
+top of the file. `date`, `commit` and `kind` are what the index is matched on;
+the rest is for the reader.
 
 Convention, architecture and security reports: a summary paragraph, then one
 section per finding with `severity`, `requirement` (the identifier it relates
 to), `where` (paths and lines), `problem`, `fix`, then the decisions table.
+A finding may carry more fields (an axis, how it was confirmed).
 
 Blind test reports: the brief (persona, task, allowed inputs, how blindness was
 enforced), then

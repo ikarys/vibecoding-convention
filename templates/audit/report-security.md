@@ -20,7 +20,15 @@ why, data exposure check done or not applicable.>
 |---|---|---|---|
 | <claim> | `path/to/test.rs::name` | yes / no | pass / fail / not run |
 
+## Threat model coverage
+
+| Class | Where it could happen | Covered by (rule or test) | Verified |
+|---|---|---|---|
+| <class> | <modules> | <rule or `path::test`> or **no coverage** | yes / no |
+
 ## Data exposure check
+
+<For a library or a tool that holds no user data: one sentence saying so, no table.>
 
 | Store, table, bucket or endpoint | Authorization rule | Test that an unauthorized caller is refused |
 |---|---|---|
@@ -31,7 +39,8 @@ why, data exposure check done or not applicable.>
 ### Finding 1: <imperative title of the fix>
 - Severity: <BLOCKER | DOC-WRONG | PAINFUL | MINOR>
 - Requirement: <A2 | T6 | T7 | A8>
-- Where: `path/to/file:line`
+- Where: `path/to/file:line` (entry → sink for a reachable vulnerability)
+- Confirmed by: <path read | `command run` | unconfirmed>
 - Problem: <what is wrong and how it is reached>
 - Fix: <the concrete change>
 

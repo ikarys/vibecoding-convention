@@ -22,19 +22,15 @@ pub struct AuditReport {
     pub open: BTreeMap<String, usize>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
-pub struct IndexRow {
-    pub date: String,
-    pub commit: String,
-    pub kind: String,
-    pub read_by: String,
-}
+pub use crate::audit_index::{parse_index, IndexRow};
 
 pub fn parse_report(text: &str) -> AuditReport {
     let mut report = AuditReport::default();
     // A report without front matter still has findings worth counting.
-    let (yaml, body) =
-        split_front_matter(text).unwrap_or_else(|_| (String::new(), text.to_string()));
+    let (yaml, body) = match split_front_matter(text) {
+        Ok((yaml, body)) => (yaml, body),
+        Err(_) => bare_header(text).unwrap_or_else(|| (String::new(), text.to_string())),
+    };
     report.header = serde_yaml_ng::from_str::<Value>(&yaml)
         .ok()
         .and_then(|front_matter| parse_header(&front_matter));
@@ -52,23 +48,6 @@ pub fn parse_report(text: &str) -> AuditReport {
         }
     }
     report
-}
-
-pub fn parse_index(text: &str) -> Vec<IndexRow> {
-    let mut rows = Vec::new();
-    for line in text.lines() {
-        let cells = table_cells(line);
-        if cells.len() < 5 || !is_date_cell(&cells[0]) {
-            continue;
-        }
-        rows.push(IndexRow {
-            date: cells[0].clone(),
-            commit: cells[1].clone(),
-            kind: cells[2].clone(),
-            read_by: cells[4].clone(),
-        });
-    }
-    rows
 }
 
 pub fn is_report_name(file_name: &str) -> bool {
@@ -174,7 +153,7 @@ fn normalize_severity(text: &str) -> Option<&'static str> {
         .find(|severity| *severity == upper.as_str())
 }
 
-fn table_cells(line: &str) -> Vec<String> {
+pub(crate) fn table_cells(line: &str) -> Vec<String> {
     let trimmed = line.trim();
     if !trimmed.starts_with('|') {
         return Vec::new();
@@ -190,14 +169,34 @@ fn is_number(text: &str) -> bool {
     !text.is_empty() && text.bytes().all(|byte| byte.is_ascii_digit())
 }
 
-fn is_date_cell(text: &str) -> bool {
-    let bytes = text.as_bytes();
-    bytes.len() == 10
-        && bytes[4] == b'-'
-        && bytes[7] == b'-'
-        && (0..4).all(|index| bytes[index].is_ascii_digit())
-        && (5..7).all(|index| bytes[index].is_ascii_digit())
-        && (8..10).all(|index| bytes[index].is_ascii_digit())
+fn bare_header(text: &str) -> Option<(String, String)> {
+    let lines: Vec<&str> = text.lines().collect();
+    let start = lines.iter().position(|line| !line.trim().is_empty())?;
+    let mut end = start;
+    while end < lines.len() && is_bare_header_line(lines[end]) {
+        end += 1;
+    }
+    if end == start {
+        return None;
+    }
+    let yaml = lines[start..end]
+        .iter()
+        .map(|line| line.trim())
+        .collect::<Vec<_>>()
+        .join("\n");
+    let body = lines[end..].join("\n");
+    Some((yaml, body))
+}
+
+fn is_bare_header_line(line: &str) -> bool {
+    let Some((key, value)) = line.trim().split_once(':') else {
+        return false;
+    };
+    !key.is_empty()
+        && key
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
+        && (value.is_empty() || value.starts_with(char::is_whitespace))
 }
 
 #[cfg(test)]
@@ -259,19 +258,13 @@ read_by: ikarys
     }
 
     #[test]
-    fn parse_index_skips_non_data_rows() {
-        let text = "\
-| Date | Commit | Kind | Tool / model | Read by | Verdict | Open findings |
-|---|---|---|---|---|---|---|
-| <YYYY-MM-DD> | <commit> | <kind> | <tool> | <read_by> | <verdict> | 0 |
-| 2026-11-08 | abc1234 | architecture | Claude Code:claude-fable-5-1 | ikarys | usable | 2 |
-";
-        let rows = parse_index(text);
-        assert_eq!(rows.len(), 1);
-        assert_eq!(rows[0].date, "2026-11-08");
-        assert_eq!(rows[0].commit, "abc1234");
-        assert_eq!(rows[0].kind, "architecture");
-        assert_eq!(rows[0].read_by, "ikarys");
+    fn report_with_bare_header_is_parsed() {
+        let text = "date: 2026-11-08\ncommit: abc1234\nkind: security\n\n# Security audit\n";
+        let report = parse_report(text);
+        let header = report.header.expect("bare header should be parsed");
+        assert_eq!(header.date, "2026-11-08");
+        assert_eq!(header.commit, "abc1234");
+        assert_eq!(header.kind, "security");
     }
 
     #[test]
