@@ -154,18 +154,18 @@
     },
     {
       "firstFile": {
-        "end": 272,
+        "end": 271,
         "endLoc": {
           "column": 40,
-          "line": 272,
-          "position": 8617
+          "line": 271,
+          "position": 8722
         },
         "name": "checks/a4.rs",
-        "start": 267,
+        "start": 266,
         "startLoc": {
           "column": 46,
-          "line": 267,
-          "position": 8329
+          "line": 266,
+          "position": 8434
         }
       },
       "format": "rust",
@@ -174,21 +174,59 @@
       "kind": "exact",
       "lines": 6,
       "secondFile": {
-        "end": 308,
+        "end": 323,
         "endLoc": {
           "column": 40,
-          "line": 308,
-          "position": 10007
+          "line": 323,
+          "position": 10719
         },
         "name": "checks/a4.rs",
-        "start": 303,
+        "start": 318,
         "startLoc": {
           "column": 8,
-          "line": 303,
-          "position": 9719
+          "line": 318,
+          "position": 10431
         }
       },
       "tokens": 75
+    },
+    {
+      "firstFile": {
+        "end": 287,
+        "endLoc": {
+          "column": 64,
+          "line": 287,
+          "position": 9310
+        },
+        "name": "checks/a4.rs",
+        "start": 281,
+        "startLoc": {
+          "column": 28,
+          "line": 281,
+          "position": 9056
+        }
+      },
+      "format": "rust",
+      "fragment": "            matching_report(),\n        );\n        let ctx = Context::for_test(root.path(), Some(declaration_with_audit_dir(\"audit\")));\n        let findings = A4.run(&ctx);\n        assert!(!findings\n            .iter()\n            .any(|finding| finding.severity == Severity::Fail));",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 7,
+      "secondFile": {
+        "end": 307,
+        "endLoc": {
+          "column": 64,
+          "line": 307,
+          "position": 10092
+        },
+        "name": "checks/a4.rs",
+        "start": 301,
+        "startLoc": {
+          "column": 62,
+          "line": 301,
+          "position": 9838
+        }
+      },
+      "tokens": 65
     },
     {
       "firstFile": {
@@ -1332,32 +1370,32 @@
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-10T18:51:50.515Z",
+    "detectionDate": "2026-11-10T21:36:03.962Z",
     "formats": {
       "rust": {
-        "clones": 35,
-        "duplicatedLines": 323,
-        "duplicatedTokens": 2173,
-        "lines": 9455,
+        "clones": 36,
+        "duplicatedLines": 330,
+        "duplicatedTokens": 2238,
+        "lines": 9470,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.4161819143310415,
-        "percentageTokens": 3.5788398827365855,
+        "percentage": 3.4846884899683213,
+        "percentageTokens": 3.6775338504009465,
         "sources": 56,
-        "tokens": 60718
+        "tokens": 60856
       }
     },
     "total": {
-      "clones": 35,
-      "duplicatedLines": 323,
-      "duplicatedTokens": 2173,
-      "lines": 9455,
+      "clones": 36,
+      "duplicatedLines": 330,
+      "duplicatedTokens": 2238,
+      "lines": 9470,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.4161819143310415,
-      "percentageTokens": 3.5788398827365855,
+      "percentage": 3.4846884899683213,
+      "percentageTokens": 3.6775338504009465,
       "sources": 56,
-      "tokens": 60718
+      "tokens": 60856
     }
   }
 }
