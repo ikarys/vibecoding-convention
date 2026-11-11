@@ -152,11 +152,13 @@ pub fn declared_or_known_ci(
 }
 
 pub fn files_with_extension(root: &Path, extensions: &[&str], skip_dirs: &[&str]) -> Vec<PathBuf> {
+    let listed = util::listed_paths(root);
     walkdir::WalkDir::new(root)
         .into_iter()
         .filter_map(|entry| entry.ok())
         .filter(|entry| entry.file_type().is_file())
         .filter(|entry| !in_skipped_dir(entry.path(), root, skip_dirs))
+        .filter(|entry| util::is_listed(entry.path(), &listed))
         .filter(|entry| {
             entry
                 .path()
@@ -178,11 +180,13 @@ pub fn source_files(ctx: &Context, extensions: &[&str]) -> Vec<PathBuf> {
 
 pub fn text_files(root: &Path, max_bytes: u64) -> Vec<PathBuf> {
     let skip_dirs = [".git", "target", "node_modules"];
+    let listed = util::listed_paths(root);
     walkdir::WalkDir::new(root)
         .into_iter()
         .filter_map(|entry| entry.ok())
         .filter(|entry| entry.file_type().is_file())
         .filter(|entry| !in_skipped_dir(entry.path(), root, &skip_dirs))
+        .filter(|entry| util::is_listed(entry.path(), &listed))
         .filter(|entry| {
             entry
                 .metadata()
@@ -196,10 +200,12 @@ pub fn text_files(root: &Path, max_bytes: u64) -> Vec<PathBuf> {
 
 pub fn find_path_containing_any(root: &Path, needles: &[&str]) -> Option<PathBuf> {
     let skip_dirs = [".git", "target", "node_modules"];
+    let listed = util::listed_paths(root);
     let mut paths = walkdir::WalkDir::new(root)
         .into_iter()
         .filter_map(|entry| entry.ok())
         .filter(|entry| !in_skipped_dir(entry.path(), root, &skip_dirs))
+        .filter(|entry| util::is_listed(entry.path(), &listed))
         .map(|entry| entry.into_path())
         .collect::<Vec<_>>();
     paths.sort();
