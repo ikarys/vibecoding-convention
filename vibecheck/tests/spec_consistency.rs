@@ -48,6 +48,7 @@ fn yaml() -> (BTreeMap<String, Requirement>, BTreeSet<String>) {
 }
 
 /// Part A rows carry a level and an `M`, `J` or `M+J` cell; Part B rows carry neither.
+/// The AI-specific ids come from the parity sentence in `docs/rationale.md`.
 fn convention_md() -> (BTreeMap<String, Requirement>, BTreeSet<String>) {
     let text = read("CONVENTION.md");
     let part_a = Regex::new(r"^\| ([DTA]\d+) \| (\d) \| .* \| ([^|]+) \|$").unwrap();
@@ -75,10 +76,12 @@ fn convention_md() -> (BTreeMap<String, Requirement>, BTreeSet<String>) {
             by_id.insert(req.id.clone(), req);
         }
     }
+    // The parity argument lives in the rationale page, not in the one-page text.
+    let rationale = read("docs/rationale.md");
     let parity = Regex::new(r"exist only because AI is involved: ([^.]+)\.").unwrap();
     let sentence = parity
-        .captures(&text)
-        .expect("CONVENTION.md has the parity sentence");
+        .captures(&rationale)
+        .expect("docs/rationale.md has the parity sentence");
     let ids = Regex::new(r"[DTA]\d+")
         .unwrap()
         .find_iter(&sentence[1])
@@ -160,7 +163,7 @@ fn ai_specific_matches_parity_sentence() {
     let (_, in_md) = convention_md();
     assert_eq!(
         in_yaml, in_md,
-        "ai_specific vs the CONVENTION.md parity sentence"
+        "ai_specific vs the docs/rationale.md parity sentence"
     );
 }
 

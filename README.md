@@ -10,76 +10,60 @@
 > without notice. Do not adopt it in a project yet. Open an issue if you
 > disagree with something; that is what this stage is for.
 
-A checkable standard for software written with AI assistance.
-
-**Read the convention: [CONVENTION.md](CONVENTION.md)** (one page), or browse it on
-the [website](https://ikarys.github.io/vibecoding-convention/).
+**Let's vibecode properly.** A checkable standard for software written with
+AI assistance. The evidence lives in your repository, and anyone can check it.
 
 AI-assisted code is not a problem. Unframed, unreviewed, unaudited code is,
 whoever or whatever wrote it. This convention says what "framed, reviewed and
-audited" means in terms anyone can verify, and what evidence a project must
-keep in its repository to back the claim.
+audited" means in terms anyone can verify, and what evidence a project keeps
+to back the claim.
 
-It was written against the criticisms actually made of vibecoded software,
-with their sources: see [docs/criticisms.md](docs/criticisms.md).
+**Read the convention: [CONVENTION.md](CONVENTION.md)** (one page), or on the
+[website](https://ikarys.github.io/vibecoding-convention/).
 
-**Status: draft 0.1.** Nothing here is final. Open an issue to argue.
+## What you get
 
-## The three levels
+- **A maintainer** shows the quality of an AI-assisted project with proof
+  instead of promises: a declaration, a badge computed from the repository,
+  and audits anyone can re-run.
+- **A user** checks a project before depending on it: who decides, what is
+  tested, when it was last checked, what is not covered.
+- **A contributor** gets an AI-assisted pull request taken seriously, because
+  it says what it did and shows what was run.
+
+## Three levels
 
 | Level | Name | A project at this level has... |
 |---|---|---|
-| 1 | **Declared** | told its users that AI wrote part of it, which tools and models, who reviews and decides, how it handles contributions, its licence and provenance stance, and when it was last checked. All text, an afternoon's work. |
-| 2 | **Tested** | tests that assert behaviour, a declared and met coverage threshold, green CI, lint, a secrets scanner in CI, static analysis, dependency checks and freshness, and measured duplication and size. |
-| 3 | **Audited** | versioned audit reports in the repository: architecture review, security audit, blind usability test where the software has user documentation, architecture documents validated by a named human, each finding with a decision. |
+| 1 | **Declared** | told its users that AI wrote part of it, which tools and models, who reviews and decides, how it handles contributions, and its licence and provenance stance. Text only, an afternoon's work, no tool to install. |
+| 2 | **Tested** | tests that assert behaviour, a met coverage threshold, green CI, lint, secrets scanning, static analysis, dependency checks and freshness, measured duplication and size, and a dated check behind the badge. |
+| 3 | **Audited** | versioned audit reports in the repository: architecture review, security audit, blind usability test, architecture documents validated by a named human, each finding with a decision. |
 
-A project picks a level and proves it. Nobody is asked to reach level 3 for a
-weekend script. A second part, five rules named C1 to C5, applies to anyone
-sending a pull request or a bug report to a project they do not maintain:
-disclose, know what your changes do, bring tests and docs (or a reproduction),
-respect the target's policy, answer review. The one-page text is [CONVENTION.md](CONVENTION.md); the
-detail of each requirement is in [docs/requirements.md](docs/requirements.md).
-
-## What it reuses
-
-- The [AI-DECLARATION.md](https://github.com/DimwitLabs/AI-DECLARATION.md)
-  keys for the degree of AI involvement.
-- The `Assisted-by:` and `Generated-by:` commit trailers adopted by the Linux
-  kernel, Fedora, LLVM and others.
-
-What it adds is the evidence behind the declaration: tests that are checked
-for asserting something, audits kept in the repository, blind tests by an AI
-that cannot see the source, and a dated check that marks itself stale.
+A project picks a level and proves it. A second part, five rules named C1 to
+C5, applies to anyone sending a pull request or a bug report to a project
+they do not maintain.
 
 ## Adopting it
 
-1. Add a `VIBECODING.md` declaration at the root of your repository (template in
-   `templates/`), a contribution policy, and the badge in your README.
-2. Attribute AI-written commits with an `Assisted-by:` trailer naming the tool and model.
-3. Run the checks for your level and commit the reports under `audit/`.
+1. Add a `VIBECODING.md` declaration at the root of your repository
+   (template in [`templates/`](templates)), a contribution policy, and the
+   badge in your README.
+2. Attribute AI-written commits with an `Assisted-by:` trailer naming the
+   tool and model.
+3. From level 2, run the checks for your level in CI and commit the evidence
+   under `audit/`.
 
-## Tooling
+## Where to go next
 
-The convention is a text. The tooling in this repository helps apply it from
-AI coding tools:
-
-- `vibecheck/` — a command-line validator with no AI in it. It is read-only: it
-  never runs the project's commands; it reads the declaration, the repository
-  and the evidence files the project's CI wrote, runs every mechanical check
-  and writes `audit/status.json`. Its `--pr-review` mode checks only what a
-  pull request adds (trailers, test changes, dependencies, secrets, markers),
-  for the owner's CI.
-- `convention.yaml` — the requirements as data, for tools.
-- `skills/` — procedures loaded into the main assistant: bootstrap a project,
-  prepare a release, check a contribution before sending it.
-- `agents/claude-code/` — Claude Code subagents `vibecoding-audit`,
-  `vibecoding-blind-test`, `vibecoding-architecture`, `vibecoding-security`.
-- `agents/fennec/` — the same four agents for [Fennec](https://github.com/ikarys/fennec).
-- `templates/` — `VIBECODING.md`, `audit/README.md`, `audit/status.json`,
-  report skeletons, and `ci/` with two GitHub Actions jobs: one writes the
-  evidence and the status, one reviews pull requests.
-
-Tooling is optional. A project can satisfy the convention by hand.
+- [CONVENTION.md](CONVENTION.md): the one-page text.
+- [docs/requirements.md](docs/requirements.md): each requirement, its
+  evidence and how it is checked.
+- [docs/rationale.md](docs/rationale.md): why it is shaped this way, what it
+  reuses, what it does not try to do.
+- [docs/criticisms.md](docs/criticisms.md): the criticisms of vibecoded
+  software it answers, with sources.
+- [docs/tooling.md](docs/tooling.md): the validator, agents, skills and
+  templates that apply it from AI coding tools. All optional.
 
 ## This repository
 
