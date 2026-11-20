@@ -62,7 +62,8 @@ with its reason and date.
 ## 4. Disclosure and contribution policy
 
 - `README.md`: a short "AI assistance" line linking `VIBECODING.md`, and the
-  status badge (`templates/` has the badge line; replace owner and repository).
+  status badge from level 2 (`templates/` has the badge line; replace owner
+  and repository).
 - `CONTRIBUTING.md`: write or complete the AI contribution policy (accepted
   with disclosure, with conditions, or refused), the trailer the project
   expects, and the verification evidence a pull request must carry. Add the

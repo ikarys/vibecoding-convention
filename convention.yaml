@@ -64,7 +64,7 @@ requirements:
       - where the platform exposes it, every merged pull request with an AI-attributed commit has at least one human approval
 
   - id: D5
-    level: 1
+    level: 2
     title: Dated check
     statement: audit/status.json holds the level, date, commit and verdict of the last check and names the evidence it was computed from; it is written by the check itself (vibecheck --write-status does it), normally from the project's CI after its own checks passed, otherwise by a maintainer, never by hand; it feeds the README badge and is stale after the declared interval or a release.
     evidence: [audit/status.json, README.md]
@@ -78,7 +78,7 @@ requirements:
       - README.md references audit/status.json through a badge, or links VIBECODING.md (D1)
 
   - id: D6
-    level: 1
+    level: 2
     title: Test changes are explained
     statement: A change that deletes a test, weakens an assertion, skips a test or raises a tolerance states why in its message or pull request, and a human approves.
     evidence: [git history]
@@ -117,7 +117,7 @@ requirements:
       - convention.security_response is set; when not "none", SECURITY.md exists and contains the same value
 
   - id: D10
-    level: 1
+    level: 2
     title: Agent instructions carry the convention
     statement: Where the project has agent instruction files (any name its tools use, or the paths it declares), each names the convention level and links VIBECODING.md, gives the commands to pass before a change is done, states the rules the project's humans are held to (attribution, test changes, dependencies, secrets) and lists what the agent never does without a human; the template carries the recommended wording.
     evidence: [AGENTS.md, CLAUDE.md, .cursorrules, GEMINI.md, convention.agent_instruction_files]

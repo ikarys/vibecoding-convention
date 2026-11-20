@@ -14,7 +14,7 @@ impl Check for D5 {
     }
 
     fn level(&self) -> u8 {
-        1
+        2
     }
 
     fn run(&self, ctx: &crate::checks::Context) -> Vec<Finding> {

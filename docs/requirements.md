@@ -84,35 +84,6 @@ that produced a change is never its only reviewer.
 - Checked: the policy exists; the history shows no AI-attributed commit merged
   without a human review event where the platform records one.
 
-**D5. Dated check.** The repository carries the date and commit of the last
-convention check, produced by the check itself and not typed by hand:
-- `audit/status.json` holds the claimed level, the date, the commit checked,
-  the verdict (`pass`, `pass with findings`, `fail`, `stale`), the number of
-  open findings by severity, the evidence files it was computed from, and the
-  tool and model that ran the check. It is written by the check itself
-  (`vibecheck --write-status` does it; any tool producing the same file will
-  do), normally from the project's CI after its own checks passed, otherwise
-  by a maintainer running the check, never typed by hand. Its
-  top-level fields follow the shields.io endpoint schema (`schemaVersion`,
-  `label`, `message`, `color`), so the README badge is a dynamic badge that
-  reads this file and cannot be edited without a visible commit under
-  `audit/`.
-- The check is stale when it is older than the last release, or older than
-  the interval declared in `VIBECODING.md` (default: six months). A stale
-  check is shown as such in the badge.
-- Evidence: `audit/status.json`, the badge, the report the status points to.
-- Checked: the file exists, matches `VIBECODING.md` and the latest report,
-  and the commit it names exists; staleness is computed, not read.
-
-**D6. Test changes are explained.** A change that deletes a test, weakens an
-assertion, marks a test as skipped, or raises a tolerance states why in its
-commit message or pull request, and the human reviewer approves that
-statement. Making CI green by removing the check that failed is the failure
-mode this requirement names.
-- Evidence: the git history.
-- Checked: the auditor lists test removals and weakenings since the last
-  check and reports those without a stated reason.
-
 **D7. Provenance and licence statement.** `VIBECODING.md` states the project
 licence; acknowledges that AI-written parts may not be protected by copyright
 in some jurisdictions and that the maintainers accept this; states that no
@@ -146,6 +117,37 @@ honest, and it is the information a user needs.
 - Checked: present and consistent between the two files; an `archived`
   project is not required to keep its check fresh (D5).
 
+### Level 2: Tested
+
+**D5. Dated check.** The repository carries the date and commit of the last
+convention check, produced by the check itself and not typed by hand:
+- `audit/status.json` holds the claimed level, the date, the commit checked,
+  the verdict (`pass`, `pass with findings`, `fail`, `stale`), the number of
+  open findings by severity, the evidence files it was computed from, and the
+  tool and model that ran the check. It is written by the check itself
+  (`vibecheck --write-status` does it; any tool producing the same file will
+  do), normally from the project's CI after its own checks passed, otherwise
+  by a maintainer running the check, never typed by hand. Its
+  top-level fields follow the shields.io endpoint schema (`schemaVersion`,
+  `label`, `message`, `color`), so the README badge is a dynamic badge that
+  reads this file and cannot be edited without a visible commit under
+  `audit/`.
+- The check is stale when it is older than the last release, or older than
+  the interval declared in `VIBECODING.md` (default: six months). A stale
+  check is shown as such in the badge.
+- Evidence: `audit/status.json`, the badge, the report the status points to.
+- Checked: the file exists, matches `VIBECODING.md` and the latest report,
+  and the commit it names exists; staleness is computed, not read.
+
+**D6. Test changes are explained.** A change that deletes a test, weakens an
+assertion, marks a test as skipped, or raises a tolerance states why in its
+commit message or pull request, and the human reviewer approves that
+statement. Making CI green by removing the check that failed is the failure
+mode this requirement names.
+- Evidence: the git history.
+- Checked: the auditor lists test removals and weakenings since the last
+  check and reports those without a stated reason.
+
 **D10. Agent instructions carry the convention.** Where the project has agent
 instruction files, under whatever name its tools use (`AGENTS.md`, `CLAUDE.md`,
 `.cursorrules`, `GEMINI.md` and the like, or the paths the project declares in
@@ -169,8 +171,6 @@ required to add one.
 - Checked: where present, the file contains the four points and no secret;
   `vibecheck` verifies the declared level, the `VIBECODING.md` link, a
   declared trailer and the declared test command.
-
-### Level 2: Tested
 
 **T1. Tests run in CI on every change.** Automated tests exist and run on every
 push or pull request. The default branch is green. The build runs from a clean
