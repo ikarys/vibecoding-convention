@@ -45,9 +45,12 @@ they do not maintain.
 
 ## Adopting it
 
-1. Add a `VIBECODING.md` declaration at the root of your repository
-   (template in [`templates/`](templates)), a contribution policy, and the
-   badge in your README.
+1. Add four texts, all from [`templates/`](templates): a `VIBECODING.md`
+   declaration at the root of your repository, a `CONTRIBUTING.md` that
+   states your AI policy and names the trailer, a `SECURITY.md` with your
+   response time (or declare `none`), and a README line that says the project
+   follows the convention and links to the declaration. The badge comes with
+   level 2.
 2. Attribute AI-written commits with an `Assisted-by:` trailer naming the
    tool and model.
 3. From level 2, run the checks for your level in CI and commit the evidence

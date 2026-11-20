@@ -65,7 +65,8 @@ a model; and an attribution trailer names a model the project declares (D2),
 so the declaration cannot fall behind the history. `Co-Authored-By:` is exempt
 from the second rule because it also names humans. A commit without any attribution trailer is understood as
 human-written.
-- Evidence: the git history from the adoption commit named in `VIBECODING.md`.
+- Evidence: the git history after the commit named in `VIBECODING.md`
+  (`adopted_at`: the last commit before the declaration was added).
 - Checked: sample commits since adoption. Substantial commits without a
   trailer are a finding if the declaration says the project is mostly
   AI-written. The share of attributed commits is reported, not judged against
@@ -110,8 +111,9 @@ to other projects follow Part B.
 **D9. Project status.** `VIBECODING.md` states the project status: `active`,
 `maintenance` (fixes only), or `archived`. For `active` and `maintenance`
 projects that accept security reports, `SECURITY.md` states the time within
-which a report is acknowledged (for example 72 hours), and `VIBECODING.md`
-matches it. A project that cannot commit to a response time says so; that is
+which a report is acknowledged (for example `72h`), and `VIBECODING.md`
+repeats the same text: the check is a literal match, so `72 hours` in one
+file and `72h` in the other fails. A project that cannot commit to a response time says so; that is
 honest, and it is the information a user needs.
 - Evidence: the fields.
 - Checked: present and consistent between the two files; an `archived`
@@ -563,7 +565,8 @@ fails the requirement it serves; one whose last commit is older than the latest
 release tag is stale (a warning). The `commands` block stays: it tells CI
 matching and agents and humans what to run.
 
-The README disclosure (D1) is the dynamic badge of D5:
+At level 1 the README disclosure (D1) is a sentence that links to
+`VIBECODING.md`. From level 2 it is the dynamic badge of D5:
 
 ```
 [![Vibecoding Convention](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/<owner>/<repo>/main/audit/status.json)](VIBECODING.md)

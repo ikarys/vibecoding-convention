@@ -16,6 +16,7 @@ convention:
   tools:
     - "Claude Code:claude-fable-5-1"
     - "Claude Code:claude-opus-5-5"
+    - "Claude Code:claude-sonnet-5-5"   # blind-test agent
     - "Claude Code:qwen3.8-27b"
   attribution_trailers: [Assisted-by, Generated-by]
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }

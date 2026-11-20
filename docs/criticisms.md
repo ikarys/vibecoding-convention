@@ -1,6 +1,6 @@
 # Criticisms of vibecoding, and what the convention answers
 
-Working document for version 0.1. Last changed 2026-11-08.
+Working document for version 0.1. Last changed 2026-11-20.
 
 A convention worth adopting has to answer the criticisms people actually make,
 with evidence anyone can check. This page lists the main criticisms found in
@@ -147,7 +147,8 @@ from being deleted in the same change that broke the behaviour it covered.
   testing tool on its core modules and declares the score and threshold.
   Mutation testing is the objective answer to "do these tests detect
   anything": it measures whether the tests fail when the code is changed.
-- **NEW D6. Test changes are explained.** Level 1. A commit or pull request
+- **NEW D6. Test changes are explained.** Level 2 (it reads the git
+  history, so it left the text-only level 1 on 2026-11-20). A commit or pull request
   that deletes a test, weakens an assertion, or marks a test as skipped states
   why in its message, and the reviewer approves that statement. Checked: the
   auditor lists test removals since the last audit without a stated reason.
@@ -403,8 +404,8 @@ judged, not into a number.
 
 ## Changes to the level structure
 
-If the proposals above are accepted, level 2 grows by T7, T8, T9 and the
-extended T6; level 1 grows by D6, D7, D8 and D9 (all text, no tooling); level 3
+If the proposals above are accepted, level 2 grows by D6, T7, T8, T9 and
+the extended T6; level 1 grows by D7, D8 and D9 (all text, no tooling); level 3
 grows by A6, A7 and A8. Level 1 stays achievable in an afternoon. Level 2
 adds three CI steps. Level 3 adds one human-written document and one optional
 measurement.

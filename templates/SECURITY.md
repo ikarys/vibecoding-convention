@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Write to <address or private channel>. We acknowledge within <72 hours> and
+Write to <address or private channel>. We acknowledge within <72h, the same text as in `VIBECODING.md`> and
 say what we will do within <7 days>. Do not open a public issue for a
 vulnerability.
 
