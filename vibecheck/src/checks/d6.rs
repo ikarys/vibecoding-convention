@@ -162,6 +162,14 @@ pub(crate) fn is_test_change(stat: &str, diff: &str) -> bool {
 }
 
 pub(crate) fn has_explanation(subject: &str, body: &str) -> bool {
+    // A "Test:" paragraph in the body describes the test change on purpose,
+    // whatever words it uses; in the subject "test:" is only the commit type.
+    if body.lines().any(|line| {
+        let lower = line.trim().to_lowercase();
+        lower.starts_with("test:") || lower.starts_with("tests:")
+    }) {
+        return true;
+    }
     let text = format!("{subject}\n{body}").to_lowercase();
     [
         "why",
@@ -225,5 +233,14 @@ mod tests {
     fn explanation_words_work() {
         assert!(has_explanation("fix flaky test", ""));
         assert!(!has_explanation("update", ""));
+    }
+
+    #[test]
+    fn test_paragraph_in_body_is_an_explanation() {
+        assert!(has_explanation(
+            "feat: sign once",
+            "Test: the index row is enough now."
+        ));
+        assert!(!has_explanation("test: drop a check", ""));
     }
 }
