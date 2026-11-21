@@ -1,11 +1,11 @@
 {
   "color": "blue",
   "label": "vibecoding",
-  "message": "level 2 · checked 2026-11-21 · 1c8393b",
+  "message": "level 2 · checked 2026-11-21 · 312f155",
   "schemaVersion": 1,
   "vibecoding": {
     "checked_by": "vibecheck 0.4.0",
-    "commit": "1c8393b",
+    "commit": "312f155",
     "date": "2026-11-21",
     "evidence": {
       "audit": "audit/evidence/audit.json",
