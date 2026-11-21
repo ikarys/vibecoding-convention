@@ -13,6 +13,13 @@ pub mod util;
 
 use std::path::Path;
 
+/// The current UTC calendar day.
+pub fn today() -> jiff::civil::Date {
+    jiff::Timestamp::now()
+        .to_zoned_datetime(jiff::tz::TimeZone::UTC)
+        .date()
+}
+
 pub use finding::Report;
 pub use review::run_review;
 
@@ -48,7 +55,7 @@ pub fn run(root: &Path, opts: Options) -> anyhow::Result<Report> {
             .then_with(|| a.severity.cmp(&b.severity))
             .then_with(|| a.problem.cmp(&b.problem))
     });
-    let date = chrono::Utc::now().naive_local().date();
+    let date = crate::today();
     let metrics = ctx.metrics.into_inner();
     let evidence = ctx
         .decl

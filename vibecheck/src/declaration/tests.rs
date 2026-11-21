@@ -2,9 +2,18 @@ use super::*;
 
 #[test]
 fn parses_intervals() {
-    assert_eq!(parse_interval("90d").unwrap(), Duration::days(90));
-    assert_eq!(parse_interval("6m").unwrap(), Duration::days(180));
-    assert_eq!(parse_interval("1y").unwrap(), Duration::days(365));
+    assert_eq!(
+        parse_interval("90d").unwrap().fieldwise(),
+        Span::new().days(90).fieldwise()
+    );
+    assert_eq!(
+        parse_interval("6m").unwrap().fieldwise(),
+        Span::new().days(180).fieldwise()
+    );
+    assert_eq!(
+        parse_interval("1y").unwrap().fieldwise(),
+        Span::new().days(365).fieldwise()
+    );
     assert!(parse_interval("6x").is_err());
 }
 

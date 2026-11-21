@@ -26,7 +26,7 @@ pub fn run_review(root: &Path, base: &str) -> anyhow::Result<Report> {
     let (decl, _) = declaration::read_declaration(root);
     let git = Git::new(root.to_path_buf());
     let level = decl.as_ref().map(|d| d.convention.level).unwrap_or(1);
-    let date = chrono::Utc::now().naive_local().date();
+    let date = crate::today();
     let report = |findings| Report {
         level,
         findings,

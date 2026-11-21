@@ -92,7 +92,7 @@ mod tests {
             level: 1,
             findings: vec![Finding::info("D1", "ok", "all good", None)],
             checked_commit: Some("abcdef1234567890".to_string()),
-            date: chrono::Utc::now().naive_local().date(),
+            date: crate::today(),
             metrics,
             evidence: BTreeMap::new(),
         }

@@ -90,7 +90,7 @@ pub struct Report {
     pub level: u8,
     pub findings: Vec<Finding>,
     pub checked_commit: Option<String>,
-    pub date: chrono::NaiveDate,
+    pub date: jiff::civil::Date,
     pub metrics: BTreeMap<String, Value>,
     /// Declared evidence keys and their paths, recorded in `status.json`.
     pub evidence: BTreeMap<String, String>,

@@ -1,4 +1,4 @@
-use chrono::NaiveDate;
+use jiff::{civil::Date, tz::TimeZone, Span};
 use serde_json::Value;
 
 use crate::checks::Check;
@@ -101,17 +101,18 @@ impl Check for D5 {
             .get("date")
             .and_then(|v| v.as_str())
             .unwrap_or_default();
-        if let Ok(date) = NaiveDate::parse_from_str(date_string, "%Y-%m-%d") {
+        if let Ok(date) = date_string.parse::<Date>() {
             let interval = decl
                 .convention
                 .check_interval
-                .map(|value| value.as_duration())
-                .unwrap_or_else(|| chrono::Duration::days(180));
-            let now = chrono::Utc::now().naive_local().date();
-            let mut stale = date < now - interval;
+                .map(|value| value.as_span())
+                .unwrap_or_else(|| Span::new().days(180));
+            let now = crate::today();
+            // An interval too large to subtract means the status never goes stale.
+            let mut stale = date < now.checked_sub(interval).unwrap_or(Date::MIN);
 
             if let Some((_, tag_date)) = ctx.git.latest_tag() {
-                let tag_date = tag_date.naive_utc().date();
+                let tag_date = tag_date.to_zoned_datetime(TimeZone::UTC).date();
                 stale |= date < tag_date;
             }
 
