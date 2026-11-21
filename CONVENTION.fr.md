@@ -30,39 +30,55 @@ La partie A s'applique à un dépôt et aux personnes qui le maintiennent. Chaqu
 
 ### Exigences
 
-Les identifiants en gras dans le tableau ci-dessous sont le cœur d'un niveau : les exigences qui le constituent. Les autres le consolident. Toutes sont obligatoires : un projet qui ne peut pas en respecter une le dit, et pourquoi, sous `Exceptions` dans son `VIBECODING.md`. La convention n'est pas à la carte, mais elle ne demande jamais le silence.
+Les identifiants en gras dans les tableaux ci-dessous sont le cœur d'un niveau : les exigences qui le constituent. Les autres le consolident. Toutes sont obligatoires : un projet qui ne peut pas en respecter une le dit, et pourquoi, sous `Exceptions` dans son `VIBECODING.md`. La convention n'est pas à la carte, mais elle ne demande jamais le silence.
 
 Vérification : **M** mécanique (un outil la vérifie sans jugement), **J** jugement (un relecteur, humain ou agent, tranche), **M+J** les deux.
 
-| ID | Niveau | Exigence | Preuve | Vérification |
-|---|---|---|---|---|
-| D1 | 1 | Le README divulgue l'assistance IA et pointe vers `VIBECODING.md` | README | M |
-| **D2** | 1 | `VIBECODING.md` déclare l'implication IA, le niveau de convention, les outils et modèles, les mainteneurs, la politique de revue, l'état, la provenance, le commit d'adoption et les seuils | le fichier | M |
-| **D3** | 1 | Les commits écrits par IA portent un trailer nommant l'outil et le modèle, et un modèle ne signe jamais un certificat d'origine | historique git | M |
-| **D4** | 1 | Aucun changement écrit par IA n'atteint la branche par défaut sans une revue humaine, et le générateur n'est jamais le seul réviseur | politique, historique de pull request | M+J |
-| D7 | 1 | La déclaration indique la licence, la position sur le droit d'auteur des parties écrites par IA, qu'aucune reproduction connue incompatible avec la licence n'a été incluse, et les garde-fous utilisés | la déclaration | M |
-| D8 | 1 | `CONTRIBUTING.md` indique la politique pour les contributions IA entrantes, nomme le trailer du projet et demande C1 à C3 dans les pull request | le fichier, modèle de pull request | M |
-| D9 | 1 | La déclaration indique l'état du projet et le délai de réponse en matière de sécurité, correspondant à `SECURITY.md` | les fichiers | M |
-| **T1** | 2 | Les tests s'exécutent en CI à chaque changement depuis un checkout propre | config CI | M |
-| **T2** | 2 | La couverture, mesurée par un outil déclaré, est au moins égale au seuil déclaré, et CI écrit le rapport dans le fichier de preuve | fichier de preuve de couverture | M |
-| T3 | 2 | Les tests affirment le comportement, aucun test n'est sauté sans raison, et chaque changement de comportement arrive avec son test | suite de tests, historique | J |
-| T4 | 2 | Le logiciel destiné à l'utilisateur a des tests de bout en bout de ses parcours principaux | suite e2e | J |
-| T5 | 2 | Lint et formatage s'exécutent en CI et échouent sur les avertissements, avec les exceptions listées avec une raison | config CI | M |
-| **T6** | 2 | Le fichier de verrouillage (lockfile) est versionné, les vérifications de vulnérabilités et de licence s'exécutent en CI, et chaque nouvelle dépendance est vérifiée contre le registre avant fusion | fichier de verrouillage (lockfile), CI, fichier de preuve, historique | M |
-| **T7** | 2 | Un analyseur de secrets et un analyseur statique s'exécutent en CI à chaque changement, et les constats sont corrigés ou acceptés avec une raison | config CI | M |
-| T8 | 2 | La duplication, la complexité, la longueur des fonctions et des fichiers et les marqueurs résiduels sont mesurés avec un outil déclaré et des seuils, et enregistrés dans le fichier d'état | fichier de preuve, fichier d'état | M |
-| T9 | 2 | Les dépendances sont à jour, maintenues à jour par un mécanisme déclaré, aucune n'est abandonnée, et les exceptions sont déclarées avec une raison | config de mise à jour, fichier de preuve obsolète | M |
-| D5 | 2 | `audit/status.json` contient la date, le commit et le verdict de la dernière vérification, est écrit par la vérification, alimente le badge et se marque obsolète | fichier d'état, badge | M |
-| D6 | 2 | Un changement qui supprime, saute ou affaiblit un test indique pourquoi, et un humain approuve | historique git | M+J |
-| D10 | 2 | Les fichiers d'instructions d'agent nomment le niveau, pointent vers `VIBECODING.md`, donnent les commandes à passer, les règles auxquelles les humains sont tenus, et ce que l'agent ne fait jamais seul | les fichiers | M |
-| A1 | 3 | Une revue d'architecture juge le code par rapport à des principes de conception nommés, y compris le signal plutôt que le bruit, et donne un verdict, renouvelé à chaque changement mineur ou structurel | `audit/*-architecture.md` | J |
-| **A2** | 3 | `SECURITY.md` nomme un contact, un délai de réponse et un modèle de menace, chaque affirmation de sécurité est tracée jusqu'à un test réussi, et les chemins de données utilisateur ont des tests d'autorisation | `audit/*-security.md` | M+J |
-| **A3** | 3 | Lorsque le logiciel a une documentation utilisateur, un testeur sans accès au code source l'installe et l'utilise à partir de la documentation seule | `audit/*-blind-*.md` | J |
-| **A4** | 3 | `audit/README.md` indexe chaque rapport avec date, commit, type, outil, lecteur et verdict, et les rapports ne sont jamais réécrits, seulement ajoutés | l'index | M |
-| A5 | 3 | Aucune publication ne sort avec un `BLOCKER` ou un `DOC-WRONG` ouvert, et chaque publication nomme l'humain qui l'a approuvée | index à l'étiquette, notes de publication | M |
-| A6 | 3 | Une vue d'ensemble de l'architecture et des enregistrements de décision existent, chacun validé par un humain nommé avec une date, revalidé en cas de changement structurel, et correspondent au code | les documents | M+J |
-| A7 | 3 | Le score de mutation est mesuré sur les modules principaux et est au moins égal au seuil déclaré (recommandé) | fichier de preuve de mutation | M |
-| A8 | 3 | Tout ce qui s'exécute avec un accès au dépôt est versionné, revu, épinglé, exempt de secrets, et a un modèle de permissions déclaré | les fichiers | M+J |
+#### Niveau 1 : Déclaré
+
+| ID | Exigence | Preuve | Vérification |
+|---|---|---|---|
+| D1 | Le README divulgue l'assistance IA et pointe vers `VIBECODING.md` | README | M |
+| **D2** | `VIBECODING.md` déclare l'implication IA, le niveau de convention, les outils et modèles, les mainteneurs, la politique de revue, l'état, la provenance, le commit d'adoption et les seuils | le fichier | M |
+| **D3** | Les commits écrits par IA portent un trailer nommant l'outil et le modèle, et un modèle ne signe jamais un certificat d'origine | historique git | M |
+| **D4** | Aucun changement écrit par IA n'atteint la branche par défaut sans une revue humaine, et le générateur n'est jamais le seul réviseur | politique, historique de pull request | M+J |
+| D7 | La déclaration indique la licence, la position sur le droit d'auteur des parties écrites par IA, qu'aucune reproduction connue incompatible avec la licence n'a été incluse, et les garde-fous utilisés | la déclaration | M |
+| D8 | `CONTRIBUTING.md` indique la politique pour les contributions IA entrantes, nomme le trailer du projet et demande C1 à C3 dans les pull request | le fichier, modèle de pull request | M |
+| D9 | La déclaration indique l'état du projet et le délai de réponse en matière de sécurité, correspondant à `SECURITY.md` | les fichiers | M |
+
+#### Niveau 2 : Testé
+
+Niveau 1, plus :
+
+| ID | Exigence | Preuve | Vérification |
+|---|---|---|---|
+| **T1** | Les tests s'exécutent en CI à chaque changement depuis un checkout propre | config CI | M |
+| **T2** | La couverture, mesurée par un outil déclaré, est au moins égale au seuil déclaré, et CI écrit le rapport dans le fichier de preuve | fichier de preuve de couverture | M |
+| T3 | Les tests affirment le comportement, aucun test n'est sauté sans raison, et chaque changement de comportement arrive avec son test | suite de tests, historique | J |
+| T4 | Le logiciel destiné à l'utilisateur a des tests de bout en bout de ses parcours principaux | suite e2e | J |
+| T5 | Lint et formatage s'exécutent en CI et échouent sur les avertissements, avec les exceptions listées avec une raison | config CI | M |
+| **T6** | Le fichier de verrouillage (lockfile) est versionné, les vérifications de vulnérabilités et de licence s'exécutent en CI, et chaque nouvelle dépendance est vérifiée contre le registre avant fusion | fichier de verrouillage (lockfile), CI, fichier de preuve, historique | M |
+| **T7** | Un analyseur de secrets et un analyseur statique s'exécutent en CI à chaque changement, et les constats sont corrigés ou acceptés avec une raison | config CI | M |
+| T8 | La duplication, la complexité, la longueur des fonctions et des fichiers et les marqueurs résiduels sont mesurés avec un outil déclaré et des seuils, et enregistrés dans le fichier d'état | fichier de preuve, fichier d'état | M |
+| T9 | Les dépendances sont à jour, maintenues à jour par un mécanisme déclaré, aucune n'est abandonnée, et les exceptions sont déclarées avec une raison | config de mise à jour, fichier de preuve obsolète | M |
+| D5 | `audit/status.json` contient la date, le commit et le verdict de la dernière vérification, est écrit par la vérification, alimente le badge et se marque obsolète | fichier d'état, badge | M |
+| D6 | Un changement qui supprime, saute ou affaiblit un test indique pourquoi, et un humain approuve | historique git | M+J |
+| D10 | Les fichiers d'instructions d'agent nomment le niveau, pointent vers `VIBECODING.md`, donnent les commandes à passer, les règles auxquelles les humains sont tenus, et ce que l'agent ne fait jamais seul | les fichiers | M |
+
+#### Niveau 3 : Audité
+
+Niveau 2, plus :
+
+| ID | Exigence | Preuve | Vérification |
+|---|---|---|---|
+| A1 | Une revue d'architecture juge le code par rapport à des principes de conception nommés, y compris le signal plutôt que le bruit, et donne un verdict, renouvelé à chaque changement mineur ou structurel | `audit/*-architecture.md` | J |
+| **A2** | `SECURITY.md` nomme un contact, un délai de réponse et un modèle de menace, chaque affirmation de sécurité est tracée jusqu'à un test réussi, et les chemins de données utilisateur ont des tests d'autorisation | `audit/*-security.md` | M+J |
+| **A3** | Lorsque le logiciel a une documentation utilisateur, un testeur sans accès au code source l'installe et l'utilise à partir de la documentation seule | `audit/*-blind-*.md` | J |
+| **A4** | `audit/README.md` indexe chaque rapport avec date, commit, type, outil, lecteur et verdict, et les rapports ne sont jamais réécrits, seulement ajoutés | l'index | M |
+| A5 | Aucune publication ne sort avec un `BLOCKER` ou un `DOC-WRONG` ouvert, et chaque publication nomme l'humain qui l'a approuvée | index à l'étiquette, notes de publication | M |
+| A6 | Une vue d'ensemble de l'architecture et des enregistrements de décision existent, chacun validé par un humain nommé avec une date, revalidé en cas de changement structurel, et correspondent au code | les documents | M+J |
+| A7 | Le score de mutation est mesuré sur les modules principaux et est au moins égal au seuil déclaré (recommandé) | fichier de preuve de mutation | M |
+| A8 | Tout ce qui s'exécute avec un accès au dépôt est versionné, revu, épinglé, exempt de secrets, et a un modèle de permissions déclaré | les fichiers | M+J |
 
 ## Partie B : contribuer à d'autres projets
 
