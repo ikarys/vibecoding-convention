@@ -631,8 +631,8 @@ the default branch (or a maintainer does). vibecheck never executes the
 project's commands, so it is safe to run on any repository. At level 2 and
 above `evidence.coverage` and `evidence.audit` are required, `outdated` only
 when no update bot is configured. A declared file that is missing or unreadable
-fails the requirement it serves; one whose last commit is older than the latest
-release tag is stale (a warning). The `commands` block stays: it tells CI
+fails the requirement it serves. Freshness is judged on the whole check, not
+per file: after a release, a status older than the tagged commit is stale (D5). The `commands` block stays: it tells CI
 matching and agents and humans what to run.
 
 At level 1 the README disclosure (D1) is a sentence that links to

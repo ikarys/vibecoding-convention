@@ -1,5 +1,5 @@
 //! Evidence-driven checks: coverage (T2), declaration (D2), maintainability
-//! (T8), path hardening, staleness and the status file.
+//! (T8), path hardening, release staleness (D5) and the status file.
 mod common;
 
 use std::fs;
@@ -206,24 +206,58 @@ fn t8_reports_maintainability_evidence() {
     ));
 }
 
-#[test]
-fn stale_evidence_is_warned_about_after_a_release() {
-    let dir = fixture();
+fn tag_with_dates(dir: &std::path::Path, commit_date: Option<&str>) {
+    if let Some(date) = commit_date {
+        fs::write(dir.join("later.txt"), "later\n").unwrap();
+        common::git(dir, &["add", "later.txt"]);
+        let status = Command::new("git")
+            .args(["commit", "-m", "later change"])
+            .current_dir(dir)
+            .env("GIT_AUTHOR_NAME", "Vibecheck Test")
+            .env("GIT_AUTHOR_EMAIL", "test@example.com")
+            .env("GIT_COMMITTER_DATE", date)
+            .env("GIT_COMMITTER_NAME", "Vibecheck Test")
+            .env("GIT_COMMITTER_EMAIL", "test@example.com")
+            .status()
+            .unwrap();
+        assert!(status.success());
+    }
+    // The tagger date is far in the future in both cases: only the tagged
+    // commit's date may decide staleness.
     let status = Command::new("git")
         .args(["tag", "-a", "v9.9.9", "-m", "release"])
-        .current_dir(dir.path())
+        .current_dir(dir)
         .env("GIT_COMMITTER_DATE", "2099-01-01T00:00:00+00:00")
         .env("GIT_COMMITTER_NAME", "Vibecheck Test")
         .env("GIT_COMMITTER_EMAIL", "test@example.com")
         .status()
         .unwrap();
     assert!(status.success());
+}
+
+#[test]
+fn status_is_stale_when_a_later_commit_is_released() {
+    let dir = fixture();
+    tag_with_dates(dir.path(), Some("2098-01-01T00:00:00+00:00"));
     let report = run_default(dir.path());
     assert!(has_finding(
         report.findings.iter(),
-        "T2",
+        "D5",
         Severity::Warn,
-        "evidence older than release v9.9.9"
+        "status.json is stale"
+    ));
+}
+
+#[test]
+fn status_of_the_tagged_commit_is_not_stale() {
+    let dir = fixture();
+    tag_with_dates(dir.path(), None);
+    let report = run_default(dir.path());
+    assert!(!has_finding(
+        report.findings.iter(),
+        "D5",
+        Severity::Warn,
+        "status.json is stale"
     ));
 }
 

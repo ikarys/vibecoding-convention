@@ -348,8 +348,8 @@ commands:
 # Evidence files a project declares in VIBECODING.md under convention.evidence:
 # the outputs of its tools, written by CI, read by vibecheck. Paths are relative
 # to the repository root. A declared file that is missing or unreadable fails
-# the requirement it serves; one whose last commit is older than the latest
-# release tag is stale (a warning).
+# the requirement it serves. Freshness is judged on the whole check, not per
+# file: after a release, a status older than the tagged commit is stale (D5).
 evidence:
   coverage: cargo-llvm-cov summary text, lcov.info, cobertura.xml, cargo-llvm-cov JSON, or any text whose last percentage is the line coverage (required at level 2+)
   audit: cargo-audit JSON, npm/pnpm audit JSON, pip-audit JSON, or the tool's text output (required at level 2+)

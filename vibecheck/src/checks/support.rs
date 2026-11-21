@@ -64,19 +64,6 @@ pub fn read_evidence(ctx: &Context, id: &str, path: &str) -> Result<String, Box<
     })
 }
 
-/// A warning when a release tag is newer than the evidence file.
-pub fn stale_evidence(ctx: &Context, id: &str, path: &str) -> Option<Finding> {
-    evidence::staleness(path, &ctx.git).map(|text| {
-        Finding::warn(
-            id,
-            "stale evidence",
-            text,
-            Some(path.to_string()),
-            Some("regenerate the evidence in CI for the release".to_string()),
-        )
-    })
-}
-
 pub fn no_ci(id: &str) -> Finding {
     Finding::fail(
         id,

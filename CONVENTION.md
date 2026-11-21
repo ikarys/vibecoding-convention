@@ -1,6 +1,6 @@
 # Vibecoding Convention
 
-Version 0.1, draft. Last changed 2026-11-21.
+Version 0.1. Last changed 2026-11-21.
 
 Software written wholly or partly by AI assistants can be as trustworthy as any
 other software, provided it is framed, reviewed and audited. This page defines

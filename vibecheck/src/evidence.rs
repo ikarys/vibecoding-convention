@@ -8,8 +8,6 @@ use std::path::{Component, Path, PathBuf};
 
 use serde_json::Value;
 
-use crate::git::Git;
-
 /// Evidence files larger than this are refused: the declaration is hostile
 /// input and a path may point at an unbounded file.
 const MAX_EVIDENCE_BYTES: u64 = 16 * 1024 * 1024;
@@ -315,14 +313,6 @@ fn cargo_mutants_score(value: &Value) -> Option<f64> {
     let caught = count("caught")?;
     let total = caught + count("missed")? + count("timeout").unwrap_or(0);
     (total > 0).then(|| caught as f64 * 100.0 / total as f64)
-}
-
-/// Warning text when a release tag is newer than the last commit touching the
-/// evidence file: the file then describes a state older than the release.
-pub fn staleness(relative: &str, git: &Git) -> Option<String> {
-    let changed = git.last_commit_time(relative)?;
-    let (tag, tag_date) = git.latest_tag()?;
-    (tag_date > changed).then(|| format!("evidence older than release {tag}"))
 }
 
 #[cfg(test)]
