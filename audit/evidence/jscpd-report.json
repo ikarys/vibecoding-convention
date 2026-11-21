@@ -1367,35 +1367,73 @@
         }
       },
       "tokens": 51
+    },
+    {
+      "firstFile": {
+        "end": 79,
+        "endLoc": {
+          "column": 31,
+          "line": 79,
+          "position": 2716
+        },
+        "name": "spec_consistency.rs",
+        "start": 74,
+        "startLoc": {
+          "column": 20,
+          "line": 74,
+          "position": 2503
+        }
+      },
+      "format": "rust",
+      "fragment": "    for line in text.lines() {\n        if let Some(c) = level.captures(line) {\n            current = Some(c[1].parse().unwrap());\n        } else if line.starts_with(\"## \") {\n            current = None;\n        } else if let Some(c) = part_a.captures(line) {",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 6,
+      "secondFile": {
+        "end": 148,
+        "endLoc": {
+          "column": 31,
+          "line": 148,
+          "position": 5380
+        },
+        "name": "spec_consistency.rs",
+        "start": 143,
+        "startLoc": {
+          "column": 44,
+          "line": 143,
+          "position": 5167
+        }
+      },
+      "tokens": 60
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-21T09:38:03.652Z",
+    "detectionDate": "2026-11-21T10:00:51.956Z",
     "formats": {
       "rust": {
-        "clones": 36,
-        "duplicatedLines": 327,
-        "duplicatedTokens": 2250,
-        "lines": 9811,
+        "clones": 37,
+        "duplicatedLines": 333,
+        "duplicatedTokens": 2310,
+        "lines": 9820,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.3329935786362244,
-        "percentageTokens": 3.5722223986282664,
+        "percentage": 3.3910386965376778,
+        "percentageTokens": 3.66265518717595,
         "sources": 57,
-        "tokens": 62986
+        "tokens": 63069
       }
     },
     "total": {
-      "clones": 36,
-      "duplicatedLines": 327,
-      "duplicatedTokens": 2250,
-      "lines": 9811,
+      "clones": 37,
+      "duplicatedLines": 333,
+      "duplicatedTokens": 2310,
+      "lines": 9820,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.3329935786362244,
-      "percentageTokens": 3.5722223986282664,
+      "percentage": 3.3910386965376778,
+      "percentageTokens": 3.66265518717595,
       "sources": 57,
-      "tokens": 62986
+      "tokens": 63069
     }
   }
 }
