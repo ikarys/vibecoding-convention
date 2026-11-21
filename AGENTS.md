@@ -40,7 +40,10 @@ Rules while editing:
   (`vibecheck/tests/spec_consistency.rs` checks ids, levels and check kinds;
   wording is read by a human). `README.md`, `index.html`, `agents/README.md`
   and the skills summarise them: a change to a requirement is checked against
-  these mirrors too.
+  these mirrors too. `CONVENTION.fr.md` and `fr/index.html` translate
+  `CONVENTION.md` and `index.html`; the English text is the reference, and a
+  change to it is a change to the translation (the same test checks ids,
+  levels, check kinds, core and the date of the translation).
 - Everything in this repository is in English.
 
 Never without a human: merge, release, change the CI, delete data.

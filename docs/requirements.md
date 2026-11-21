@@ -16,13 +16,19 @@ it. Identifiers are stable: a requirement is never renumbered.
 
 ### Level 1: Declared
 
-**D1. README disclosure.** The README has a section, or the badge of D5, that
+The core of this level: D2, D3 and D4. The other requirements consolidate it.
+
+#### D1. README disclosure
+
+The README has a section, or the badge of D5, that
 says the project is wholly or partly written with AI assistance and links to
 `VIBECODING.md`.
 - Evidence: the README section or badge.
 - Checked: the section or badge exists and links to `VIBECODING.md`.
 
-**D2. Declaration file.** The repository root has a `VIBECODING.md` whose
+#### D2. Declaration file
+
+The repository root has a `VIBECODING.md` whose
 front matter uses the [AI-DECLARATION.md](https://github.com/DimwitLabs/AI-DECLARATION.md)
 keys for the degree of AI involvement (`version`, `level`, `processes`, and
 `components` where the project uses it), so that the same information is written once and existing
@@ -48,7 +54,9 @@ repeating those keys. The Declaration file section gives the format. The file st
   (tools named in commit trailers, audit dates in `audit/status.json`,
   thresholds in CI configuration).
 
-**D3. Commit attribution.** Every commit that contains AI-written content
+#### D3. Commit attribution
+
+Every commit that contains AI-written content
 carries a git trailer that names the tool and the model, so that attribution
 can be read by a machine from the history alone. The convention does not pick
 the trailer. The project declares the ones it uses in `VIBECODING.md`
@@ -73,7 +81,9 @@ human-written.
   a threshold. A `Signed-off-by:` naming a model is a failure, and so is an
   attribution trailer other than `Co-Authored-By:` naming no declared model.
 
-**D4. Human review before merge.** No AI-written change reaches the default
+#### D4. Human review before merge
+
+No AI-written change reaches the default
 branch without a human having reviewed it (C2) and approved it. For a team this is a
 reviewed pull request. For a single maintainer this is the maintainer's own
 review of every change, stated in `VIBECODING.md`, and a tool or workflow that
@@ -85,7 +95,9 @@ that produced a change is never its only reviewer.
 - Checked: the policy exists; the history shows no AI-attributed commit merged
   without a human review event where the platform records one.
 
-**D7. Provenance and licence statement.** `VIBECODING.md` states the project
+#### D7. Provenance and licence statement
+
+`VIBECODING.md` states the project
 licence; acknowledges that AI-written parts may not be protected by copyright
 in some jurisdictions and that the maintainers accept this; states that no
 verbatim reproduction of licence-incompatible code was knowingly included; and
@@ -95,7 +107,9 @@ scanning, a human check of long generated blocks).
 - Checked: the statement is present and complete; where a snippet scanner is
   declared, CI runs it and the auditor reads its output.
 
-**D8. Contribution policy.** `CONTRIBUTING.md` states the project's policy for
+#### D8. Contribution policy
+
+`CONTRIBUTING.md` states the project's policy for
 incoming AI-assisted contributions: accepted with disclosure, accepted with
 conditions, or refused. Where accepted, it asks contributors for C1 to C3 of
 Part B: disclosure with the project's trailer, a statement that the diff was
@@ -108,7 +122,9 @@ to other projects follow Part B.
   otherwise); the auditor samples merged pull requests from outside
   contributors for the trailer and a human approval.
 
-**D9. Project status.** `VIBECODING.md` states the project status: `active`,
+#### D9. Project status
+
+`VIBECODING.md` states the project status: `active`,
 `maintenance` (fixes only), or `archived`. For `active` and `maintenance`
 projects that accept security reports, `SECURITY.md` states the time within
 which a report is acknowledged (for example `72h`), and `VIBECODING.md`
@@ -121,7 +137,11 @@ honest, and it is the information a user needs.
 
 ### Level 2: Tested
 
-**D5. Dated check.** The repository carries the date and commit of the last
+The core of this level: T1, T2, T6 and T7. The other requirements consolidate it.
+
+#### D5. Dated check
+
+The repository carries the date and commit of the last
 convention check, produced by the check itself and not typed by hand:
 - `audit/status.json` holds the claimed level, the date, the commit checked,
   the verdict (`pass`, `pass with findings`, `fail`, `stale`), the number of
@@ -141,7 +161,9 @@ convention check, produced by the check itself and not typed by hand:
 - Checked: the file exists, matches `VIBECODING.md` and the latest report,
   and the commit it names exists; staleness is computed, not read.
 
-**D6. Test changes are explained.** A change that deletes a test, weakens an
+#### D6. Test changes are explained
+
+A change that deletes a test, weakens an
 assertion, marks a test as skipped, or raises a tolerance states why in its
 commit message or pull request, and the human reviewer approves that
 statement. Making CI green by removing the check that failed is the failure
@@ -150,7 +172,9 @@ mode this requirement names.
 - Checked: the auditor lists test removals and weakenings since the last
   check and reports those without a stated reason.
 
-**D10. Agent instructions carry the convention.** Where the project has agent
+#### D10. Agent instructions carry the convention
+
+Where the project has agent
 instruction files, under whatever name its tools use (`AGENTS.md`, `CLAUDE.md`,
 `.cursorrules`, `GEMINI.md` and the like, or the paths the project declares in
 `convention.agent_instruction_files`), each such file names the convention level and links to
@@ -174,7 +198,9 @@ required to add one.
   `vibecheck` verifies the declared level, the `VIBECODING.md` link, a
   declared trailer and the declared test command.
 
-**T1. Tests run in CI on every change.** Automated tests exist and run on every
+#### T1. Tests run in CI on every change
+
+Automated tests exist and run on every
 push or pull request. The default branch is green. The build runs from a clean
 checkout with the steps the documentation gives, so that a stranger can build
 the project.
@@ -183,7 +209,9 @@ the project.
   every push or pull request. Whether the default branch is green is read by
   the auditor on the platform; vibecheck does not check it.
 
-**T2. Coverage at the declared threshold.** `VIBECODING.md` declares a line (or
+#### T2. Coverage at the declared threshold
+
+`VIBECODING.md` declares a line (or
 statement) coverage threshold and the tool that measures it. The measured
 coverage is at or above the threshold. The recommended threshold for software
 used in production is 80 %. A lower threshold is allowed and must be
@@ -195,7 +223,9 @@ explained in one sentence.
   the threshold (lcov: LH/LF; cobertura: line-rate; cargo-llvm-cov summary or
   JSON; otherwise the last percentage in the text).
 
-**T3. Tests assert behaviour.** Tests check results, not only that the code ran.
+#### T3. Tests assert behaviour
+
+Tests check results, not only that the code ran.
 No test is skipped or disabled without a comment giving the reason. A failing
 test means the software is wrong, not that the test is flaky. Every change of
 behaviour lands with the test that covers it, in the same change. Test-driven
@@ -210,20 +240,26 @@ convention checks the result, not the order in which it was written.
   changes since the last check that landed without a test. The report says
   which tests were read.
 
-**T4. End-to-end tests for user-facing software.** Software with a user
+#### T4. End-to-end tests for user-facing software
+
+Software with a user
 interface, an API or a command line has tests that exercise its main user
 journeys end to end, against real dependencies or declared stand-ins.
 - Evidence: the e2e suite and the journeys it covers, listed in the test
   directory or the docs.
 - Checked: the main journeys named in the documentation have a test.
 
-**T5. Lint and format enforced.** A linter and a formatter run in CI and fail
+#### T5. Lint and format enforced
+
+A linter and a formatter run in CI and fail
 the build on warnings, or the exceptions are listed in the configuration with
 a reason.
 - Evidence: CI configuration, lint configuration.
 - Checked: the CI step exists and the default branch passes it.
 
-**T6. Dependency hygiene and provenance.** Lockfiles are committed.
+#### T6. Dependency hygiene and provenance
+
+Lockfiles are committed.
 Dependencies are checked for known vulnerabilities and for licence
 compatibility in CI or before every release. Every new dependency is checked
 against the registry before merge, by a tool, an agent or a human: it exists
@@ -244,7 +280,9 @@ the hallucinated name, leaves nothing to measure once it is in the lockfile.
   dependencies added since the last check and reports those without a recorded
   check.
 
-**T7. Secrets and static analysis.** A secrets scanner runs in CI on every
+#### T7. Secrets and static analysis
+
+A secrets scanner runs in CI on every
 change, so that no secret reaches the default branch unnoticed. Running the
 same scanner as a pre-commit hook catches the secret before it enters the
 history at all and is recommended; the convention does not require it, since
@@ -265,7 +303,9 @@ the known classes be looked for by a tool, every time.
   tree for secrets with its built-in scanner and notes, without failing,
   whether a pre-commit hook runs the scanner too.
 
-**T8. Maintainability signals.** The project declares a tool and thresholds for
+#### T8. Maintainability signals
+
+The project declares a tool and thresholds for
 at least: code duplication, function complexity (cyclomatic or cognitive),
 function length, file length, and leftover markers (`TODO`, `FIXME`, `XXX`,
 placeholder text, commented-out code blocks) in delivered code. Where the
@@ -289,7 +329,9 @@ directions; the signal-over-noise judgement belongs to A1.
   writes `evidence.maintainability`, which vibecheck records in the status file
   for the agents.
 
-**T9. Dependency freshness.** A model proposes the library versions and APIs
+#### T9. Dependency freshness
+
+A model proposes the library versions and APIs
 it memorised, not today's, so an AI-written project is behind from its first
 day and falls further behind at every regeneration. The rule is not "always
 the latest" but "no unjustified lag". Three moments:
@@ -319,7 +361,11 @@ database stays without such an exception.
 
 ### Level 3: Audited
 
-**A1. Architecture review.** A versioned report assesses whether the software
+The core of this level: A2, A3 and A4. The other requirements consolidate it.
+
+#### A1. Architecture review
+
+A versioned report assesses whether the software
 is built to be used, not only to demonstrate. It covers module boundaries,
 error handling, configuration, persistence and migrations, observability,
 failure modes, test strategy, and agreement with the architecture documents of
@@ -342,7 +388,9 @@ structural change, as the declaration states.
 - Checked: the report exists for the current minor version; every finding has
   a decision (Findings and decisions).
 
-**A2. Security audit.** The repository has a `SECURITY.md` with a disclosure
+#### A2. Security audit
+
+The repository has a `SECURITY.md` with a disclosure
 contact, the response time of D9, and a threat model that names the known
 vulnerability classes relevant to this kind of software (from the OWASP Top
 10, the CWE Top 25, or the ecosystem's own list) and, for each, the tool rule
@@ -362,7 +410,9 @@ versioned report.
   software holds none; the scans of T6 and T7 ran;
   each finding names how it was confirmed; findings have decisions.
 
-**A3. Blind usability test.** When the software has user documentation and is
+#### A3. Blind usability test
+
+When the software has user documentation and is
 meant to be used by people other than its authors (libraries, command-line
 tools, APIs, applications), a tester with no access to the source code, human
 or AI, uses it from the documentation alone to build or do something real,
@@ -383,7 +433,9 @@ the Report format section.
   says one is required at each minor; every finding has a decision; the report
   states how blindness was enforced.
 
-**A4. Audit index.** `audit/README.md` lists every report: date, commit, kind,
+#### A4. Audit index
+
+`audit/README.md` lists every report: date, commit, kind,
 tool and model that produced it, human who commissioned and read it, verdict,
 number of open findings. The table may carry more columns, in any order;
 vibecheck finds the ones it needs by their header. Reports are not rewritten
@@ -395,7 +447,9 @@ after the fact. Decisions are appended.
   report named by `audit/status.json` is one of them; a report edited after
   its first commit is a warning (a correction must say so in its commit).
 
-**A5. Release rule.** No release is published with an open finding of
+#### A5. Release rule
+
+No release is published with an open finding of
 severity `BLOCKER` or `DOC-WRONG` (Findings and decisions) in any audit report of the
 current minor version. Each release names, in its notes or tag message, the
 human maintainer who approved it; that person is listed in `VIBECODING.md`.
@@ -405,7 +459,9 @@ human maintainer who approved it; that person is listed in `VIBECODING.md`.
   open); the tag message or the release notes section for that version must
   name a declared maintainer.
 
-**A6. Validated architecture documents.** The repository has an architecture
+#### A6. Validated architecture documents
+
+The repository has an architecture
 overview (`ARCHITECTURE.md` or a docs page) naming the components, the data
 flow, the main invariants and the known weak points, and decision records for
 the structural choices, kept where the overview says (`docs/adr/` when it
@@ -421,7 +477,9 @@ checks that the description is true.
   a validation line, or validated before the last structural change it
   describes, is a finding.
 
-**A7. Mutation score (recommended).** The project runs a mutation testing tool
+#### A7. Mutation score (recommended)
+
+The project runs a mutation testing tool
 on its core modules and declares the score and its threshold in
 `VIBECODING.md`. Mutation testing measures whether the tests fail when the
 code is changed, which is the objective form of T3. It is recommended rather
@@ -432,7 +490,9 @@ than required because tooling is uneven across languages.
   runs the tool and writes the evidence file; vibecheck reads it and compares
   the figure to the threshold.
 
-**A8. Tooling configuration is code.** Everything that executes with access to
+#### A8. Tooling configuration is code
+
+Everything that executes with access to
 the repository or the developers' machines is versioned, reviewed like code
 and pinned: agent instruction files (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`
 and the like), agent skills, hooks and plugins, CI actions and workflows,
@@ -456,14 +516,18 @@ the evidence is the contribution itself, and the receiving maintainer checks
 it. A project under Part A asks for C1 to C3 in its pull request template
 (D8); a project that has never heard of the convention can still read them.
 
-**C1. Disclosure.** The pull request or report says that AI assisted in
+#### C1. Disclosure
+
+The pull request or report says that AI assisted in
 writing it, with the tool and model, in its text and, for commits, as the
 trailer the target project expects; when the project expresses no preference,
 the D3 defaults apply. A contribution with AI-written content and no
 disclosure is dishonest, whatever its quality.
 - Evidence: the description and the commit trailers.
 
-**C2. Understood.** The contributor has gone through the whole diff and
+#### C2. Understood
+
+The contributor has gone through the whole diff and
 can say, for each change, what it does, why it is there and what it affects.
 Understanding the change is required; reading every line and understanding
 every construct of the language is not: a
@@ -475,7 +539,9 @@ How the description was written does not matter; that it is true does.
   ask what a change does and why; an answer that does not match the diff
   shows the statement was false, and the project may close the contribution.
 
-**C3. Complete.** A change of behaviour comes with the tests that cover it and
+#### C3. Complete
+
+A change of behaviour comes with the tests that cover it and
 with the documentation it affects, in the same pull request. The description
 says what was run (tests, lint, the software itself) and shows the result.
 For a bug report: the contributor reproduced the bug and gives the exact steps,
@@ -485,7 +551,9 @@ describes a vulnerability a model imagined is the single most damaging form of
 slop, and it is what closed curl's bug bounty.
 - Evidence: the diff, the description, the report.
 
-**C4. Scope and policy.** The contributor has read the target project's
+#### C4. Scope and policy
+
+The contributor has read the target project's
 contribution guide and its AI policy and follows them; a project that refuses
 AI-assisted contributions receives none. One change per pull request. No
 unsolicited generated changes sent across many repositories (typo sweeps,
@@ -493,7 +561,9 @@ unsolicited generated changes sent across many repositories (typo sweeps,
 - Evidence: the description names the guide; the contributor's recent
   activity shows no mass sending.
 
-**C5. Follow-up.** The contributor answers review themselves, within the time
+#### C5. Follow-up
+
+The contributor answers review themselves, within the time
 the project expects, and does not hand the thread to a model that has not seen
 the review. An AI-assisted contribution whose author does not answer may be
 closed without discussion; the convention says this is legitimate, so that

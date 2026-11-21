@@ -1,13 +1,41 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ page.lang | default: 'en' }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{ site.description }}">
   <title>{% if page.title == site.title %}{{ site.title }}{% else %}{{ page.title }} | {{ site.title }}{% endif %}</title>
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+  <link rel="alternate" hreflang="en" href="{{ '/' | absolute_url }}">
+  <link rel="alternate" hreflang="fr" href="{{ '/fr/' | absolute_url }}">
 </head>
 <body>
+{% if page.lang == 'fr' %}
+  <a class="skip-link" href="#main">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="wordmark" href="{{ '/fr/' | relative_url }}">Vibecoding Convention</a>
+      <span class="draft-tag">Brouillon 0.1</span>
+      <nav class="site-nav" aria-label="Principale">
+        <a href="{{ '/CONVENTION.fr.html' | relative_url }}" {% if page.path == 'CONVENTION.fr.md' %}aria-current="page"{% endif %}>Convention</a>
+        <a href="{{ '/docs/requirements.html' | relative_url }}" hreflang="en">Exigences (en)</a>
+        <a href="{{ '/docs/criticisms.html' | relative_url }}" hreflang="en">Critiques (en)</a>
+        <a href="https://github.com/ikarys/vibecoding-convention">GitHub</a>
+        <a href="{{ '/' | relative_url }}" lang="en" hreflang="en">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <p>Brouillon 0.1. Licence MIT. Le texte anglais fait foi.</p>
+    <p>Écrit avec l'aide d'une IA et relu par son mainteneur ; <a href="https://github.com/ikarys/vibecoding-convention/blob/main/VIBECODING.md">voir la déclaration du projet.</a></p>
+  </footer>
+{% else %}
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -19,6 +47,7 @@
         <a href="{{ '/docs/requirements.html' | relative_url }}" {% if page.path == 'docs/requirements.md' %}aria-current="page"{% endif %}>Requirements</a>
         <a href="{{ '/docs/criticisms.html' | relative_url }}" {% if page.path == 'docs/criticisms.md' %}aria-current="page"{% endif %}>Criticisms</a>
         <a href="https://github.com/ikarys/vibecoding-convention">GitHub</a>
+        <a href="{{ '/fr/' | relative_url }}" lang="fr" hreflang="fr">Français</a>
       </nav>
     </div>
   </header>
@@ -31,5 +60,6 @@
     <p>Draft 0.1. MIT licence.</p>
     <p>Written with AI assistance and reviewed by its maintainer; <a href="https://github.com/ikarys/vibecoding-convention/blob/main/VIBECODING.md">see the project's declaration.</a></p>
   </footer>
+{% endif %}
 </body>
 </html>

@@ -19,7 +19,8 @@ audited" means in terms anyone can verify, and what evidence a project keeps
 to back the claim.
 
 **Read the convention: [CONVENTION.md](CONVENTION.md)** (one page), or on the
-[website](https://ikarys.github.io/vibecoding-convention/).
+[website](https://ikarys.github.io/vibecoding-convention/). En français :
+[CONVENTION.fr.md](CONVENTION.fr.md).
 
 ## What you get
 
@@ -33,15 +34,18 @@ to back the claim.
 
 ## Three levels
 
-| Level | Name | A project at this level has... |
-|---|---|---|
-| 1 | **Declared** | told its users that AI wrote part of it, which tools and models, who reviews and decides, how it handles contributions, and its licence and provenance stance. Text only, an afternoon's work, no tool to install. |
-| 2 | **Tested** | tests that assert behaviour, a met coverage threshold, green CI, lint, secrets scanning, static analysis, dependency checks and freshness, measured duplication and size, and a dated check behind the badge. |
-| 3 | **Audited** | versioned audit reports in the repository: architecture review, security audit, blind usability test, architecture documents validated by a named human, each finding with a decision. |
+| Level | You do | It proves | Costs | Fits |
+|---|---|---|---|---|
+| 1 **Declared** | Say that AI wrote part of the project, with which tools and models, who decides, how you take contributions and your licence stance. Tag AI-written commits. A human reviews every change. | Nothing is hidden: who wrote what, who is accountable. | An afternoon. Text only, no tool to install. | scripts, prototypes, anything public |
+| 2 **Tested** | Level 1, plus tests, coverage, lint, secrets scanning, static analysis and dependency checks in CI, their results committed as evidence behind a dated badge. | The code behaves as claimed and is checked on every change, not once. | A day or two of CI set-up, then it runs itself. | anything others depend on |
+| 3 **Audited** | Level 2, plus versioned audits in the repository: architecture review, security audit, blind usability test, validated architecture documents, each finding with a decision. | Someone other than the author looked, and what they found is on record. | A few hours per release, repeated. | other people's data, money or safety |
 
-A project picks a level and proves it. A second part, five rules named C1 to
-C5, applies to anyone sending a pull request or a bug report to a project
-they do not maintain.
+A project picks a level and proves it. Each level has a core of three or
+four requirements, in bold in [CONVENTION.md](CONVENTION.md); the others
+consolidate it. All are required: a project that cannot meet one says so, and
+why, under `Exceptions` in its `VIBECODING.md`. A second part, five rules
+named C1 to C5, applies to anyone sending a pull request or a bug report to a
+project they do not maintain.
 
 ## Adopting it
 

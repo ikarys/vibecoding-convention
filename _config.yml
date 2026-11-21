@@ -21,6 +21,14 @@ defaults:
       path: ""
     values:
       layout: doc
+  - scope:
+      path: "fr"
+    values:
+      lang: fr
+  - scope:
+      path: "CONVENTION.fr.md"
+    values:
+      lang: fr
 
 exclude:
   - vibecheck
