@@ -158,7 +158,7 @@ pub fn finalize_level2_fixture(dir: &Path) {
 }
 
 fn write_status(dir: &Path, level: u8, hash: &str) {
-    let date = chrono::Utc::now().naive_local().date().to_string();
+    let date = vibecheck::today().to_string();
     let short = &hash[..7.min(hash.len())];
     fs::create_dir_all(dir.join("audit")).unwrap();
     fs::write(

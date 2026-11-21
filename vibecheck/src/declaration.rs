@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-use chrono::Duration;
+use jiff::Span;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -192,17 +192,17 @@ pub fn declared_evidence(decl: &Declaration) -> std::collections::BTreeMap<Strin
 }
 
 #[derive(Debug, Clone, Copy)]
-pub struct CheckInterval(Duration);
+pub struct CheckInterval(Span);
 
 impl CheckInterval {
-    pub fn as_duration(&self) -> Duration {
+    pub fn as_span(&self) -> Span {
         self.0
     }
 }
 
 impl Default for CheckInterval {
     fn default() -> Self {
-        Self(Duration::days(180))
+        Self(Span::new().days(180))
     }
 }
 
@@ -211,7 +211,7 @@ impl Serialize for CheckInterval {
     where
         S: Serializer,
     {
-        serializer.serialize_str(&format!("{}d", self.0.num_days()))
+        serializer.serialize_str(&format!("{}d", self.0.get_days()))
     }
 }
 
@@ -227,10 +227,10 @@ impl<'de> Deserialize<'de> for CheckInterval {
     }
 }
 
-pub fn parse_interval(value: &str) -> anyhow::Result<Duration> {
+pub fn parse_interval(value: &str) -> anyhow::Result<Span> {
     let value = value.trim();
     if value.is_empty() {
-        return Ok(Duration::days(180));
+        return Ok(Span::new().days(180));
     }
 
     let (number, unit) = value.split_at(value.len() - 1);
@@ -238,12 +238,15 @@ pub fn parse_interval(value: &str) -> anyhow::Result<Duration> {
         .parse()
         .map_err(|_| anyhow::anyhow!("invalid check_interval number: {number}"))?;
 
-    match unit {
-        "d" => Ok(Duration::days(days)),
-        "m" => Ok(Duration::days(days * 30)),
-        "y" => Ok(Duration::days(days * 365)),
-        _ => Err(anyhow::anyhow!("invalid check_interval unit: {unit}")),
-    }
+    let factor = match unit {
+        "d" => 1,
+        "m" => 30,
+        "y" => 365,
+        _ => return Err(anyhow::anyhow!("invalid check_interval unit: {unit}")),
+    };
+    days.checked_mul(factor)
+        .and_then(|days| Span::new().try_days(days).ok())
+        .ok_or_else(|| anyhow::anyhow!("check_interval out of range: {value}"))
 }
 
 pub fn split_front_matter(text: &str) -> anyhow::Result<(String, String)> {

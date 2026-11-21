@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::{civil::Date, Timestamp};
 
 #[derive(Debug, Clone)]
 pub struct Commit {
@@ -77,7 +77,7 @@ impl Git {
     }
 
     /// Commits reachable from HEAD made on `date` (a UTC day) or later.
-    pub fn commits_since_date(&self, date: &NaiveDate) -> Vec<Commit> {
+    pub fn commits_since_date(&self, date: &Date) -> Vec<Commit> {
         if !self.is_repo() {
             return Vec::new();
         }
@@ -95,7 +95,7 @@ impl Git {
         .unwrap_or_default()
     }
 
-    pub fn latest_tag(&self) -> Option<(String, DateTime<Utc>)> {
+    pub fn latest_tag(&self) -> Option<(String, Timestamp)> {
         self.output(&[
             "for-each-ref",
             "--sort=-creatordate",
@@ -112,12 +112,10 @@ impl Git {
 
     /// Commit time of the last commit that changed `path` (relative to the
     /// root); `None` when the path was never committed.
-    pub fn last_commit_time(&self, path: &str) -> Option<DateTime<Utc>> {
+    pub fn last_commit_time(&self, path: &str) -> Option<Timestamp> {
         let out = self.output(&["log", "-1", "--format=%cI", "--", path])?;
         let text = String::from_utf8_lossy(&out.stdout);
-        DateTime::parse_from_rfc3339(text.trim())
-            .ok()
-            .map(|value| value.with_timezone(&Utc))
+        text.trim().parse().ok()
     }
 
     pub fn show_stat(&self, hash: &str) -> String {
@@ -262,11 +260,9 @@ fn parse_trailer(line: &str) -> Option<(String, String)> {
     }
 }
 
-fn parse_tag_line(line: &str) -> Option<(String, DateTime<Utc>)> {
+fn parse_tag_line(line: &str) -> Option<(String, Timestamp)> {
     let (name, date) = line.split_once('\x00')?;
-    let date = DateTime::parse_from_rfc3339(date)
-        .ok()
-        .map(|value| value.with_timezone(&Utc))?;
+    let date = date.parse().ok()?;
     Some((name.to_string(), date))
 }
 
@@ -318,7 +314,7 @@ mod tests {
             "2026-01-02T00:00:01+00:00",
         );
         let repo = Git::new(dir.path().to_path_buf());
-        let day = NaiveDate::from_ymd_opt(2026, 1, 2).unwrap();
+        let day = jiff::civil::date(2026, 1, 2);
         let subjects: Vec<_> = repo
             .commits_since_date(&day)
             .into_iter()
@@ -331,6 +327,9 @@ mod tests {
     fn parses_tag_line() {
         let parsed = parse_tag_line("v1.0.0\x002026-01-02T03:04:05+00:00").unwrap();
         assert_eq!(parsed.0, "v1.0.0");
-        assert_eq!(chrono::Timelike::hour(&parsed.1), 3);
+        assert_eq!(
+            parsed.1.to_zoned_datetime(jiff::tz::TimeZone::UTC).hour(),
+            3
+        );
     }
 }

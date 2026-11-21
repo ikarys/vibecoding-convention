@@ -1,5 +1,7 @@
 use std::fs;
 
+use jiff::Span;
+
 use vibecheck::declaration::{parse_interval, read_declaration, Declaration};
 
 #[test]
@@ -26,10 +28,22 @@ fn read_declaration_errors_on_invalid_yaml() {
 
 #[test]
 fn parse_interval_accepts_supported_units() {
-    assert_eq!(parse_interval("90d").unwrap(), chrono::Duration::days(90));
-    assert_eq!(parse_interval("2y").unwrap(), chrono::Duration::days(730));
-    assert_eq!(parse_interval("6m").unwrap(), chrono::Duration::days(180));
-    assert_eq!(parse_interval("").unwrap(), chrono::Duration::days(180));
+    assert_eq!(
+        parse_interval("90d").unwrap().fieldwise(),
+        Span::new().days(90).fieldwise()
+    );
+    assert_eq!(
+        parse_interval("2y").unwrap().fieldwise(),
+        Span::new().days(730).fieldwise()
+    );
+    assert_eq!(
+        parse_interval("6m").unwrap().fieldwise(),
+        Span::new().days(180).fieldwise()
+    );
+    assert_eq!(
+        parse_interval("").unwrap().fieldwise(),
+        Span::new().days(180).fieldwise()
+    );
 }
 
 #[test]

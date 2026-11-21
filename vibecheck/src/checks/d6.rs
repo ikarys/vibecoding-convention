@@ -1,5 +1,3 @@
-use chrono::NaiveDate;
-
 use crate::checks::{support, Check};
 use crate::finding::Finding;
 use crate::status;
@@ -44,7 +42,7 @@ impl Check for D6 {
                 .get("vibecoding")
                 .and_then(|v| v.get("date"))
                 .and_then(|v| v.as_str())
-                .and_then(|date| NaiveDate::parse_from_str(date, "%Y-%m-%d").ok())
+                .and_then(|date| date.parse::<jiff::civil::Date>().ok())
         });
 
         let commits = if let Some(date) = status_date {

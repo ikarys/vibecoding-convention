@@ -82,9 +82,6 @@ days.
   serde): flagged unmaintained by RUSTSEC-2024-0449. No maintained serde YAML
   parser without it exists yet; revisit at each minor release. Declared
   2026-11-08.
-- `chrono`: flagged unmaintained by RUSTSEC-2026-0543. Kept until the date
-  handling moves to a maintained crate (`jiff`), planned for the next
-  `vibecheck` release. Declared 2026-11-21.
 
 ## Exceptions
 

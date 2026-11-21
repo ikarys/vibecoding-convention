@@ -6,7 +6,7 @@ description = "Mechanical validator for the Vibecoding Convention"
 
 [dependencies]
 anyhow = "1"
-chrono = { version = "0.4", features = ["serde"] }
+jiff = { version = "1", default-features = false, features = ["std", "serde"] }
 clap = { version = "4", features = ["derive"] }
 regex = "1"
 serde = { version = "1", features = ["derive"] }

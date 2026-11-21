@@ -165,7 +165,7 @@ fn new_dependency_warnings(ctx: &Context) -> Vec<Finding> {
             .get("vibecoding")
             .and_then(|v| v.get("date"))
             .and_then(|v| v.as_str())
-            .and_then(|s| chrono::NaiveDate::parse_from_str(s, "%Y-%m-%d").ok())
+            .and_then(|s| s.parse::<jiff::civil::Date>().ok())
         {
             ctx.git.commits_since_date(&date)
         } else if ctx.git.commit_exists(&decl.convention.adopted_at) {

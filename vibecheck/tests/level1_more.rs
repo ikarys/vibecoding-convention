@@ -102,7 +102,7 @@ fn d2_warns_when_declared_tool_never_attributed() {
 fn d5_fails_when_status_level_mismatches_declaration() {
     let dir = tempfile::tempdir().unwrap();
     common::finalize_level2_fixture(dir.path());
-    let today = chrono::Utc::now().naive_local().date().to_string();
+    let today = vibecheck::today().to_string();
     write_status_json(dir.path(), 1, &today, &short_hash(dir.path()));
     let report = run_default(dir.path());
     assert!(has_finding(
@@ -117,7 +117,7 @@ fn d5_fails_when_status_level_mismatches_declaration() {
 fn d5_warns_when_status_is_old() {
     let dir = tempfile::tempdir().unwrap();
     common::finalize_level2_fixture(dir.path());
-    let old = (chrono::Utc::now().naive_local().date() - chrono::Duration::days(365)).to_string();
+    let old = (vibecheck::today() - jiff::Span::new().days(365)).to_string();
     write_status_json(dir.path(), 2, &old, &short_hash(dir.path()));
     let report = run_default(dir.path());
     assert!(has_finding(
@@ -138,7 +138,7 @@ fn d5_informs_when_archived_status_is_old() {
         "status: active",
         "status: archived",
     );
-    let old = (chrono::Utc::now().naive_local().date() - chrono::Duration::days(365)).to_string();
+    let old = (vibecheck::today() - jiff::Span::new().days(365)).to_string();
     write_status_json(dir.path(), 2, &old, &short_hash(dir.path()));
     let report = run_default(dir.path());
     assert!(has_finding(
@@ -157,8 +157,7 @@ fn d5_informs_when_archived_status_is_old() {
 fn d5_warns_when_status_is_older_than_tag() {
     let dir = tempfile::tempdir().unwrap();
     common::finalize_level2_fixture(dir.path());
-    let yesterday =
-        (chrono::Utc::now().naive_local().date() - chrono::Duration::days(1)).to_string();
+    let yesterday = (vibecheck::today() - jiff::Span::new().days(1)).to_string();
     write_status_json(dir.path(), 2, &yesterday, &short_hash(dir.path()));
     common::git(dir.path(), &["tag", "-a", "v0.1.0", "-m", "v0.1.0"]);
     let report = run_default(dir.path());
