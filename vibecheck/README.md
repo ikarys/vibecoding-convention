@@ -8,6 +8,10 @@ for the README badge. It works on any repository, whatever the language.
 
 ## Install
 
+Each release on GitHub ships `vibecheck-<target>.tar.gz` for Linux (x86_64,
+aarch64) and macOS (aarch64) with a `SHA256SUMS` file; the CI templates in
+`templates/ci/` download and verify one. From source:
+
 ```
 cargo install --path vibecheck
 ```
@@ -64,7 +68,8 @@ reads them. `--write-status` is refused in this mode (exit 2), the status file
 describes the project, not a branch. A base that cannot be read as a revision
 is refused (exit 2); a base that is not in the clone is reported as NOT RUN:
 fetch it first. In GitHub Actions
-(`templates/ci/github-actions-pr-review.yml`):
+(`templates/ci/github-actions-pr-review.yml`; `templates/ci/` has the same
+job for GitLab CI and Forgejo Actions):
 
 ```yaml
 - uses: actions/checkout@v4

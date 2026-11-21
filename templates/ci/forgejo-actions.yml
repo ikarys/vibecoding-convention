@@ -1,0 +1,76 @@
+# Skeleton: run the project's tools, write their outputs as evidence files,
+# let vibecheck compute audit/status.json, commit both on the default branch,
+# and review pull requests; replace every <placeholder> so paths match `evidence` in VIBECODING.md.
+name: Convention
+
+on:
+  push:
+    branches: [<default-branch>]
+  pull_request:
+
+env:
+  VIBECHECK_VERSION: v0.4.0
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # only to commit the status and evidence back
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # vibecheck reads the history (trailers, release tags)
+      # <toolchain setup, for example actions/setup-node or dtolnay/rust-toolchain>
+      - name: Test
+        run: <commands.test>
+      - name: Coverage evidence
+        run: |
+          set -o pipefail
+          mkdir -p audit/evidence
+          <commands.coverage> | tee audit/evidence/coverage.txt
+      - name: Audit evidence
+        run: |
+          set -o pipefail
+          mkdir -p audit/evidence
+          <commands.audit> | tee audit/evidence/audit.json
+      # Forgejo runner images run as root; use sudo install if the image is not root.
+      - name: Install vibecheck
+        run: |
+          curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/vibecheck-x86_64-unknown-linux-gnu.tar.gz"
+          curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/SHA256SUMS"
+          sha256sum --check --ignore-missing SHA256SUMS
+          tar -xzf vibecheck-x86_64-unknown-linux-gnu.tar.gz
+          install -m 755 vibecheck /usr/local/bin/vibecheck
+      - name: Convention check
+        run: vibecheck . --write-status --strict
+      # The repository must allow the Actions token to push to the default branch (branch protection) or this step must be dropped.
+      - name: Commit status and evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/<default-branch>'
+        run: |
+          git add audit/status.json audit/evidence
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='forgejo-actions[bot]' -c user.email='forgejo-actions@noreply.localhost' commit -m 'ci: refresh convention status and evidence [skip ci]'
+          git push
+
+  review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the range BASE..HEAD needs the full history
+      - name: Fetch the base branch
+        run: git fetch origin ${{ github.base_ref }}
+      # Forgejo runner images run as root; use sudo install if the image is not root.
+      - name: Install vibecheck
+        run: |
+          curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/vibecheck-x86_64-unknown-linux-gnu.tar.gz"
+          curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/SHA256SUMS"
+          sha256sum --check --ignore-missing SHA256SUMS
+          tar -xzf vibecheck-x86_64-unknown-linux-gnu.tar.gz
+          install -m 755 vibecheck /usr/local/bin/vibecheck
+      - name: Review the pull request
+        run: vibecheck . --pr-review origin/${{ github.base_ref }} --strict   # drop --strict to let warnings through

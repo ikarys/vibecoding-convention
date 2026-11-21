@@ -7,6 +7,9 @@ name: PR review
 on:
   pull_request:
 
+env:
+  VIBECHECK_VERSION: v0.4.0
+
 permissions:
   contents: read
 
@@ -19,8 +22,12 @@ jobs:
           fetch-depth: 0   # the range BASE..HEAD needs the full history
       - name: Fetch the base branch
         run: git fetch origin ${{ github.base_ref }}
-      # Install vibecheck from source; a release binary will follow.
       - name: Install vibecheck
-        run: cargo install --git https://github.com/ikarys/vibecoding-convention vibecheck
+        run: |
+          curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/vibecheck-x86_64-unknown-linux-gnu.tar.gz"
+          curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/SHA256SUMS"
+          sha256sum --check --ignore-missing SHA256SUMS
+          tar -xzf vibecheck-x86_64-unknown-linux-gnu.tar.gz
+          sudo install -m 755 vibecheck /usr/local/bin/vibecheck
       - name: Review the pull request
         run: vibecheck . --pr-review origin/${{ github.base_ref }} --strict   # drop --strict to let warnings through

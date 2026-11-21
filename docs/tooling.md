@@ -24,8 +24,9 @@ tools.
   [Fennec](https://github.com/ikarys/fennec). They read `vibecheck`'s output
   rather than redoing it.
 - [`templates/`](../templates), `VIBECODING.md`, `CONTRIBUTING.md`,
-  `SECURITY.md`, `audit/README.md`, `audit/status.json`, report skeletons, and `ci/` with two GitHub Actions
-  jobs: one writes the evidence and the status, one reviews pull requests.
+  `SECURITY.md`, `audit/README.md`, `audit/status.json`, report skeletons, and `ci/` with two CI jobs for
+  GitHub Actions, GitLab CI and Forgejo Actions: one writes the evidence and
+  the status, one reviews pull requests.
 
 A ten-line block in the agent instruction file (D10) is all that sits in a
 model's context during ordinary work.

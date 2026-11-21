@@ -1,0 +1,60 @@
+# Skeleton: run the project's tools, write their outputs as evidence files,
+# let vibecheck compute audit/status.json, commit both on the default branch,
+# and review merge requests; replace every <placeholder> so paths match `evidence` in VIBECODING.md.
+image: "<your toolchain image>" # the install step needs curl and tar
+
+variables:
+  VIBECHECK_VERSION: v0.4.0
+
+stages:
+  - check
+  - review
+
+convention:
+  stage: check
+  variables:
+    GIT_DEPTH: "0"   # vibecheck reads the history
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - <commands.test>
+    - |
+      set -o pipefail
+      mkdir -p audit/evidence
+      <commands.coverage> | tee audit/evidence/coverage.txt
+    - |
+      set -o pipefail
+      mkdir -p audit/evidence
+      <commands.audit> | tee audit/evidence/audit.json
+    - |
+      curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/vibecheck-x86_64-unknown-linux-gnu.tar.gz"
+      curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/SHA256SUMS"
+      sha256sum --check --ignore-missing SHA256SUMS
+      tar -xzf vibecheck-x86_64-unknown-linux-gnu.tar.gz
+      install -m 755 vibecheck /usr/local/bin/vibecheck
+    - vibecheck . --write-status --strict
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
+        git add audit/status.json audit/evidence
+        if git diff --cached --quiet; then exit 0; fi
+        git -c user.name='gitlab-ci' -c user.email='gitlab-ci@localhost' commit -m 'ci: refresh convention status and evidence [skip ci]'
+        # CI_PUSH_TOKEN: a project access token with write_repository, masked and protected; never a personal token
+        git push "https://oauth2:${CI_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" "HEAD:${CI_DEFAULT_BRANCH}"
+      fi
+
+review:
+  stage: review
+  variables:
+    GIT_DEPTH: "0"   # the range BASE..HEAD needs the full history
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - |
+      curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/vibecheck-x86_64-unknown-linux-gnu.tar.gz"
+      curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/SHA256SUMS"
+      sha256sum --check --ignore-missing SHA256SUMS
+      tar -xzf vibecheck-x86_64-unknown-linux-gnu.tar.gz
+      install -m 755 vibecheck /usr/local/bin/vibecheck
+    - vibecheck . --pr-review "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --strict # drop --strict to let warnings through
