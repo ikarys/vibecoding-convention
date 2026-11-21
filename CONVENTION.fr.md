@@ -1,6 +1,6 @@
 # Vibecoding Convention
 
-Version 0.1, brouillon. Traduction de [CONVENTION.md](CONVENTION.md) modifié le 2026-11-21 ; le texte anglais fait foi.
+Version 0.1. Traduction de [CONVENTION.md](CONVENTION.md) modifié le 2026-11-21 ; le texte anglais fait foi.
 
 Un logiciel écrit entièrement ou partiellement par des assistants IA peut être aussi fiable que tout autre logiciel, à condition d'être cadré, revu et audité. Cette page définit ces trois mots en termes vérifiables. Personne n'accorde la convention ; un projet déclare un niveau et conserve les preuves dans son propre dépôt, où n'importe qui peut les vérifier.
 
