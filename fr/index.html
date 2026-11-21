@@ -1,0 +1,195 @@
+---
+layout: default
+title: Vibecoding Convention
+lang: fr
+---
+<section class="hero">
+  <div class="hero-text">
+    <h1>Vibecodons proprement.</h1>
+    <p class="lede">Une norme vérifiable pour le logiciel écrit avec l'aide de l'IA. Les preuves sont dans votre dépôt, et n'importe qui peut les vérifier.</p>
+    <p class="hero-actions">
+      <a class="button primary" href="{{ '/CONVENTION.fr.html' | relative_url }}">Lire la convention</a>
+      <a class="button secondary" href="#adopt">L'adopter</a>
+    </p>
+  </div>
+
+  <figure class="yaml-card">
+    <figcaption>VIBECODING.md, à la racine d'un projet</figcaption>
+    <pre><code>---
+<span class="k">convention</span>:
+  <span class="c"># ce que vous déclarez</span>
+  <span class="k">level</span>: 2
+  <span class="c"># quels modèles ont écrit du code</span>
+  <span class="k">tools</span>:
+    - "Claude Code:claude-opus-5-5"
+  <span class="c"># qui décide</span>
+  <span class="k">maintainers</span>: [ikarys]
+  <span class="k">review</span>: "a human reviews every change"
+  <span class="c"># mesuré par CI, non déclaré</span>
+  <span class="k">coverage</span>: { <span class="k">threshold</span>: 80, <span class="k">kind</span>: line, <span class="k">tool</span>: cargo-llvm-cov }
+  <span class="k">maintainability</span>: { <span class="k">tool</span>: jscpd, <span class="k">duplication_max</span>: 5 }
+  <span class="c"># la sortie des outils, lue par vibecheck</span>
+  <span class="k">evidence</span>: { <span class="k">coverage</span>: audit/evidence/coverage.txt }
+  <span class="k">status</span>: active
+---</code></pre>
+  </figure>
+</section>
+
+<section class="section">
+  <h2>Le problème n'est pas l'IA</h2>
+  <p class="statement">Le code assisté par IA n'est pas un problème. Le code non cadré, non relu, non audité l'est, qu'importe qui ou quoi l'ait écrit.</p>
+  <p>La convention dit ce que signifient cadré, relu et audité en termes que n'importe qui peut vérifier, et quelles preuves un projet conserve pour étayer l'affirmation. Chaque exigence répond à une <a href="{{ '/docs/criticisms.html' | relative_url }}">critique réellement formulée</a> du logiciel vibecodé.</p>
+
+  <dl class="principles">
+    <div class="principle">
+      <dt>Transparence plutôt que pureté</dt>
+      <dd>Dire ce que l'IA a écrit ; personne n'est tenu d'éviter l'IA.</dd>
+    </div>
+    <div class="principle">
+      <dt>Preuves plutôt qu'affirmations</dt>
+      <dd>Chaque exigence désigne un artefact ou une commande que n'importe qui peut exécuter.</dd>
+    </div>
+    <div class="principle">
+      <dt>Proportionnalité</dt>
+      <dd>Un projet choisit le niveau qui convient et le prouve.</dd>
+    </div>
+    <div class="principle">
+      <dt>Les humains décident</dt>
+      <dd>L'IA propose ; un humain nommé valide, décide et est responsable.</dd>
+    </div>
+    <div class="principle">
+      <dt>Résultats, non formes</dt>
+      <dd>La convention dit ce qui doit être visible, jamais quel outil utiliser ni comment travailler.</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="section" id="levels">
+  <h2>Trois niveaux, chacun incluant le précédent</h2>
+  <p>Un projet choisit un niveau et le prouve. Personne n'est tenu d'atteindre le niveau 3 pour un script de week-end.</p>
+  <p class="visually-hidden">Chaque niveau inclut toutes les exigences des niveaux qu'il contient.</p>
+
+  <section class="level level-3">
+    <div class="level-head">
+      <span class="level-num" aria-hidden="true">3</span>
+      <h3>Audité</h3>
+    </div>
+    <p><strong>Vous faites :</strong> niveau 2, plus des audits versionnés dans le dépôt : revue d'architecture, audit de sécurité, test d'utilisabilité en aveugle, documents d'architecture validés, chaque constat avec une décision.</p>
+    <p><strong>Cela prouve :</strong> quelqu'un d'autre que l'auteur a examiné, et ce qu'il a trouvé est consigné.</p>
+    <p class="level-suggested">Coût : quelques heures par version, à chaque fois. Convient à tout ce qui traite les données, l'argent ou la sécurité d'autrui.</p>
+    <details>
+      <summary>Les 8 exigences</summary>
+      <ul>
+        <li><a href="{{ '/docs/requirements.html#a1-architecture-review' | relative_url }}">A1</a> Une revue d'architecture avec un verdict, renouvelée à chaque changement structurel.</li>
+        <li class="core"><a href="{{ '/docs/requirements.html#a2-security-audit' | relative_url }}">A2</a> <code>SECURITY.md</code> avec un modèle de menaces ; chaque affirmation de sécurité est tracée jusqu'à un test réussi.</li>
+        <li class="core"><a href="{{ '/docs/requirements.html#a3-blind-usability-test' | relative_url }}">A3</a> Un testeur sans accès au code source utilise le logiciel à partir de la documentation seule.</li>
+        <li class="core"><a href="{{ '/docs/requirements.html#a4-audit-index' | relative_url }}">A4</a> <code>audit/README.md</code> indexe chaque rapport ; les rapports sont complétés, jamais réécrits.</li>
+        <li><a href="{{ '/docs/requirements.html#a5-release-rule' | relative_url }}">A5</a> Aucune publication avec un <code>BLOCKER</code> ou un <code>DOC-WRONG</code> non résolu ; un humain nommé l'approuve.</li>
+        <li><a href="{{ '/docs/requirements.html#a6-validated-architecture-documents' | relative_url }}">A6</a> Vue d'ensemble de l'architecture et registres de décision, validés par un humain nommé.</li>
+        <li><a href="{{ '/docs/requirements.html#a7-mutation-score-recommended' | relative_url }}">A7</a> Score de mutation mesuré sur les modules essentiels (recommandé).</li>
+        <li><a href="{{ '/docs/requirements.html#a8-tooling-configuration-is-code' | relative_url }}">A8</a> Tout ce qui a accès au dépôt est versionné, relu, épinglé et exempt de secrets.</li>
+      </ul>
+    </details>
+
+    <section class="level level-2">
+      <div class="level-head">
+        <span class="level-num" aria-hidden="true">2</span>
+        <h3>Testé</h3>
+      </div>
+      <p><strong>Vous faites :</strong> niveau 1, plus des tests, de la couverture, du lint, de la détection de secrets, de l'analyse statique et des vérifications de dépendances en CI, leurs résultats déposés comme preuves derrière un badge daté.</p>
+      <p><strong>Cela prouve :</strong> le code se comporte comme affirmé et est vérifié à chaque changement, pas une seule fois.</p>
+      <p class="level-suggested">Coût : un ou deux jours de configuration de la CI, puis il tourne tout seul. Convient à tout ce sur quoi d'autres comptent.</p>
+      <details>
+        <summary>Les 12 exigences</summary>
+        <ul>
+          <li class="core"><a href="{{ '/docs/requirements.html#t1-tests-run-in-ci-on-every-change' | relative_url }}">T1</a> Les tests s'exécutent en CI à chaque changement.</li>
+          <li class="core"><a href="{{ '/docs/requirements.html#t2-coverage-at-the-declared-threshold' | relative_url }}">T2</a> La couverture est mesurée et atteint le seuil déclaré.</li>
+          <li><a href="{{ '/docs/requirements.html#t3-tests-assert-behaviour' | relative_url }}">T3</a> Les tests affirment le comportement ; aucun n'est sauté sans raison.</li>
+          <li><a href="{{ '/docs/requirements.html#t4-end-to-end-tests-for-user-facing-software' | relative_url }}">T4</a> Le logiciel destiné aux utilisateurs dispose de tests de bout en bout de ses principaux parcours.</li>
+          <li><a href="{{ '/docs/requirements.html#t5-lint-and-format-enforced' | relative_url }}">T5</a> Le lint et la mise en forme s'exécutent en CI et échouent sur les avertissements.</li>
+          <li class="core"><a href="{{ '/docs/requirements.html#t6-dependency-hygiene-and-provenance' | relative_url }}">T6</a> Fichier de verrouillage commité ; vérifications de vulnérabilités, de licences et de registre pour chaque dépendance.</li>
+          <li class="core"><a href="{{ '/docs/requirements.html#t7-secrets-and-static-analysis' | relative_url }}">T7</a> Un détecteur de secrets et un analyseur statique s'exécutent à chaque changement.</li>
+          <li><a href="{{ '/docs/requirements.html#t8-maintainability-signals' | relative_url }}">T8</a> La duplication, la complexité et la taille sont mesurées par rapport aux seuils déclarés.</li>
+          <li><a href="{{ '/docs/requirements.html#t9-dependency-freshness' | relative_url }}">T9</a> Les dépendances sont à jour et aucune n'est abandonnée, ou l'exception est déclarée.</li>
+          <li><a href="{{ '/docs/requirements.html#d5-dated-check' | relative_url }}">D5</a> Un fichier d'état daté, écrit par la vérification, alimente le badge et devient obsolète de lui-même.</li>
+          <li><a href="{{ '/docs/requirements.html#d6-test-changes-are-explained' | relative_url }}">D6</a> Supprimer ou affaiblir un test est expliqué et approuvé par un humain.</li>
+          <li><a href="{{ '/docs/requirements.html#d10-agent-instructions-carry-the-convention' | relative_url }}">D10</a> Les fichiers d'instructions d'agent portent le niveau, les commandes à faire passer et ce que l'agent ne fait jamais seul.</li>
+        </ul>
+      </details>
+
+      <section class="level level-1">
+        <div class="level-head">
+          <span class="level-num" aria-hidden="true">1</span>
+          <h3>Déclaré</h3>
+        </div>
+        <p><strong>Vous faites :</strong> dire que l'IA a écrit une partie du projet, avec quels outils et quels modèles, qui décide, comment vous acceptez les contributions et votre position sur la licence. Marquer les commits écrits par l'IA. Un humain relit chaque changement.</p>
+        <p><strong>Cela prouve :</strong> rien n'est caché : qui a écrit quoi, qui est responsable.</p>
+        <p class="level-suggested">Coût : un après-midi. Texte seulement, aucun outil à installer. Convient aux scripts, aux prototypes, à tout ce qui est public.</p>
+        <details>
+          <summary>Les 7 exigences</summary>
+          <ul>
+            <li><a href="{{ '/docs/requirements.html#d1-readme-disclosure' | relative_url }}">D1</a> Le README indique que l'IA a aidé et renvoie à la déclaration.</li>
+            <li class="core"><a href="{{ '/docs/requirements.html#d2-declaration-file' | relative_url }}">D2</a> <code>VIBECODING.md</code> indique le niveau, les outils et les modèles, qui décide et comment les changements sont relus.</li>
+            <li class="core"><a href="{{ '/docs/requirements.html#d3-commit-attribution' | relative_url }}">D3</a> Les commits écrits par l'IA portent un trailer nommant l'outil et le modèle.</li>
+            <li class="core"><a href="{{ '/docs/requirements.html#d4-human-review-before-merge' | relative_url }}">D4</a> Un humain relit chaque changement écrit par l'IA avant son intégration.</li>
+            <li><a href="{{ '/docs/requirements.html#d7-provenance-and-licence-statement' | relative_url }}">D7</a> La licence, la position sur le droit d'auteur pour les parties écrites par l'IA et les garanties de provenance sont indiquées.</li>
+            <li><a href="{{ '/docs/requirements.html#d8-contribution-policy' | relative_url }}">D8</a> <code>CONTRIBUTING.md</code> indique comment les contributions de l'IA sont reçues et quel trailer utiliser.</li>
+            <li><a href="{{ '/docs/requirements.html#d9-project-status' | relative_url }}">D9</a> L'état du projet et le délai de réponse en matière de sécurité sont indiqués et correspondent à <code>SECURITY.md</code>.</li>
+          </ul>
+        </details>
+      </section>
+    </section>
+  </section>
+
+  <p>Les exigences en gras sont le cœur d'un niveau : celles qui le constituent. Les autres le consolident. Toutes sont requises : un projet qui ne peut en satisfaire une le dit, et pourquoi, sous <code>Exceptions</code> dans son <code>VIBECODING.md</code>. La convention n'est pas à la carte, mais elle ne demande jamais le silence.</p>
+  <p>L'essentiel de cela est ce qu'un projet soigneux mené par des humains fait déjà. Six exigences existent seulement parce que l'IA est impliquée : D1, D2, D3, D7, D10 et A3 ; toutes sauf A3 sont du texte. La vérification de registre enregistrée dans T6 est là pour la même raison.</p>
+  <p><a href="{{ '/docs/requirements.html' | relative_url }}">Chaque exigence, ses preuves et comment elle est vérifiée</a></p>
+</section>
+
+<section class="section" id="contributing">
+  <h2>Envoyer une contribution ailleurs</h2>
+  <p>La plupart des dégâts attribués au vibecoding viennent de contributions uniques : une pull request générée, envoyée sans être lue, un rapport de bug que personne n'a reproduit. Cinq règles s'appliquent à quiconque, personne ou agent, contribue à un projet qu'il ne maintient pas.</p>
+
+  <ul class="rules">
+    <li>
+      <span class="id">C1</span>
+      <p><strong>Déclarer :</strong> dire que l'IA a aidé, avec l'outil et le modèle, dans le texte et sous forme du trailer que le projet attend.</p>
+    </li>
+    <li>
+      <span class="id">C2</span>
+      <p><strong>Connaître son diff :</strong> être capable de dire ce que fait chaque changement, pourquoi, et ce qu'il affecte.</p>
+    </li>
+    <li>
+      <span class="id">C3</span>
+      <p><strong>Apporter la preuve :</strong> tests et documentation avec chaque changement de comportement ; reproduire ce que vous signalez.</p>
+    </li>
+    <li>
+      <span class="id">C4</span>
+      <p><strong>Respecter le projet :</strong> suivre son guide et sa politique IA ; un changement par pull request.</p>
+    </li>
+    <li>
+      <span class="id">C5</span>
+      <p><strong>Répondre à la revue</strong> vous-même, dans le délai que le projet attend.</p>
+    </li>
+  </ul>
+</section>
+
+<section class="section" id="adopt">
+  <h2>L'adopter</h2>
+
+  <ol class="steps">
+    <li>
+      <p>Ajouter une <a href="https://github.com/ikarys/vibecoding-convention/tree/main/templates">déclaration VIBECODING.md</a> à la racine de votre dépôt, un <code>CONTRIBUTING.md</code> indiquant votre trailer, un <code>SECURITY.md</code> avec votre délai de réponse, et une ligne du README renvoyant à la déclaration. Le badge arrive avec le niveau 2.</p>
+    </li>
+    <li>
+      <p>Attribuer les commits écrits par l'IA avec un trailer nommant l'outil et le modèle :</p>
+      <pre><code>Assisted-by: Claude Code:claude-opus-5-5</code></pre>
+    </li>
+    <li>
+      <p>Exécuter les vérifications de votre niveau et conserver les rapports sous audit/.</p>
+      <p><a href="https://github.com/ikarys/vibecoding-convention/tree/main/vibecheck">vibecheck</a>, un validateur sans IA, lit la déclaration, le dépôt et les preuves écrites par votre CI, et n'exécute jamais votre code.</p>
+    </li>
+  </ol>
+
+  <p>Les outils sont optionnels. Un projet peut satisfaire la convention à la main.</p>
+</section>

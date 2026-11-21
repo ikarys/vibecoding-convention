@@ -329,10 +329,37 @@ p.statement {
   color: #EAF6F3;
 }
 
-.level-ids {
-  margin: 0;
+.level details {
+  margin: 0.75rem 0 0;
+}
+
+.level summary {
+  cursor: pointer;
   font-family: var(--mono);
   font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.level details ul {
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.level details li {
+  max-width: 68ch;
+  font-size: 0.9375rem;
+}
+
+.level details li.core {
+  font-weight: 700;
+}
+
+.level details a {
+  font-family: var(--mono);
+  color: inherit;
 }
 
 .rules {
