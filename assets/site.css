@@ -3,11 +3,16 @@
   --ink: #172036;
   --muted: #566079;
   --rule: #D3D9E3;
-  --accent: #0E7C6B;
-  --accent-tint: #DDEFEA;
   --card: #FFFFFF;
+  --proved: #0E7C6B;
+  --proved-tint: #DDEFEA;
+  --open: #8A5A00;
+  --open-tint: #F6ECD6;
+  --accent: var(--proved);
+  --accent-tint: var(--proved-tint);
   --sans: "Atkinson Hyperlegible Next", sans-serif;
   --mono: "Atkinson Hyperlegible Mono", monospace;
+  --measure: 68ch;
 }
 
 @font-face {
@@ -60,8 +65,14 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--ink);
   outline-offset: 3px;
+}
+
+code {
+  font-family: var(--mono);
+  /* The mono face runs wide; at body size inline code dominates the line. */
+  font-size: 0.88em;
 }
 
 .skip-link {
@@ -79,7 +90,7 @@ a {
 }
 
 .site-header-inner,
-.site-footer,
+.site-footer-inner,
 .hero,
 .section,
 .prose,
@@ -90,15 +101,18 @@ a {
   padding-inline: clamp(1.25rem, 4vw, 3rem);
 }
 
+/* Header */
+
 .site-header {
   padding-block: 1rem;
+  border-bottom: 1px solid var(--rule);
 }
 
 .site-header-inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem 1rem;
 }
 
 .wordmark {
@@ -109,17 +123,19 @@ a {
 }
 
 .draft-tag {
-  color: var(--muted);
-  border: 1px solid var(--rule);
+  color: var(--open);
+  background: var(--open-tint);
   border-radius: 999px;
-  padding: 0.125rem 0.5rem;
+  padding: 0.125rem 0.6rem;
   font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .site-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.25rem 1.25rem;
   margin-left: auto;
 }
 
@@ -128,38 +144,110 @@ a {
   text-decoration: none;
 }
 
+.site-nav a:hover,
 .site-nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--accent);
+}
+
+/* Hero and the three doors */
+
+.hero {
+  padding-block: clamp(3rem, 8vw, 6rem) 0;
+}
+
+.hero h1 {
+  margin: 0 0 1.25rem;
+  max-width: 14ch;
+  font-size: clamp(2.75rem, 7.5vw, 5.25rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.lede {
+  margin: 0;
+  max-width: 56ch;
+  font-size: 1.333rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.doors {
+  list-style: none;
+  display: grid;
+  margin: clamp(2.5rem, 6vw, 4rem) 0 0;
+  padding: 0;
+  border-top: 2px solid var(--ink);
+}
+
+.doors li {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.doors a {
+  color: var(--ink);
+  font-size: 1.5rem;
+  font-weight: 750;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.doors a:hover {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
 
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 4rem);
-  padding-block: clamp(3rem, 8vw, 6rem);
+.doors li.door-open a:hover {
+  color: var(--open);
 }
 
-.hero-text h1 {
-  margin: 0 0 1.5rem;
-  font-size: clamp(2.6rem, 7vw, 5.2rem);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.025em;
-}
-
-.lede {
-  margin: 0 0 1.5rem;
-  max-width: 68ch;
-  font-size: 1.333rem;
+.doors p {
+  margin: 0;
   color: var(--muted);
+  max-width: 40ch;
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+/* Sections */
+
+.section {
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+}
+
+.section + .section {
+  border-top: 1px solid var(--rule);
+}
+
+.section h2 {
+  margin: 0 0 1rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 2rem;
+}
+
+.section p {
+  margin: 0 0 1rem;
+  max-width: var(--measure);
+}
+
+.section pre {
+  margin: 0 0 1rem;
+  padding: 1rem;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.9375rem;
 }
 
 .button {
@@ -181,65 +269,16 @@ a {
   background: transparent;
 }
 
-.yaml-card {
-  margin: 0;
+.button.open {
+  background: var(--open);
+  color: #FFFFFF;
 }
 
-.yaml-card figcaption {
-  margin-bottom: 0.5rem;
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-
-.yaml-card pre {
-  margin: 0;
-  padding: 1rem;
-  background: var(--card);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  box-shadow: 0 1px 0 var(--rule), 0 18px 40px -24px rgba(23, 32, 54, 0.35);
-  overflow-x: auto;
-  font-family: var(--mono);
-  font-size: 0.9375rem;
-}
-
-.yaml-card .c {
-  color: var(--accent);
-}
-
-.yaml-card .k {
-  font-weight: 700;
-}
-
-.section {
-  padding-block: clamp(3rem, 7vw, 5.5rem);
-}
-
-.section h2 {
-  margin: 0 0 1rem;
-  font-size: 2rem;
-  font-weight: 750;
-  line-height: 1.2;
-  scroll-margin-top: 2rem;
-}
-
-.section p {
-  margin: 0 0 1rem;
-  max-width: 68ch;
-}
-
-.section code,
-.section pre {
-  font-family: var(--mono);
-}
-
-.section pre {
-  margin: 0 0 1rem;
-  padding: 1rem;
-  background: var(--card);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  overflow-x: auto;
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.5rem 0 0;
 }
 
 p.statement {
@@ -251,7 +290,7 @@ p.statement {
 
 .principles {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.5rem 2.5rem;
   margin: 2rem 0 0;
 }
 
@@ -271,108 +310,194 @@ p.statement {
   color: var(--muted);
 }
 
-.level-3 {
-  margin-bottom: 1.5rem;
-  padding: clamp(1rem, 3vw, 2rem);
-  background: var(--card);
-  border: 2px solid var(--ink);
-  border-radius: 14px;
+/* Levels: the striped rail counts the levels a level includes. */
+
+.levels {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  margin: 2.5rem 0;
 }
 
-.level-2 {
-  margin-top: clamp(1rem, 3vw, 2rem);
-  padding: clamp(0.75rem, 2.5vw, 1.5rem);
-  background: #EEF7F4;
-  border: 2px solid var(--accent);
-  border-radius: 10px;
+.level {
+  position: relative;
+  padding-left: clamp(1.75rem, 5vw, 3.5rem);
 }
 
-.level-1 {
-  margin-top: clamp(1rem, 3vw, 2rem);
-  padding: clamp(0.75rem, 2.5vw, 1.5rem);
-  background: var(--accent);
-  color: #FFFFFF;
-  border-radius: 7px;
+.level::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  bottom: 0;
+  width: calc(var(--stripes) * 0.5rem - 0.25rem);
+  background: repeating-linear-gradient(
+    to right,
+    var(--proved) 0 0.25rem,
+    transparent 0.25rem 0.5rem
+  );
 }
+
+.level-1 { --stripes: 1; }
+.level-2 { --stripes: 2; }
+.level-3 { --stripes: 3; }
 
 .level-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.75rem;
+  gap: 0.25rem 0.75rem;
   margin-bottom: 0.75rem;
-}
-
-.level-num {
-  font-family: var(--mono);
-  font-size: 2.4rem;
-  font-weight: 800;
-  line-height: 1;
 }
 
 .level h3 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 750;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.1;
 }
 
-.level p {
-  margin: 0 0 0.75rem;
-  max-width: 68ch;
-}
-
-.level-suggested {
-  font-size: 0.9375rem;
+.level-fits {
   color: var(--muted);
 }
 
-.level-1 .level-suggested {
-  color: #EAF6F3;
+.level dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.35rem 1rem;
+  margin: 0 0 1rem;
+  max-width: var(--measure);
+}
+
+.level dt {
+  font-weight: 700;
+}
+
+.level dd {
+  margin: 0;
+}
+
+.level ul {
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  max-width: var(--measure);
+}
+
+.level li {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+.level li.core {
+  font-weight: 700;
+}
+
+.level li a {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--proved);
+  text-decoration: none;
+}
+
+.level li a:hover {
+  text-decoration: underline;
 }
 
 .level details {
   margin: 0.75rem 0 0;
+  max-width: var(--measure);
 }
 
 .level summary {
   cursor: pointer;
-  font-family: var(--mono);
-  font-size: 0.9375rem;
-  font-weight: 700;
+  color: var(--muted);
+  font-weight: 600;
 }
 
-.level details ul {
+.level details[open] summary {
+  margin-bottom: 0.6rem;
+}
+
+/* Debate: the criticisms as a review thread */
+
+.thread {
   list-style: none;
-  display: grid;
-  gap: 0.4rem;
-  margin: 0.75rem 0 0;
+  counter-reset: criticism;
+  margin: 2rem 0;
   padding: 0;
+  border-top: 1px solid var(--rule);
 }
 
-.level details li {
-  max-width: 68ch;
-  font-size: 0.9375rem;
+.thread li {
+  counter-increment: criticism;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--rule);
 }
 
-.level details li.core {
-  font-weight: 700;
-}
-
-.level details a {
+.thread li::before {
+  content: counter(criticism);
   font-family: var(--mono);
-  color: inherit;
+  font-weight: 700;
+  color: var(--muted);
 }
+
+.thread a {
+  color: var(--ink);
+}
+
+.thread .status {
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  color: var(--proved);
+}
+
+.thread .status.open {
+  color: var(--open);
+  font-weight: 650;
+}
+
+.questions {
+  margin: 1.5rem 0 0;
+  padding: 0 0 0 1.5rem;
+  max-width: var(--measure);
+}
+
+.questions li {
+  margin: 0 0 0.75rem;
+}
+
+.questions li::marker {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--open);
+}
+
+.questions a {
+  color: var(--open);
+}
+
+/* Part B */
 
 .rules {
   list-style: none;
   margin: 2rem 0 0;
   padding: 0;
+  max-width: var(--measure);
 }
 
 .rules li {
   display: grid;
-  grid-template-columns: 4rem 1fr;
+  grid-template-columns: 3.25rem 1fr;
   gap: 1rem;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
 }
 
 .rules li + li {
@@ -381,50 +506,88 @@ p.statement {
 
 .rules .id {
   font-family: var(--mono);
-  color: var(--accent);
+  color: var(--proved);
   font-weight: 700;
 }
 
 .rules p {
   margin: 0;
-  max-width: 68ch;
+}
+
+/* Adopt: a real sequence, hence the numbers */
+
+.adopt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+/* Grid items default to min-content width; the trailer line in the <pre> would widen the page. */
+.adopt > * {
+  min-width: 0;
 }
 
 .steps {
   list-style: none;
   counter-reset: step;
-  margin: 2rem 0 0;
+  margin: 1.5rem 0 0;
   padding: 0;
 }
 
 .steps li {
   counter-increment: step;
   position: relative;
-  padding: 0 0 2rem 4rem;
+  padding: 0 0 1.75rem 3.25rem;
 }
 
 .steps li::before {
   content: counter(step);
   position: absolute;
   left: 0;
-  top: 0;
+  top: -0.2rem;
   font-family: var(--mono);
   font-size: 2rem;
   font-weight: 800;
   line-height: 1;
-  color: var(--accent);
+  color: var(--proved);
 }
 
 .steps p {
-  margin: 0 0 1rem;
-  max-width: 68ch;
+  margin: 0 0 0.75rem;
 }
 
 .steps pre {
   margin: 0;
 }
 
+.yaml-card {
+  margin: 0;
+  align-self: start;
+}
+
+.yaml-card figcaption {
+  margin-bottom: 0.5rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.yaml-card pre {
+  margin: 0;
+}
+
+.yaml-card .c {
+  color: var(--muted);
+}
+
+.yaml-card .k {
+  font-weight: 700;
+  color: var(--proved);
+}
+
+/* Footer */
+
 .site-footer {
+  border-top: 1px solid var(--rule);
   padding-block: 2rem;
   color: var(--muted);
   font-size: 0.9375rem;
@@ -434,9 +597,7 @@ p.statement {
   margin: 0 0 0.5rem;
 }
 
-.site-footer a {
-  color: var(--accent);
-}
+/* Documents rendered from Markdown */
 
 .prose {
   padding-block: clamp(2.5rem, 6vw, 4rem) 2rem;
@@ -444,14 +605,23 @@ p.statement {
 
 .prose h1,
 .prose h2,
-.prose h3 {
+.prose h3,
+.prose h4 {
   scroll-margin-top: 2rem;
+  letter-spacing: -0.01em;
+}
+
+.prose h1 {
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 1rem;
 }
 
 .prose h2 {
   margin: 3rem 0 1rem;
   font-size: 2rem;
-  font-weight: 750;
+  font-weight: 800;
   line-height: 1.2;
 }
 
@@ -461,21 +631,17 @@ p.statement {
   font-weight: 700;
 }
 
+.prose h4 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
 .prose p,
 .prose li,
 .prose blockquote {
   margin: 0 0 1rem;
-  max-width: 68ch;
-}
-
-.prose code,
-.prose pre {
-  font-family: var(--mono);
-}
-
-/* The mono face runs wide; at body size inline code dominates the line. */
-.prose code {
-  font-size: 0.88em;
+  max-width: var(--measure);
 }
 
 .prose li {
@@ -487,26 +653,33 @@ p.statement {
   padding: 1rem;
   background: var(--card);
   border: 1px solid var(--rule);
-  border-radius: 6px;
   overflow-x: auto;
+  font-family: var(--mono);
 }
 
 .prose table {
   display: block;
   overflow-x: auto;
   border-collapse: collapse;
-  margin: 1rem 0;
+  margin: 1rem 0 1.5rem;
+  font-size: 1rem;
 }
 
 .prose th,
 .prose td {
-  border: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
   padding: 0.5rem 0.75rem;
   text-align: left;
+  vertical-align: top;
 }
 
 .prose th {
-  background: var(--accent-tint);
+  border-bottom: 2px solid var(--ink);
+}
+
+.prose td:first-child {
+  font-family: var(--mono);
+  white-space: nowrap;
 }
 
 .source {
@@ -527,14 +700,42 @@ p.statement {
   border: 0;
 }
 
-@media (min-width: 60rem) {
-  .hero {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    align-items: center;
+@media (min-width: 48rem) {
+  .doors {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 2rem;
   }
 
+  .doors li {
+    border-bottom: 0;
+    padding-block: 1.5rem;
+  }
+
+  .doors li + li {
+    border-left: 1px solid var(--rule);
+    padding-left: 2rem;
+  }
+}
+
+@media (min-width: 60rem) {
   .principles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .adopt {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+@media (max-width: 40rem) {
+  .thread li {
+    grid-template-columns: 2rem minmax(0, 1fr);
+  }
+
+  .thread .status {
+    grid-column: 2;
+    white-space: normal;
   }
 }
 
