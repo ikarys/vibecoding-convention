@@ -16,6 +16,7 @@ convention:
   tools:
     - "Claude Code:claude-fable-5-1"
     - "Claude Code:claude-opus-5-5"
+    - "Claude Code:claude-sonnet-5-5"   # blind-test agent
     - "Claude Code:qwen3.8-27b"
   attribution_trailers: [Assisted-by, Generated-by]
   coverage: { threshold: 80, kind: line, tool: cargo-llvm-cov }
@@ -81,6 +82,9 @@ days.
   serde): flagged unmaintained by RUSTSEC-2024-0449. No maintained serde YAML
   parser without it exists yet; revisit at each minor release. Declared
   2026-11-08.
+- `chrono`: flagged unmaintained by RUSTSEC-2026-0543. Kept until the date
+  handling moves to a maintained crate (`jiff`), planned for the next
+  `vibecheck` release. Declared 2026-11-21.
 
 ## Exceptions
 

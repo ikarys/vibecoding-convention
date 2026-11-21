@@ -45,6 +45,7 @@ impl Git {
         let range = format!("{r}..HEAD");
         self.output(&[
             "log",
+            "--no-merges",
             "--format=%H%x00%s%x00%b%x00%(trailers:only,unfold)%x1e",
             &range,
         ])
@@ -58,6 +59,7 @@ impl Git {
         let range = format!("{base}..HEAD");
         self.output(&[
             "log",
+            "--no-merges",
             "--format=%H%x00%s%x00%b%x00%(trailers:only,unfold)%x1e",
             &range,
             "--",
@@ -81,6 +83,7 @@ impl Git {
         let since = date.to_string();
         self.output(&[
             "log",
+            "--no-merges",
             "--format=%H%x00%s%x00%b%x00%(trailers:only,unfold)%x1e",
             &format!("--since={since}"),
             "HEAD",

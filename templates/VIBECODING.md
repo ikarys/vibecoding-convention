@@ -1,6 +1,7 @@
 ---
 # AI involvement, AI-DECLARATION.md keys (https://github.com/DimwitLabs/AI-DECLARATION.md)
-# levels: none | hint | assist | pair | copilot | auto
+# levels: none (human alone) | hint (AI suggests passively) | assist (AI does a part)
+#   | pair (human and AI act equally) | copilot (AI does the whole task, asks) | auto (AI completes alone)
 version: "0.1.1"
 level: <highest level below>
 processes:
@@ -14,7 +15,7 @@ processes:
 convention:
   version: "0.1"
   level: <1 | 2 | 3>
-  adopted_at: <commit hash>
+  adopted_at: <commit hash>        # the last commit before this file; the checks read the history after it
   status: <active | maintenance | archived>
   tools:
     - "<Tool>:<model>"            # same values as in the attribution trailers
@@ -82,7 +83,7 @@ long generated blocks | none>.
 ## Status
 
 <active | maintenance | archived>. Security reports are acknowledged within
-<72 hours | best effort, no commitment>; see `SECURITY.md`.
+<72h | none>, the same text as `convention.security_response`; see `SECURITY.md`.
 
 ## Exceptions
 

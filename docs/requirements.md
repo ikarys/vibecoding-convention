@@ -65,7 +65,8 @@ a model; and an attribution trailer names a model the project declares (D2),
 so the declaration cannot fall behind the history. `Co-Authored-By:` is exempt
 from the second rule because it also names humans. A commit without any attribution trailer is understood as
 human-written.
-- Evidence: the git history from the adoption commit named in `VIBECODING.md`.
+- Evidence: the git history after the commit named in `VIBECODING.md`
+  (`adopted_at`: the last commit before the declaration was added).
 - Checked: sample commits since adoption. Substantial commits without a
   trailer are a finding if the declaration says the project is mostly
   AI-written. The share of attributed commits is reported, not judged against
@@ -83,6 +84,42 @@ that produced a change is never its only reviewer.
   request history where available, review-gate configuration of the tool.
 - Checked: the policy exists; the history shows no AI-attributed commit merged
   without a human review event where the platform records one.
+
+**D7. Provenance and licence statement.** `VIBECODING.md` states the project
+licence; acknowledges that AI-written parts may not be protected by copyright
+in some jurisdictions and that the maintainers accept this; states that no
+verbatim reproduction of licence-incompatible code was knowingly included; and
+names the safeguards used, if any (vendor code-reference filters, snippet
+scanning, a human check of long generated blocks).
+- Evidence: the statement.
+- Checked: the statement is present and complete; where a snippet scanner is
+  declared, CI runs it and the auditor reads its output.
+
+**D8. Contribution policy.** `CONTRIBUTING.md` states the project's policy for
+incoming AI-assisted contributions: accepted with disclosure, accepted with
+conditions, or refused. Where accepted, it asks contributors for C1 to C3 of
+Part B: disclosure with the project's trailer, a statement that the diff was
+read, tests and documentation with the change, and what was run. The pull
+request template carries them as checkboxes. Contributions the project makes
+to other projects follow Part B.
+- Evidence: `CONTRIBUTING.md` and the pull request template.
+- Checked: both exist and say this; vibecheck verifies that
+  `CONTRIBUTING.md` names one of the project's declared trailers (D3 defaults
+  otherwise); the auditor samples merged pull requests from outside
+  contributors for the trailer and a human approval.
+
+**D9. Project status.** `VIBECODING.md` states the project status: `active`,
+`maintenance` (fixes only), or `archived`. For `active` and `maintenance`
+projects that accept security reports, `SECURITY.md` states the time within
+which a report is acknowledged (for example `72h`), and `VIBECODING.md`
+repeats the same text: the check is a literal match, so `72 hours` in one
+file and `72h` in the other fails. A project that cannot commit to a response time says so; that is
+honest, and it is the information a user needs.
+- Evidence: the fields.
+- Checked: present and consistent between the two files; an `archived`
+  project is not required to keep its check fresh (D5).
+
+### Level 2: Tested
 
 **D5. Dated check.** The repository carries the date and commit of the last
 convention check, produced by the check itself and not typed by hand:
@@ -113,39 +150,6 @@ mode this requirement names.
 - Checked: the auditor lists test removals and weakenings since the last
   check and reports those without a stated reason.
 
-**D7. Provenance and licence statement.** `VIBECODING.md` states the project
-licence; acknowledges that AI-written parts may not be protected by copyright
-in some jurisdictions and that the maintainers accept this; states that no
-verbatim reproduction of licence-incompatible code was knowingly included; and
-names the safeguards used, if any (vendor code-reference filters, snippet
-scanning, a human check of long generated blocks).
-- Evidence: the statement.
-- Checked: the statement is present and complete; where a snippet scanner is
-  declared, CI runs it and the auditor reads its output.
-
-**D8. Contribution policy.** `CONTRIBUTING.md` states the project's policy for
-incoming AI-assisted contributions: accepted with disclosure, accepted with
-conditions, or refused. Where accepted, it asks contributors for C1 to C3 of
-Part B: disclosure with the project's trailer, a statement that the diff was
-read, tests and documentation with the change, and what was run. The pull
-request template carries them as checkboxes. Contributions the project makes
-to other projects follow Part B.
-- Evidence: `CONTRIBUTING.md` and the pull request template.
-- Checked: both exist and say this; vibecheck verifies that
-  `CONTRIBUTING.md` names one of the project's declared trailers (D3 defaults
-  otherwise); the auditor samples merged pull requests from outside
-  contributors for the trailer and a human approval.
-
-**D9. Project status.** `VIBECODING.md` states the project status: `active`,
-`maintenance` (fixes only), or `archived`. For `active` and `maintenance`
-projects that accept security reports, `SECURITY.md` states the time within
-which a report is acknowledged (for example 72 hours), and `VIBECODING.md`
-matches it. A project that cannot commit to a response time says so; that is
-honest, and it is the information a user needs.
-- Evidence: the fields.
-- Checked: present and consistent between the two files; an `archived`
-  project is not required to keep its check fresh (D5).
-
 **D10. Agent instructions carry the convention.** Where the project has agent
 instruction files, under whatever name its tools use (`AGENTS.md`, `CLAUDE.md`,
 `.cursorrules`, `GEMINI.md` and the like, or the paths the project declares in
@@ -169,8 +173,6 @@ required to add one.
 - Checked: where present, the file contains the four points and no secret;
   `vibecheck` verifies the declared level, the `VIBECODING.md` link, a
   declared trailer and the declared test command.
-
-### Level 2: Tested
 
 **T1. Tests run in CI on every change.** Automated tests exist and run on every
 push or pull request. The default branch is green. The build runs from a clean
@@ -563,7 +565,8 @@ fails the requirement it serves; one whose last commit is older than the latest
 release tag is stale (a warning). The `commands` block stays: it tells CI
 matching and agents and humans what to run.
 
-The README disclosure (D1) is the dynamic badge of D5:
+At level 1 the README disclosure (D1) is a sentence that links to
+`VIBECODING.md`. From level 2 it is the dynamic badge of D5:
 
 ```
 [![Vibecoding Convention](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/<owner>/<repo>/main/audit/status.json)](VIBECODING.md)

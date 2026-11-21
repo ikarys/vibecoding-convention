@@ -1,8 +1,58 @@
+use std::collections::HashSet;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 use regex::Regex;
 use walkdir::WalkDir;
+
+/// Paths git lists as tracked or untracked-but-not-ignored, plus their ancestor
+/// directories; `None` outside a git repository. A gitignored cache (a cargo
+/// registry, a virtualenv) is not the project's code and must not be scanned.
+pub fn listed_paths(root: &Path) -> Option<HashSet<PathBuf>> {
+    let output = Command::new("git")
+        .arg("-C")
+        .arg(root)
+        .args([
+            "ls-files",
+            "-z",
+            "--cached",
+            "--others",
+            "--exclude-standard",
+        ])
+        .output()
+        .ok()?;
+    if !output.status.success() {
+        return None;
+    }
+
+    let mut listed = HashSet::new();
+    for entry in output.stdout.split(|&byte| byte == 0) {
+        if entry.is_empty() {
+            continue;
+        }
+        let relative = PathBuf::from(String::from_utf8_lossy(entry).into_owned());
+        let path = root.join(relative);
+        listed.insert(path.clone());
+        let mut ancestor = path.parent();
+        while let Some(dir) = ancestor {
+            if dir == root {
+                break;
+            }
+            listed.insert(dir.to_path_buf());
+            ancestor = dir.parent();
+        }
+    }
+    Some(listed)
+}
+
+/// True when there is no git listing to honour or the path is in it.
+pub fn is_listed(path: &Path, listed: &Option<HashSet<PathBuf>>) -> bool {
+    match listed {
+        None => true,
+        Some(set) => set.contains(path),
+    }
+}
 
 pub fn read_file_if_exists(path: &Path) -> Option<String> {
     fs::read_to_string(path).ok()
@@ -26,6 +76,7 @@ pub fn find_file_case_insensitive(root: &Path, name: &str) -> Option<PathBuf> {
 
 pub fn find_files_by_glob(root: &Path, pattern: &str) -> Vec<PathBuf> {
     let pattern_parts: Vec<&str> = pattern.split('/').collect();
+    let listed = listed_paths(root);
     let mut found = Vec::new();
 
     for entry in WalkDir::new(root)
@@ -41,6 +92,10 @@ pub fn find_files_by_glob(root: &Path, pattern: &str) -> Vec<PathBuf> {
         .filter_map(|entry| entry.ok())
     {
         if !entry.file_type().is_file() {
+            continue;
+        }
+
+        if !is_listed(entry.path(), &listed) {
             continue;
         }
 

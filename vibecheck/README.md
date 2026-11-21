@@ -86,10 +86,8 @@ Only the **mechanical** part of each requirement; the judgement parts
 Level 1, Declared: D1 README disclosure, D2 declaration fields and consistency
 with the repository, D3 attribution trailers since adoption (any trailer the
 project declares; a `Signed-off-by` naming a model fails), D4 review policy
-stated, D5 dated check and staleness, D6 test removals without a stated reason,
-D7 provenance statement and licence file, D8 contribution policy and pull
-request template, D9 status and security response time, D10 agent instruction
-files carry the rules.
+stated, D7 provenance statement and licence file, D8 contribution policy and
+pull request template, D9 status and security response time.
 
 Level 2, Tested: T1 test command present in CI, T2 coverage declared, the coverage tool in CI,
 and the figure in the coverage evidence file measured against the threshold, T3 test files, unexplained disabled
@@ -102,8 +100,10 @@ thresholds, leftover markers, and `doc_lint` in CI (duplication and complexity
 need the declared tool; its evidence file is noted, agents read it), T9
 dependency freshness: an update bot, or `evidence.outdated` counted against
 `max_outdated` (required only then), and unmaintained or yanked audit
-items without a declared held-back exception. At level 2, D2 also requires
-`evidence.coverage` and `evidence.audit`.
+items without a declared held-back exception, D5 dated check and staleness,
+D6 test removals without a stated reason, D10 agent instruction files carry
+the rules. At level 2, D2 also requires `evidence.coverage` and
+`evidence.audit`.
 
 CI configuration is recognised for GitHub Actions, GitLab CI, Woodpecker,
 Forgejo, Jenkins, CircleCI, Azure Pipelines, Bitbucket and Drone. Ecosystems

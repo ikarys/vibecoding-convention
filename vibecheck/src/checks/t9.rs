@@ -153,9 +153,12 @@ fn held_back_names(body: &str) -> BTreeSet<String> {
             continue;
         }
         if in_section && trimmed.starts_with("- ") {
-            // Names are usually written in backticks; the first word is the name.
+            // Names are usually written in backticks and often followed by a
+            // colon or a comma; the first word, stripped of both, is the name.
             if let Some(name) = trimmed[2..].split_whitespace().next() {
-                names.insert(name.trim_matches('`').to_string());
+                let name =
+                    name.trim_matches(|c: char| !c.is_alphanumeric() && c != '-' && c != '_');
+                names.insert(name.to_string());
             }
         }
     }
@@ -169,9 +172,17 @@ mod tests {
 
     #[test]
     fn parses_held_back_names() {
-        let body = "\n## Dependencies held back\n\n- serde\n- foo bar\n";
+        let body = "\n## Dependencies held back\n\n- serde\n- foo bar\n- `chrono`: unmaintained\n- `my_crate`, pinned\n";
         let names = held_back_names(body);
         assert!(names.contains("serde"));
         assert!(names.contains("foo"));
+        assert!(
+            names.contains("chrono"),
+            "backticks and colon stripped: {names:?}"
+        );
+        assert!(
+            names.contains("my_crate"),
+            "backticks and comma stripped: {names:?}"
+        );
     }
 }

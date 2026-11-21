@@ -104,8 +104,8 @@ mod tests {
     fn all_contains_checks_for_the_three_levels() {
         let checks = all();
         assert_eq!(checks.len(), 22);
-        assert_eq!(checks.iter().filter(|check| check.level() == 1).count(), 10);
-        assert_eq!(checks.iter().filter(|check| check.level() == 2).count(), 9);
+        assert_eq!(checks.iter().filter(|check| check.level() == 1).count(), 7);
+        assert_eq!(checks.iter().filter(|check| check.level() == 2).count(), 12);
         assert_eq!(checks.iter().filter(|check| check.level() == 3).count(), 3);
     }
 }
