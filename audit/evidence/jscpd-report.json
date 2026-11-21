@@ -462,14 +462,14 @@
         "endLoc": {
           "column": 41,
           "line": 22,
-          "position": 424
+          "position": 446
         },
         "name": "checks/d5.rs",
         "start": 14,
         "startLoc": {
           "column": 4,
           "line": 14,
-          "position": 227
+          "position": 249
         }
       },
       "format": "rust",
@@ -478,18 +478,18 @@
       "kind": "exact",
       "lines": 9,
       "secondFile": {
-        "end": 20,
+        "end": 18,
         "endLoc": {
           "column": 41,
-          "line": 20,
-          "position": 395
+          "line": 18,
+          "position": 371
         },
         "name": "checks/d6.rs",
-        "start": 12,
+        "start": 10,
         "startLoc": {
           "column": 4,
-          "line": 12,
-          "position": 198
+          "line": 10,
+          "position": 174
         }
       },
       "tokens": 58
@@ -1146,18 +1146,18 @@
         "endLoc": {
           "column": 18,
           "line": 126,
-          "position": 3822
+          "position": 3780
         },
         "name": "level1_more.rs",
         "start": 119,
         "startLoc": {
           "column": 46,
           "line": 119,
-          "position": 3520
+          "position": 3499
         }
       },
       "format": "rust",
-      "fragment": "    common::finalize_level2_fixture(dir.path());\n    let old = (chrono::Utc::now().naive_local().date() - chrono::Duration::days(365)).to_string();\n    write_status_json(dir.path(), 2, &old, &short_hash(dir.path()));\n    let report = run_default(dir.path());\n    assert!(has_finding(\n        report.findings.iter(),\n        \"D5\",\n        Severity::Warn,",
+      "fragment": "    common::finalize_level2_fixture(dir.path());\n    let old = (vibecheck::today() - jiff::Span::new().days(365)).to_string();\n    write_status_json(dir.path(), 2, &old, &short_hash(dir.path()));\n    let report = run_default(dir.path());\n    assert!(has_finding(\n        report.findings.iter(),\n        \"D5\",\n        Severity::Warn,",
       "isNew": false,
       "kind": "exact",
       "lines": 8,
@@ -1166,32 +1166,32 @@
         "endLoc": {
           "column": 18,
           "line": 147,
-          "position": 4428
+          "position": 4365
         },
         "name": "level1_more.rs",
         "start": 140,
         "startLoc": {
           "column": 4,
           "line": 140,
-          "position": 4126
+          "position": 4084
         }
       },
-      "tokens": 94
+      "tokens": 87
     },
     {
       "firstFile": {
-        "end": 223,
+        "end": 222,
         "endLoc": {
           "column": 14,
-          "line": 223,
-          "position": 6745
+          "line": 222,
+          "position": 6653
         },
         "name": "level1_more.rs",
-        "start": 216,
+        "start": 215,
         "startLoc": {
           "column": 44,
-          "line": 216,
-          "position": 6497
+          "line": 215,
+          "position": 6405
         }
       },
       "format": "rust",
@@ -1408,32 +1408,32 @@
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-21T10:30:44.201Z",
+    "detectionDate": "2026-11-21T15:43:35.349Z",
     "formats": {
       "rust": {
         "clones": 37,
         "duplicatedLines": 333,
-        "duplicatedTokens": 2310,
-        "lines": 9820,
+        "duplicatedTokens": 2303,
+        "lines": 9850,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.3910386965376778,
-        "percentageTokens": 3.66265518717595,
+        "percentage": 3.3807106598984773,
+        "percentageTokens": 3.6479123107140596,
         "sources": 57,
-        "tokens": 63069
+        "tokens": 63132
       }
     },
     "total": {
       "clones": 37,
       "duplicatedLines": 333,
-      "duplicatedTokens": 2310,
-      "lines": 9820,
+      "duplicatedTokens": 2303,
+      "lines": 9850,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.3910386965376778,
-      "percentageTokens": 3.66265518717595,
+      "percentage": 3.3807106598984773,
+      "percentageTokens": 3.6479123107140596,
       "sources": 57,
-      "tokens": 63069
+      "tokens": 63132
     }
   }
 }
