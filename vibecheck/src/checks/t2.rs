@@ -103,7 +103,7 @@ fn coverage_evidence(ctx: &Context, decl: &Declaration, threshold: u32) -> Vec<F
     ctx.metrics
         .borrow_mut()
         .insert("coverage".to_string(), json!(percent));
-    let mut findings = vec![if percent < f64::from(threshold) {
+    let findings = vec![if percent < f64::from(threshold) {
         Finding::fail(
             id,
             "coverage below threshold",
@@ -119,6 +119,5 @@ fn coverage_evidence(ctx: &Context, decl: &Declaration, threshold: u32) -> Vec<F
             None,
         )
     }];
-    findings.extend(support::stale_evidence(ctx, id, path));
     findings
 }

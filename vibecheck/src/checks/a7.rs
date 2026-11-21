@@ -70,7 +70,7 @@ impl Check for A7 {
             .borrow_mut()
             .insert("mutation".to_string(), json!(score));
 
-        let mut findings = if score < mutation.threshold as f64 {
+        let findings = if score < mutation.threshold as f64 {
             vec![Finding::fail(
                 "A7",
                 "Mutation score",
@@ -89,7 +89,6 @@ impl Check for A7 {
                 None,
             )]
         };
-        findings.extend(support::stale_evidence(ctx, "A7", path));
         findings
     }
 }

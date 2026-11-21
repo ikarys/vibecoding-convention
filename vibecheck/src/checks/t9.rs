@@ -107,7 +107,7 @@ fn outdated_evidence(
     ctx.metrics
         .borrow_mut()
         .insert("outdated".to_string(), json!(count));
-    let mut findings = vec![if count > max_outdated {
+    let findings = vec![if count > max_outdated {
         Finding::fail(
             id,
             "outdated",
@@ -123,7 +123,6 @@ fn outdated_evidence(
             None,
         )
     }];
-    findings.extend(support::stale_evidence(ctx, id, path));
     findings
 }
 

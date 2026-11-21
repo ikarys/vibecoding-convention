@@ -99,7 +99,9 @@ impl Git {
         self.output(&[
             "for-each-ref",
             "--sort=-creatordate",
-            "--format=%(refname:short)%00%(creatordate:iso-strict)",
+            // The tagged commit's date, not the tagger's: a tag made after the
+            // checked commit must not make that check look older than the release.
+            "--format=%(refname:short)%00%(if)%(*committerdate)%(then)%(*committerdate:iso-strict)%(else)%(committerdate:iso-strict)%(end)",
             "refs/tags",
         ])
         .and_then(|out| {
@@ -108,14 +110,6 @@ impl Git {
                 .next()
                 .and_then(parse_tag_line)
         })
-    }
-
-    /// Commit time of the last commit that changed `path` (relative to the
-    /// root); `None` when the path was never committed.
-    pub fn last_commit_time(&self, path: &str) -> Option<Timestamp> {
-        let out = self.output(&["log", "-1", "--format=%cI", "--", path])?;
-        let text = String::from_utf8_lossy(&out.stdout);
-        text.trim().parse().ok()
     }
 
     pub fn show_stat(&self, hash: &str) -> String {

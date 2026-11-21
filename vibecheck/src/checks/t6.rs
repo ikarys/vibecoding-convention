@@ -115,7 +115,7 @@ fn audit_evidence(ctx: &Context, decl: &Declaration) -> Vec<Finding> {
         Ok(text) => text,
         Err(finding) => return vec![*finding],
     };
-    let mut findings = vec![match evidence::vulnerability_count(&text) {
+    let findings = vec![match evidence::vulnerability_count(&text) {
         Some(0) => Finding::info(
             id,
             "no vulnerabilities",
@@ -139,7 +139,6 @@ fn audit_evidence(ctx: &Context, decl: &Declaration) -> Vec<Finding> {
             ),
         ),
     }];
-    findings.extend(support::stale_evidence(ctx, id, path));
     findings
 }
 
