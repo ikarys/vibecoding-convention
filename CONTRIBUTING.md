@@ -1,7 +1,6 @@
 # Contributing
 
-Issues and pull requests are welcome. The convention is a draft; arguing with
-it is the point.
+Issues and pull requests are welcome. Arguing with the convention is the point.
 
 ## AI-assisted contributions
 
