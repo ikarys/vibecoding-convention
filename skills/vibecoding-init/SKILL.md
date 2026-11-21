@@ -82,9 +82,10 @@ with its reason and date.
   `gitleaks` otherwise; the same scanner as a pre-commit hook (recommended, not
   required; tell the human how to install it); the confirmed commands in CI
   where missing.
-- Level 2 and above: add the CI steps from `templates/ci/github-actions.yml`
-  (or the platform's equivalent) that write the evidence files and run
-  `vibecheck . --write-status`.
+- Level 2 and above: add the CI steps that write the evidence files and run
+  `vibecheck . --write-status`, from `templates/ci/github-actions.yml`,
+  `templates/ci/gitlab-ci.yml` or `templates/ci/forgejo-actions.yml`
+  (other platforms: adapt the closest one).
 - `audit/README.md` from the template. Level 3: `SECURITY.md` from the
   template if missing; `ARCHITECTURE.md` and `docs/adr/` skeletons, each with a
   "Validated by <maintainer> on <date>" line left for the human to fill.

@@ -8,6 +8,9 @@ on:
     branches: [<default-branch>]
   pull_request:
 
+env:
+  VIBECHECK_VERSION: v0.4.0
+
 permissions:
   contents: read
 
@@ -33,9 +36,13 @@ jobs:
           set -o pipefail
           mkdir -p audit/evidence
           <commands.audit> | tee audit/evidence/audit.json
-      # Install vibecheck from source; a release binary will follow.
       - name: Install vibecheck
-        run: cargo install --git https://github.com/ikarys/vibecoding-convention vibecheck
+        run: |
+          curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/vibecheck-x86_64-unknown-linux-gnu.tar.gz"
+          curl -fsSLO "https://github.com/ikarys/vibecoding-convention/releases/download/${VIBECHECK_VERSION}/SHA256SUMS"
+          sha256sum --check --ignore-missing SHA256SUMS
+          tar -xzf vibecheck-x86_64-unknown-linux-gnu.tar.gz
+          sudo install -m 755 vibecheck /usr/local/bin/vibecheck
       - name: Convention check
         run: vibecheck . --write-status --strict
       - name: Commit status and evidence
