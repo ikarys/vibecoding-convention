@@ -3,8 +3,17 @@ layout: default
 title: Vibecoding Convention
 ---
 <section class="hero">
-  <h1>Let’s vibecode properly.</h1>
-  <p class="lede">A checkable standard for software written with AI assistance. A project declares a level, keeps the evidence in its own repository, and anyone can check it.</p>
+  <div class="hero-top">
+    <div>
+      <h1>Let’s vibecode properly.</h1>
+      <p class="lede">A checkable standard for software written with AI assistance. A project declares a level, keeps the evidence in its own repository, and anyone can check it.</p>
+    </div>
+    <ol class="ladder" aria-label="The three levels">
+      <li class="level-1"><a href="#levels"><span><small>Level 1</small>Declared</span></a></li>
+      <li class="level-2"><a href="#levels"><span><small>Level 2</small>Tested</span></a></li>
+      <li class="level-3"><a href="#levels"><span><small>Level 3</small>Audited</span></a></li>
+    </ol>
+  </div>
 
   <ul class="doors">
     <li>
@@ -155,7 +164,7 @@ title: Vibecoding Convention
   <p><a href="{{ '/docs/requirements.html' | relative_url }}">Every requirement, its evidence and how it is checked</a></p>
 </section>
 
-<section class="section" id="debate">
+<section class="section band" id="debate">
   <h2>Argue with it</h2>
   <p>This is draft 0.1, and it is wrong somewhere. It was built by listing the criticisms people actually make of vibecoded software and asking what evidence would answer each one. Fourteen are answered by a requirement, two are named as non-goals. If a criticism is missing, or an answer is weak, say so.</p>
 
@@ -222,7 +231,7 @@ title: Vibecoding Convention
   </ul>
 </section>
 
-<section class="section" id="adopt">
+<section class="section band band-proved" id="adopt">
   <h2>Adopt it</h2>
   <div class="adopt">
     <div>
