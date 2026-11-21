@@ -3,35 +3,23 @@ layout: default
 title: Vibecoding Convention
 ---
 <section class="hero">
-  <div class="hero-text">
-    <h1>Let’s vibecode properly.</h1>
-    <p class="lede">A checkable standard for software written with AI assistance. The evidence lives in your repository, and anyone can check it.</p>
-    <p class="hero-actions">
-      <a class="button primary" href="{{ '/CONVENTION.html' | relative_url }}">Read the convention</a>
-      <a class="button secondary" href="#adopt">Adopt it</a>
-    </p>
-  </div>
+  <h1>Let’s vibecode properly.</h1>
+  <p class="lede">A checkable standard for software written with AI assistance. A project declares a level, keeps the evidence in its own repository, and anyone can check it.</p>
 
-  <figure class="yaml-card">
-    <figcaption>VIBECODING.md, at the root of a project</figcaption>
-    <pre><code>---
-<span class="k">convention</span>:
-  <span class="c"># what you claim</span>
-  <span class="k">level</span>: 2
-  <span class="c"># which models wrote code</span>
-  <span class="k">tools</span>:
-    - "Claude Code:claude-opus-5-5"
-  <span class="c"># who decides</span>
-  <span class="k">maintainers</span>: [ikarys]
-  <span class="k">review</span>: "a human reviews every change"
-  <span class="c"># measured by CI, not claimed</span>
-  <span class="k">coverage</span>: { <span class="k">threshold</span>: 80, <span class="k">kind</span>: line, <span class="k">tool</span>: cargo-llvm-cov }
-  <span class="k">maintainability</span>: { <span class="k">tool</span>: jscpd, <span class="k">duplication_max</span>: 5 }
-  <span class="c"># the tools' output, read by vibecheck</span>
-  <span class="k">evidence</span>: { <span class="k">coverage</span>: audit/evidence/coverage.txt }
-  <span class="k">status</span>: active
----</code></pre>
-  </figure>
+  <ul class="doors">
+    <li>
+      <a href="{{ '/CONVENTION.html' | relative_url }}">Read it</a>
+      <p>One page, five principles, three levels. Ten minutes.</p>
+    </li>
+    <li>
+      <a href="#adopt">Adopt it</a>
+      <p>Level 1 is text only: an afternoon, no tool to install.</p>
+    </li>
+    <li class="door-open">
+      <a href="#debate">Argue with it</a>
+      <p>Draft 0.1 answers sixteen criticisms and leaves five questions open. Yours are welcome.</p>
+    </li>
+  </ul>
 </section>
 
 <section class="section">
@@ -65,84 +53,145 @@ title: Vibecoding Convention
 
 <section class="section" id="levels">
   <h2>Three levels, each including the one before</h2>
-  <p>A project picks a level and proves it. Nobody is asked to reach level 3 for a weekend script.</p>
-  <p class="visually-hidden">Each level includes all the requirements of the levels inside it.</p>
+  <p>A project picks a level and proves it. Nobody is asked to reach level 3 for a weekend script. The requirements in bold are the core of a level, the ones that make it; the others consolidate it.</p>
 
-  <section class="level level-3">
-    <div class="level-head">
-      <span class="level-num" aria-hidden="true">3</span>
-      <h3>Audited</h3>
-    </div>
-    <p><strong>You do:</strong> level 2, plus versioned audits in the repository: architecture review, security audit, blind usability test, validated architecture documents, each finding with a decision.</p>
-    <p><strong>It proves:</strong> someone other than the author looked, and what they found is on record.</p>
-    <p class="level-suggested">Costs a few hours per release, repeated. Fits anything that handles other people's data, money or safety.</p>
-    <details>
-      <summary>The 8 requirements</summary>
+  <div class="levels">
+    <section class="level level-1">
+      <div class="level-head">
+        <h3>Level 1, Declared</h3>
+        <span class="level-fits">for scripts, prototypes, anything public</span>
+      </div>
+      <dl>
+        <dt>You do</dt>
+        <dd>Say that AI wrote part of the project, with which tools and models, who decides, how you take contributions and your licence stance. Tag AI-written commits. A human reviews every change.</dd>
+        <dt>It proves</dt>
+        <dd>Nothing is hidden: who wrote what, who is accountable.</dd>
+        <dt>It costs</dt>
+        <dd>An afternoon. Text only, no tool to install.</dd>
+      </dl>
       <ul>
-        <li><a href="{{ '/docs/requirements.html#a1-architecture-review' | relative_url }}">A1</a> An architecture review with a verdict, renewed at each structural change.</li>
-        <li class="core"><a href="{{ '/docs/requirements.html#a2-security-audit' | relative_url }}">A2</a> <code>SECURITY.md</code> with a threat model; every security claim traced to a passing test.</li>
-        <li class="core"><a href="{{ '/docs/requirements.html#a3-blind-usability-test' | relative_url }}">A3</a> A tester with no access to the source uses the software from the docs alone.</li>
-        <li class="core"><a href="{{ '/docs/requirements.html#a4-audit-index' | relative_url }}">A4</a> <code>audit/README.md</code> indexes every report; reports are appended to, never rewritten.</li>
-        <li><a href="{{ '/docs/requirements.html#a5-release-rule' | relative_url }}">A5</a> No release with an open <code>BLOCKER</code> or <code>DOC-WRONG</code>; a named human approves it.</li>
-        <li><a href="{{ '/docs/requirements.html#a6-validated-architecture-documents' | relative_url }}">A6</a> Architecture overview and decision records, validated by a named human.</li>
-        <li><a href="{{ '/docs/requirements.html#a7-mutation-score-recommended' | relative_url }}">A7</a> Mutation score measured on the core modules (recommended).</li>
-        <li><a href="{{ '/docs/requirements.html#a8-tooling-configuration-is-code' | relative_url }}">A8</a> Everything with repository access is versioned, reviewed, pinned and free of secrets.</li>
+        <li class="core"><a href="{{ '/docs/requirements.html#d2-declaration-file' | relative_url }}">D2</a> <span><code>VIBECODING.md</code> states the level, the tools and models, who decides and how changes are reviewed.</span></li>
+        <li class="core"><a href="{{ '/docs/requirements.html#d3-commit-attribution' | relative_url }}">D3</a> <span>AI-written commits carry a trailer naming the tool and model.</span></li>
+        <li class="core"><a href="{{ '/docs/requirements.html#d4-human-review-before-merge' | relative_url }}">D4</a> <span>A human reviews every AI-written change before it lands.</span></li>
       </ul>
-    </details>
+      <details>
+        <summary>The 4 other requirements of level 1</summary>
+        <ul>
+          <li><a href="{{ '/docs/requirements.html#d1-readme-disclosure' | relative_url }}">D1</a> <span>README says AI helped and links to the declaration.</span></li>
+          <li><a href="{{ '/docs/requirements.html#d7-provenance-and-licence-statement' | relative_url }}">D7</a> <span>Licence, copyright stance on AI-written parts and provenance safeguards are stated.</span></li>
+          <li><a href="{{ '/docs/requirements.html#d8-contribution-policy' | relative_url }}">D8</a> <span><code>CONTRIBUTING.md</code> says how AI contributions are received and which trailer to use.</span></li>
+          <li><a href="{{ '/docs/requirements.html#d9-project-status' | relative_url }}">D9</a> <span>Project status and security response time are stated and match <code>SECURITY.md</code>.</span></li>
+        </ul>
+      </details>
+    </section>
 
     <section class="level level-2">
       <div class="level-head">
-        <span class="level-num" aria-hidden="true">2</span>
-        <h3>Tested</h3>
+        <h3>Level 2, Tested</h3>
+        <span class="level-fits">for anything others depend on</span>
       </div>
-      <p><strong>You do:</strong> level 1, plus tests, coverage, lint, secrets scanning, static analysis and dependency checks in CI, their results committed as evidence behind a dated badge.</p>
-      <p><strong>It proves:</strong> the code behaves as claimed and is checked on every change, not once.</p>
-      <p class="level-suggested">Costs a day or two of CI set-up, then it runs itself. Fits anything others depend on.</p>
+      <dl>
+        <dt>You do</dt>
+        <dd>Level 1, plus tests, coverage, lint, secrets scanning, static analysis and dependency checks in CI, their results committed as evidence behind a dated badge.</dd>
+        <dt>It proves</dt>
+        <dd>The code behaves as claimed and is checked on every change, not once.</dd>
+        <dt>It costs</dt>
+        <dd>A day or two of CI set-up, then it runs itself.</dd>
+      </dl>
+      <ul>
+        <li class="core"><a href="{{ '/docs/requirements.html#t1-tests-run-in-ci-on-every-change' | relative_url }}">T1</a> <span>Tests run in CI on every change.</span></li>
+        <li class="core"><a href="{{ '/docs/requirements.html#t2-coverage-at-the-declared-threshold' | relative_url }}">T2</a> <span>Coverage is measured and meets the declared threshold.</span></li>
+        <li class="core"><a href="{{ '/docs/requirements.html#t6-dependency-hygiene-and-provenance' | relative_url }}">T6</a> <span>Lockfile committed; vulnerability, licence and registry checks on every dependency.</span></li>
+        <li class="core"><a href="{{ '/docs/requirements.html#t7-secrets-and-static-analysis' | relative_url }}">T7</a> <span>A secrets scanner and a static analyser run on every change.</span></li>
+      </ul>
       <details>
-        <summary>The 12 requirements</summary>
+        <summary>The 8 other requirements of level 2</summary>
         <ul>
-          <li class="core"><a href="{{ '/docs/requirements.html#t1-tests-run-in-ci-on-every-change' | relative_url }}">T1</a> Tests run in CI on every change.</li>
-          <li class="core"><a href="{{ '/docs/requirements.html#t2-coverage-at-the-declared-threshold' | relative_url }}">T2</a> Coverage is measured and meets the declared threshold.</li>
-          <li><a href="{{ '/docs/requirements.html#t3-tests-assert-behaviour' | relative_url }}">T3</a> Tests assert behaviour; none is skipped without a reason.</li>
-          <li><a href="{{ '/docs/requirements.html#t4-end-to-end-tests-for-user-facing-software' | relative_url }}">T4</a> User-facing software has end-to-end tests of its main journeys.</li>
-          <li><a href="{{ '/docs/requirements.html#t5-lint-and-format-enforced' | relative_url }}">T5</a> Lint and format run in CI and fail on warnings.</li>
-          <li class="core"><a href="{{ '/docs/requirements.html#t6-dependency-hygiene-and-provenance' | relative_url }}">T6</a> Lockfile committed; vulnerability, licence and registry checks on every dependency.</li>
-          <li class="core"><a href="{{ '/docs/requirements.html#t7-secrets-and-static-analysis' | relative_url }}">T7</a> A secrets scanner and a static analyser run on every change.</li>
-          <li><a href="{{ '/docs/requirements.html#t8-maintainability-signals' | relative_url }}">T8</a> Duplication, complexity and size are measured against declared thresholds.</li>
-          <li><a href="{{ '/docs/requirements.html#t9-dependency-freshness' | relative_url }}">T9</a> Dependencies are current and none is unmaintained, or the exception is declared.</li>
-          <li><a href="{{ '/docs/requirements.html#d5-dated-check' | relative_url }}">D5</a> A dated status file, written by the check, feeds the badge and goes stale on its own.</li>
-          <li><a href="{{ '/docs/requirements.html#d6-test-changes-are-explained' | relative_url }}">D6</a> Deleting or weakening a test is explained and approved by a human.</li>
-          <li><a href="{{ '/docs/requirements.html#d10-agent-instructions-carry-the-convention' | relative_url }}">D10</a> Agent instruction files carry the level, the commands to pass and what the agent never does alone.</li>
+          <li><a href="{{ '/docs/requirements.html#t3-tests-assert-behaviour' | relative_url }}">T3</a> <span>Tests assert behaviour; none is skipped without a reason.</span></li>
+          <li><a href="{{ '/docs/requirements.html#t4-end-to-end-tests-for-user-facing-software' | relative_url }}">T4</a> <span>User-facing software has end-to-end tests of its main journeys.</span></li>
+          <li><a href="{{ '/docs/requirements.html#t5-lint-and-format-enforced' | relative_url }}">T5</a> <span>Lint and format run in CI and fail on warnings.</span></li>
+          <li><a href="{{ '/docs/requirements.html#t8-maintainability-signals' | relative_url }}">T8</a> <span>Duplication, complexity and size are measured against declared thresholds.</span></li>
+          <li><a href="{{ '/docs/requirements.html#t9-dependency-freshness' | relative_url }}">T9</a> <span>Dependencies are current and none is unmaintained, or the exception is declared.</span></li>
+          <li><a href="{{ '/docs/requirements.html#d5-dated-check' | relative_url }}">D5</a> <span>A dated status file, written by the check, feeds the badge and goes stale on its own.</span></li>
+          <li><a href="{{ '/docs/requirements.html#d6-test-changes-are-explained' | relative_url }}">D6</a> <span>Deleting or weakening a test is explained and approved by a human.</span></li>
+          <li><a href="{{ '/docs/requirements.html#d10-agent-instructions-carry-the-convention' | relative_url }}">D10</a> <span>Agent instruction files carry the level, the commands to pass and what the agent never does alone.</span></li>
         </ul>
       </details>
-
-      <section class="level level-1">
-        <div class="level-head">
-          <span class="level-num" aria-hidden="true">1</span>
-          <h3>Declared</h3>
-        </div>
-        <p><strong>You do:</strong> say that AI wrote part of the project, with which tools and models, who decides, how you take contributions and your licence stance. Tag AI-written commits. A human reviews every change.</p>
-        <p><strong>It proves:</strong> nothing is hidden: who wrote what, who is accountable.</p>
-        <p class="level-suggested">Costs an afternoon. Text only, no tool to install. Fits scripts, prototypes, anything public.</p>
-        <details>
-          <summary>The 7 requirements</summary>
-          <ul>
-            <li><a href="{{ '/docs/requirements.html#d1-readme-disclosure' | relative_url }}">D1</a> README says AI helped and links to the declaration.</li>
-            <li class="core"><a href="{{ '/docs/requirements.html#d2-declaration-file' | relative_url }}">D2</a> <code>VIBECODING.md</code> states the level, the tools and models, who decides and how changes are reviewed.</li>
-            <li class="core"><a href="{{ '/docs/requirements.html#d3-commit-attribution' | relative_url }}">D3</a> AI-written commits carry a trailer naming the tool and model.</li>
-            <li class="core"><a href="{{ '/docs/requirements.html#d4-human-review-before-merge' | relative_url }}">D4</a> A human reviews every AI-written change before it lands.</li>
-            <li><a href="{{ '/docs/requirements.html#d7-provenance-and-licence-statement' | relative_url }}">D7</a> Licence, copyright stance on AI-written parts and provenance safeguards are stated.</li>
-            <li><a href="{{ '/docs/requirements.html#d8-contribution-policy' | relative_url }}">D8</a> <code>CONTRIBUTING.md</code> says how AI contributions are received and which trailer to use.</li>
-            <li><a href="{{ '/docs/requirements.html#d9-project-status' | relative_url }}">D9</a> Project status and security response time are stated and match <code>SECURITY.md</code>.</li>
-          </ul>
-        </details>
-      </section>
     </section>
-  </section>
 
-  <p>Requirements in bold are the core of a level: the ones that make it. The others consolidate it. All are required: a project that cannot meet one says so, and why, under <code>Exceptions</code> in its <code>VIBECODING.md</code>. The convention is not à la carte, but it never asks for silence.</p>
+    <section class="level level-3">
+      <div class="level-head">
+        <h3>Level 3, Audited</h3>
+        <span class="level-fits">for other people’s data, money or safety</span>
+      </div>
+      <dl>
+        <dt>You do</dt>
+        <dd>Level 2, plus versioned audits in the repository: architecture review, security audit, blind usability test, validated architecture documents, each finding with a decision.</dd>
+        <dt>It proves</dt>
+        <dd>Someone other than the author looked, and what they found is on record.</dd>
+        <dt>It costs</dt>
+        <dd>A few hours per release, repeated.</dd>
+      </dl>
+      <ul>
+        <li class="core"><a href="{{ '/docs/requirements.html#a2-security-audit' | relative_url }}">A2</a> <span><code>SECURITY.md</code> with a threat model; every security claim traced to a passing test.</span></li>
+        <li class="core"><a href="{{ '/docs/requirements.html#a3-blind-usability-test' | relative_url }}">A3</a> <span>A tester with no access to the source uses the software from the docs alone.</span></li>
+        <li class="core"><a href="{{ '/docs/requirements.html#a4-audit-index' | relative_url }}">A4</a> <span><code>audit/README.md</code> indexes every report; reports are appended to, never rewritten.</span></li>
+      </ul>
+      <details>
+        <summary>The 5 other requirements of level 3</summary>
+        <ul>
+          <li><a href="{{ '/docs/requirements.html#a1-architecture-review' | relative_url }}">A1</a> <span>An architecture review with a verdict, renewed at each structural change.</span></li>
+          <li><a href="{{ '/docs/requirements.html#a5-release-rule' | relative_url }}">A5</a> <span>No release with an open <code>BLOCKER</code> or <code>DOC-WRONG</code>; a named human approves it.</span></li>
+          <li><a href="{{ '/docs/requirements.html#a6-validated-architecture-documents' | relative_url }}">A6</a> <span>Architecture overview and decision records, validated by a named human.</span></li>
+          <li><a href="{{ '/docs/requirements.html#a7-mutation-score-recommended' | relative_url }}">A7</a> <span>Mutation score measured on the core modules (recommended).</span></li>
+          <li><a href="{{ '/docs/requirements.html#a8-tooling-configuration-is-code' | relative_url }}">A8</a> <span>Everything with repository access is versioned, reviewed, pinned and free of secrets.</span></li>
+        </ul>
+      </details>
+    </section>
+  </div>
+
+  <p>All are required: a project that cannot meet one says so, and why, under <code>Exceptions</code> in its <code>VIBECODING.md</code>. The convention is not à la carte, but it never asks for silence.</p>
   <p>Most of this is what a careful human-led project already does. Six requirements exist only because AI is involved: D1, D2, D3, D7, D10 and A3; all but A3 are text. The recorded registry check in T6 is there for the same reason.</p>
   <p><a href="{{ '/docs/requirements.html' | relative_url }}">Every requirement, its evidence and how it is checked</a></p>
+</section>
+
+<section class="section" id="debate">
+  <h2>Argue with it</h2>
+  <p>This is draft 0.1, and it is wrong somewhere. It was built by listing the criticisms people actually make of vibecoded software and asking what evidence would answer each one. Fourteen are answered by a requirement, two are named as non-goals. If a criticism is missing, or an answer is weak, say so.</p>
+
+  <ol class="thread">
+    <li><a href="{{ '/docs/criticisms.html#1-security-ai-code-ships-vulnerabilities-and-real-apps-leak-data' | relative_url }}">AI code ships vulnerabilities, and real apps leak data</a> <span class="status">T6, T7, A2</span></li>
+    <li><a href="{{ '/docs/criticisms.html#2-comprehension-debt-nobody-understands-the-code' | relative_url }}">Nobody understands the code</a> <span class="status">A6</span></li>
+    <li><a href="{{ '/docs/criticisms.html#3-maintainability-duplication-churn-and-technical-debt' | relative_url }}">Duplication, churn and technical debt grow</a> <span class="status">T8, A1</span></li>
+    <li><a href="{{ '/docs/criticisms.html#4-tests-that-test-nothing-and-tests-that-get-weakened' | relative_url }}">Tests assert nothing; agents weaken tests to pass CI</a> <span class="status">T3, D6, A7</span></li>
+    <li><a href="{{ '/docs/criticisms.html#5-supply-chain-hallucinated-packages-and-slopsquatting' | relative_url }}">Hallucinated packages and slopsquatting</a> <span class="status">T6</span></li>
+    <li><a href="{{ '/docs/criticisms.html#6-copyright-licence-and-provenance' | relative_url }}">Copyright, licence and provenance are unknowable</a> <span class="status">D3, D7</span></li>
+    <li><a href="{{ '/docs/criticisms.html#7-ai-slop-and-the-maintainer-burden' | relative_url }}">Slop floods maintainers: drive-by pull requests, imagined bug reports</a> <span class="status">D8, C1 to C5</span></li>
+    <li><a href="{{ '/docs/criticisms.html#8-accountability' | relative_url }}">Nobody is accountable</a> <span class="status">D2, D4, A5</span></li>
+    <li><a href="{{ '/docs/criticisms.html#9-abandonment-and-stale-claims' | relative_url }}">Projects are abandoned fast; badges go stale</a> <span class="status">D5, D9</span></li>
+    <li><a href="{{ '/docs/criticisms.html#10-the-agent-tooling-is-an-attack-surface' | relative_url }}">Agent tooling is itself an attack surface</a> <span class="status">A8</span></li>
+    <li><a href="{{ '/docs/criticisms.html#11-documentation-describes-intent-not-behaviour' | relative_url }}">Docs describe intent, not behaviour</a> <span class="status">A3</span></li>
+    <li><a href="{{ '/docs/criticisms.html#12-hidden-ai-use' | relative_url }}">Hidden AI use</a> <span class="status">D1, D2, D3</span></li>
+    <li><a href="{{ '/docs/criticisms.html#13-over-confidence-and-the-productivity-perception-gap' | relative_url }}">Perceived versus measured productivity</a> <span class="status open">non-goal</span></li>
+    <li><a href="{{ '/docs/criticisms.html#14-deskilling' | relative_url }}">Deskilling of developers</a> <span class="status open">non-goal</span></li>
+    <li><a href="{{ '/docs/criticisms.html#15-frozen-in-time-the-models-library-versions-not-todays' | relative_url }}">Frozen in time: the model’s library versions, not today’s</a> <span class="status">T9</span></li>
+    <li><a href="{{ '/docs/criticisms.html#16-noise-comments-docstrings-and-readmes-that-say-nothing' | relative_url }}">Noise: comments, docstrings and READMEs that say nothing</a> <span class="status">D10, T8, A1</span></li>
+  </ol>
+
+  <h3>Five questions still open</h3>
+  <p>Each one is being decided for version 0.1. An opinion with a reason counts; a project that tried it counts double.</p>
+  <ol class="questions">
+    <li>Is 80 % the right coverage threshold, and should it be line or branch coverage? <a href="https://github.com/ikarys/vibecoding-convention/issues/new?title=Open%20question%201%3A%20coverage%20threshold">Answer</a></li>
+    <li>Should level 3 require a blind test for all software with user docs, or only where the docs are the product? <a href="https://github.com/ikarys/vibecoding-convention/issues/new?title=Open%20question%202%3A%20scope%20of%20the%20blind%20test">Answer</a></li>
+    <li>Should T8 name default thresholds for duplication and complexity, or leave them to the project? <a href="https://github.com/ikarys/vibecoding-convention/issues/new?title=Open%20question%203%3A%20T8%20default%20thresholds">Answer</a></li>
+    <li>Should A7, the mutation score, become required at level 3 once tooling is common? <a href="https://github.com/ikarys/vibecoding-convention/issues/new?title=Open%20question%204%3A%20A7%20required%20at%20level%203">Answer</a></li>
+    <li>Should there be a level 0, Undeclared, or is the absence of <code>VIBECODING.md</code> statement enough? <a href="https://github.com/ikarys/vibecoding-convention/issues/new?title=Open%20question%205%3A%20a%20level%200">Answer</a></li>
+  </ol>
+
+  <p class="actions">
+    <a class="button open" href="https://github.com/ikarys/vibecoding-convention/issues/new">Open an issue</a>
+    <a class="button secondary" href="{{ '/docs/criticisms.html' | relative_url }}">Read the criticisms, with sources</a>
+  </p>
 </section>
 
 <section class="section" id="contributing">
@@ -175,20 +224,43 @@ title: Vibecoding Convention
 
 <section class="section" id="adopt">
   <h2>Adopt it</h2>
+  <div class="adopt">
+    <div>
+      <p>Start at level 1: it is text, and it is done in an afternoon. Move up when others start to depend on the project.</p>
+      <ol class="steps">
+        <li>
+          <p>Add a <a href="https://github.com/ikarys/vibecoding-convention/tree/main/templates">VIBECODING.md declaration</a> at the root of your repository, a <code>CONTRIBUTING.md</code> naming your trailer, a <code>SECURITY.md</code> with your response time, and a README line linking to the declaration. The badge comes with level 2.</p>
+        </li>
+        <li>
+          <p>Attribute AI-written commits with a trailer naming the tool and model:</p>
+          <pre><code>Assisted-by: Claude Code:claude-opus-5-5</code></pre>
+        </li>
+        <li>
+          <p>Run the checks for your level and keep the reports under <code>audit/</code>. <a href="https://github.com/ikarys/vibecoding-convention/tree/main/vibecheck">vibecheck</a>, a validator with no AI in it, reads the declaration, the repository and the evidence your CI wrote, and never runs your code.</p>
+        </li>
+      </ol>
+      <p>Tooling is optional. A project can meet the convention by hand.</p>
+    </div>
 
-  <ol class="steps">
-    <li>
-      <p>Add a <a href="https://github.com/ikarys/vibecoding-convention/tree/main/templates">VIBECODING.md declaration</a> at the root of your repository, a <code>CONTRIBUTING.md</code> naming your trailer, a <code>SECURITY.md</code> with your response time, and a README line linking to the declaration. The badge comes with level 2.</p>
-    </li>
-    <li>
-      <p>Attribute AI-written commits with a trailer naming the tool and model:</p>
-      <pre><code>Assisted-by: Claude Code:claude-opus-5-5</code></pre>
-    </li>
-    <li>
-      <p>Run the checks for your level and keep the reports under audit/.</p>
-      <p><a href="https://github.com/ikarys/vibecoding-convention/tree/main/vibecheck">vibecheck</a>, a validator with no AI in it, reads the declaration, the repository and the evidence your CI wrote, and never runs your code.</p>
-    </li>
-  </ol>
-
-  <p>Tooling is optional. A project can meet the convention by hand.</p>
+    <figure class="yaml-card">
+      <figcaption>VIBECODING.md, at the root of a project</figcaption>
+      <pre><code>---
+<span class="k">convention</span>:
+  <span class="c"># what you claim</span>
+  <span class="k">level</span>: 2
+  <span class="c"># which models wrote code</span>
+  <span class="k">tools</span>:
+    - "Claude Code:claude-opus-5-5"
+  <span class="c"># who decides</span>
+  <span class="k">maintainers</span>: [ikarys]
+  <span class="k">review</span>: "a human reviews every change"
+  <span class="c"># measured by CI, not claimed</span>
+  <span class="k">coverage</span>: { <span class="k">threshold</span>: 80, <span class="k">kind</span>: line, <span class="k">tool</span>: cargo-llvm-cov }
+  <span class="k">maintainability</span>: { <span class="k">tool</span>: jscpd, <span class="k">duplication_max</span>: 5 }
+  <span class="c"># the tools' output, read by vibecheck</span>
+  <span class="k">evidence</span>: { <span class="k">coverage</span>: audit/evidence/coverage.txt }
+  <span class="k">status</span>: active
+---</code></pre>
+    </figure>
+  </div>
 </section>

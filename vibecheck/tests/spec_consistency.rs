@@ -59,18 +59,25 @@ fn yaml() -> Yaml {
     }
 }
 
-/// Part A rows carry a level and an `M`, `J` or `M+J` cell; Part B rows carry
-/// neither. A bold id marks a core requirement. The French text keeps the ids
-/// and the check letters, so the same parser reads both.
+/// Part A has one table per level under a `#### Level N` heading (`Niveau` in
+/// French); its rows carry an `M`, `J` or `M+J` cell, Part B rows carry none.
+/// A bold id marks a core requirement. The French text keeps the ids and the
+/// check letters, so the same parser reads both.
 fn convention_md(path: &str) -> (BTreeMap<String, Requirement>, BTreeSet<String>) {
     let text = read(path);
-    let part_a = Regex::new(r"^\| (\**)([DTA]\d+)\** \| (\d) \| .* \| ([^|]+) \|$").unwrap();
+    let level = Regex::new(r"^#### (?:Level|Niveau) (\d)").unwrap();
+    let part_a = Regex::new(r"^\| (\**)([DTA]\d+)\** \| .* \| ([^|]+) \|$").unwrap();
     let part_b = Regex::new(r"^\| (C\d+) \| ").unwrap();
+    let mut current: Option<u8> = None;
     let mut by_id = BTreeMap::new();
     let mut core = BTreeSet::new();
     for line in text.lines() {
-        if let Some(c) = part_a.captures(line) {
-            let check = match c[4].trim() {
+        if let Some(c) = level.captures(line) {
+            current = Some(c[1].parse().unwrap());
+        } else if line.starts_with("## ") {
+            current = None;
+        } else if let Some(c) = part_a.captures(line) {
+            let check = match c[3].trim() {
                 "M" => "mechanical",
                 "J" => "judgement",
                 "M+J" => "both",
@@ -81,7 +88,9 @@ fn convention_md(path: &str) -> (BTreeMap<String, Requirement>, BTreeSet<String>
             }
             let req = Requirement {
                 id: c[2].to_string(),
-                level: Some(c[3].parse().unwrap()),
+                level: Some(
+                    current.unwrap_or_else(|| panic!("{path}: {} outside a level table", &c[2])),
+                ),
                 check: Some(check.to_string()),
             };
             by_id.insert(req.id.clone(), req);
