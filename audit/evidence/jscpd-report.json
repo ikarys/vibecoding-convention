@@ -364,82 +364,6 @@
       "kind": "exact",
       "lines": 9,
       "secondFile": {
-        "end": 22,
-        "endLoc": {
-          "column": 41,
-          "line": 22,
-          "position": 424
-        },
-        "name": "checks/d5.rs",
-        "start": 14,
-        "startLoc": {
-          "column": 4,
-          "line": 14,
-          "position": 227
-        }
-      },
-      "tokens": 58
-    },
-    {
-      "firstFile": {
-        "end": 18,
-        "endLoc": {
-          "column": 41,
-          "line": 18,
-          "position": 365
-        },
-        "name": "checks/d3.rs",
-        "start": 10,
-        "startLoc": {
-          "column": 4,
-          "line": 10,
-          "position": 168
-        }
-      },
-      "format": "rust",
-      "fragment": "    }\n\n    fn level(&self) -> u8 {\n        1\n    }\n\n    fn run(&self, ctx: &crate::checks::Context) -> Vec<Finding> {\n        let Some(decl) = &ctx.decl else {\n            return vec![Finding::not_run(",
-      "isNew": false,
-      "kind": "exact",
-      "lines": 9,
-      "secondFile": {
-        "end": 20,
-        "endLoc": {
-          "column": 41,
-          "line": 20,
-          "position": 395
-        },
-        "name": "checks/d6.rs",
-        "start": 12,
-        "startLoc": {
-          "column": 4,
-          "line": 12,
-          "position": 198
-        }
-      },
-      "tokens": 58
-    },
-    {
-      "firstFile": {
-        "end": 18,
-        "endLoc": {
-          "column": 41,
-          "line": 18,
-          "position": 365
-        },
-        "name": "checks/d3.rs",
-        "start": 10,
-        "startLoc": {
-          "column": 4,
-          "line": 10,
-          "position": 168
-        }
-      },
-      "format": "rust",
-      "fragment": "    }\n\n    fn level(&self) -> u8 {\n        1\n    }\n\n    fn run(&self, ctx: &crate::checks::Context) -> Vec<Finding> {\n        let Some(decl) = &ctx.decl else {\n            return vec![Finding::not_run(",
-      "isNew": false,
-      "kind": "exact",
-      "lines": 9,
-      "secondFile": {
         "end": 18,
         "endLoc": {
           "column": 41,
@@ -534,6 +458,44 @@
     },
     {
       "firstFile": {
+        "end": 22,
+        "endLoc": {
+          "column": 41,
+          "line": 22,
+          "position": 424
+        },
+        "name": "checks/d5.rs",
+        "start": 14,
+        "startLoc": {
+          "column": 4,
+          "line": 14,
+          "position": 227
+        }
+      },
+      "format": "rust",
+      "fragment": "    }\n\n    fn level(&self) -> u8 {\n        2\n    }\n\n    fn run(&self, ctx: &crate::checks::Context) -> Vec<Finding> {\n        let Some(decl) = &ctx.decl else {\n            return vec![Finding::not_run(",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 9,
+      "secondFile": {
+        "end": 20,
+        "endLoc": {
+          "column": 41,
+          "line": 20,
+          "position": 395
+        },
+        "name": "checks/d6.rs",
+        "start": 12,
+        "startLoc": {
+          "column": 4,
+          "line": 12,
+          "position": 198
+        }
+      },
+      "tokens": 58
+    },
+    {
+      "firstFile": {
         "end": 96,
         "endLoc": {
           "column": 13,
@@ -569,6 +531,44 @@
         }
       },
       "tokens": 53
+    },
+    {
+      "firstFile": {
+        "end": 160,
+        "endLoc": {
+          "column": 59,
+          "line": 160,
+          "position": 4529
+        },
+        "name": "checks/support.rs",
+        "start": 155,
+        "startLoc": {
+          "column": 4,
+          "line": 155,
+          "position": 4285
+        }
+      },
+      "format": "rust",
+      "fragment": "    let listed = util::listed_paths(root);\n    walkdir::WalkDir::new(root)\n        .into_iter()\n        .filter_map(|entry| entry.ok())\n        .filter(|entry| entry.file_type().is_file())\n        .filter(|entry| !in_skipped_dir(entry.path(), root, skip_dirs))",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 6,
+      "secondFile": {
+        "end": 188,
+        "endLoc": {
+          "column": 59,
+          "line": 188,
+          "position": 5566
+        },
+        "name": "checks/support.rs",
+        "start": 183,
+        "startLoc": {
+          "column": 4,
+          "line": 183,
+          "position": 5322
+        }
+      },
+      "tokens": 70
     },
     {
       "firstFile": {
@@ -1370,32 +1370,32 @@
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-10T21:36:03.962Z",
+    "detectionDate": "2026-11-21T08:13:23.315Z",
     "formats": {
       "rust": {
         "clones": 36,
-        "duplicatedLines": 330,
-        "duplicatedTokens": 2238,
-        "lines": 9470,
+        "duplicatedLines": 327,
+        "duplicatedTokens": 2250,
+        "lines": 9593,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.4846884899683213,
-        "percentageTokens": 3.6775338504009465,
-        "sources": 56,
-        "tokens": 60856
+        "percentage": 3.4087355363285727,
+        "percentageTokens": 3.6499902666926225,
+        "sources": 57,
+        "tokens": 61644
       }
     },
     "total": {
       "clones": 36,
-      "duplicatedLines": 330,
-      "duplicatedTokens": 2238,
-      "lines": 9470,
+      "duplicatedLines": 327,
+      "duplicatedTokens": 2250,
+      "lines": 9593,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.4846884899683213,
-      "percentageTokens": 3.6775338504009465,
-      "sources": 56,
-      "tokens": 60856
+      "percentage": 3.4087355363285727,
+      "percentageTokens": 3.6499902666926225,
+      "sources": 57,
+      "tokens": 61644
     }
   }
 }
