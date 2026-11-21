@@ -76,11 +76,14 @@ impl Git {
             .unwrap_or_default()
     }
 
+    /// Commits reachable from HEAD made on `date` (a UTC day) or later.
     pub fn commits_since_date(&self, date: &NaiveDate) -> Vec<Commit> {
         if !self.is_repo() {
             return Vec::new();
         }
-        let since = date.to_string();
+        // git reads a bare date as that day at the current time of day, so a
+        // status written today would hide every commit older than a second.
+        let since = format!("{date}T00:00:00+00:00");
         self.output(&[
             "log",
             "--no-merges",
@@ -284,6 +287,44 @@ mod tests {
         assert_eq!(commits.len(), 1);
         assert_eq!(commits[0].hash, "abc");
         assert_eq!(commits[0].trailers[0].0, "Assisted-by");
+    }
+
+    #[test]
+    fn commits_since_date_starts_at_midnight_utc() {
+        let dir = tempfile::tempdir().unwrap();
+        let git = |args: &[&str], date: &str| {
+            let status = Command::new("git")
+                .args(args)
+                .current_dir(dir.path())
+                .env("GIT_AUTHOR_NAME", "t")
+                .env("GIT_AUTHOR_EMAIL", "t@example.com")
+                .env("GIT_COMMITTER_NAME", "t")
+                .env("GIT_COMMITTER_EMAIL", "t@example.com")
+                .env("GIT_AUTHOR_DATE", date)
+                .env("GIT_COMMITTER_DATE", date)
+                .stdout(Stdio::null())
+                .stderr(Stdio::null())
+                .status()
+                .unwrap();
+            assert!(status.success());
+        };
+        git(&["init", "-q"], "2026-01-02T00:00:00+00:00");
+        git(
+            &["commit", "-q", "--allow-empty", "-m", "before"],
+            "2026-01-01T23:59:59+00:00",
+        );
+        git(
+            &["commit", "-q", "--allow-empty", "-m", "first second"],
+            "2026-01-02T00:00:01+00:00",
+        );
+        let repo = Git::new(dir.path().to_path_buf());
+        let day = NaiveDate::from_ymd_opt(2026, 1, 2).unwrap();
+        let subjects: Vec<_> = repo
+            .commits_since_date(&day)
+            .into_iter()
+            .map(|c| c.subject)
+            .collect();
+        assert_eq!(subjects, vec!["first second".to_string()]);
     }
 
     #[test]
