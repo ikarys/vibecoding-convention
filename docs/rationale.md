@@ -41,6 +41,15 @@ depending on the code would want to see in CI. Level 3 is for software that
 handles other people's data, money or safety, where a reader needs an audit,
 not a badge.
 
+Each level has a core of three or four requirements, the ones without which
+the level's claim is empty: a declaration, attributed commits and human review
+at level 1; tests in CI, measured coverage, dependency and secrets checks at
+level 2; a security audit, a blind test and the audit index at level 3. The
+others consolidate the claim. Naming the core tells a reader where to start;
+it makes nothing optional. A project that cannot meet a requirement declares
+the exception and its reason in `VIBECODING.md`, so that the gap is visible
+instead of silent.
+
 ## Related work
 
 Disclosure formats ([AI-DECLARATION.md](https://github.com/DimwitLabs/AI-DECLARATION.md),
