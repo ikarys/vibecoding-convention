@@ -114,17 +114,22 @@ fn path_contains_test_or_spec(path: &Path) -> bool {
     text.contains("test") || text.contains("spec")
 }
 
-/// A marker that appears inside a string literal is test data, not a disabled test.
-fn inside_string_literal(line: &str, marker: &str) -> bool {
-    line.find(marker)
-        .map(|index| line[..index].matches('"').count() % 2 == 1)
-        .unwrap_or(false)
-}
-
+/// A marker must start a word (`xit(` is not in `exit(`), and one inside a string literal
+/// is test data, not a disabled test.
 fn is_disabled(line: &str) -> bool {
-    DISABLED_PATTERNS
-        .iter()
-        .any(|pattern| line.contains(pattern) && !inside_string_literal(line, pattern))
+    DISABLED_PATTERNS.iter().any(|pattern| {
+        line.match_indices(pattern).any(|(index, _)| {
+            let starts_with_letter = pattern
+                .as_bytes()
+                .first()
+                .is_some_and(|b| b.is_ascii_alphabetic());
+            let boundary_ok = !starts_with_letter
+                || index == 0
+                || (!line.as_bytes()[index - 1].is_ascii_alphanumeric()
+                    && line.as_bytes()[index - 1] != b'_');
+            boundary_ok && line[..index].matches('"').count().is_multiple_of(2)
+        })
+    })
 }
 
 fn has_explanation(line: &str) -> bool {
@@ -142,5 +147,13 @@ mod tests {
         assert!(!is_disabled(
             "    fs::write(path, \"#[ignore]\n#[test]\").unwrap();"
         ));
+    }
+
+    #[test]
+    fn marker_must_start_a_word() {
+        assert!(!is_disabled("fn exit(code: i32) {}"));
+        assert!(is_disabled("    xit(\"skipped\", () => {})"));
+        assert!(!is_disabled("let e = edit.skip(1);"));
+        assert!(is_disabled("exit(1); xit(\"a\", f)"));
     }
 }
