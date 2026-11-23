@@ -1408,32 +1408,32 @@
     }
   ],
   "statistics": {
-    "detectionDate": "2026-11-21T21:21:44.124Z",
+    "detectionDate": "2026-11-23T21:05:27.752Z",
     "formats": {
       "rust": {
         "clones": 37,
         "duplicatedLines": 333,
         "duplicatedTokens": 2303,
-        "lines": 9851,
+        "lines": 9864,
         "newClones": 0,
         "newDuplicatedLines": 0,
-        "percentage": 3.38036747538321,
-        "percentageTokens": 3.651903651903652,
+        "percentage": 3.375912408759124,
+        "percentageTokens": 3.646468324967937,
         "sources": 57,
-        "tokens": 63063
+        "tokens": 63157
       }
     },
     "total": {
       "clones": 37,
       "duplicatedLines": 333,
       "duplicatedTokens": 2303,
-      "lines": 9851,
+      "lines": 9864,
       "newClones": 0,
       "newDuplicatedLines": 0,
-      "percentage": 3.38036747538321,
-      "percentageTokens": 3.651903651903652,
+      "percentage": 3.375912408759124,
+      "percentageTokens": 3.646468324967937,
       "sources": 57,
-      "tokens": 63063
+      "tokens": 63157
     }
   }
 }
